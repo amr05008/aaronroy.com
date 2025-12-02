@@ -215,7 +215,7 @@ Experience can come from trying (and failing sometimes) at building your own pro
 
 I highly encourage finding areas and problems you are curious about, trying to build something, and getting feedback from potential people who might share a similar problem. Running this real feedback loop is a great way to learn and expand your experiences to draw upon. 
 
-The project in this slide is a silly <a href="https://aaronroy.com/vibe-coding-a-tour-de-france-app-using-replit-and-google-sheets" target="_blank" rel="noopener noreferrer">tour de france fantasy app</a> I built for me and my friends because we found it a bit annoying to track who was winning our competition each year in spreadsheets alone. 
+The project in the above slide is a silly <a href="https://aaronroy.com/vibe-coding-a-tour-de-france-app-using-replit-and-google-sheets" target="_blank" rel="noopener noreferrer">tour de france fantasy app</a> I built for me and my friends because we found it a bit annoying to track who was winning our competition each year in spreadsheets alone. 
 
 Not every problem area or passion project has to be something groundbreaking or capable of explosive growth, sometimes you can learn a lot and have a lot of fun just by tinkering. 
 
