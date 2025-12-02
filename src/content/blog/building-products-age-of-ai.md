@@ -5,7 +5,7 @@ pubDate: 2025-11-28
 categories: ["presentations", "product management", "ai"]
 ---
 
-I recently had the opportunity to speak at NYU's Product Management Club about building products in the age of AI. So much has changed over the past 12 months in terms of how we approach validating new ideas and how we build new capabilities on top of existing platforms. The crux of this presentation for aspiring and soon to be product managers was get out there, start building things, and learn how to leverage these new tools now. 
+I recently had the opportunity to speak at NYU's Product Management Club about building products in the age of AI. So much has changed over the past 12 months in terms of how we approach validating new ideas and how we build new capabilities on top of existing platforms. The crux of this presentation for aspiring and soon to be product managers was to get out there, start building things, and learn how to leverage these new tools now. 
 
 Below is a walkthrough of the main points of my presentation with additional context and insights.
 
@@ -190,7 +190,7 @@ Here's a copy of the opportunity template you can copy and experiment with: <a h
 
 Our pitches for opportunities have changed dramatically in the past six months. 
 
-Where before we would traditionally use just the template above and figma prototypes, now presenters are showing up with testable applications, live prototypes and real examples. 
+Where before we would traditionally use just the template above and Figma prototypes, now presenters are showing up with testable applications, live prototypes and real examples. 
 
 We're now using vibe coded prototypes with customers to get feedback on real functionality in advance of building at scale.
 
