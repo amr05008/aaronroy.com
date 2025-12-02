@@ -5,7 +5,7 @@ pubDate: 2025-11-28
 categories: ["presentations", "product management", "ai"]
 ---
 
-I recently had the opportunity to speak at NYU's Product Management Club about building products in the age of AI. 
+I recently had the opportunity to speak at NYU's Product Management Club about building products in the age of AI. So much has changed over the past 12 months in terms of how we approach validating new ideas and how we build new capabilities on top of existing platforms. The crux of this presentation for aspiring and soon to be product managers was get out there, start building things, and learn how to leverage these new tools now. 
 
 Below is a walkthrough of the main points of my presentation with additional context and insights.
 
