@@ -17,7 +17,7 @@ const currentURL = canonicalURL || new URL(Astro.url.pathname, Astro.site).toStr
 // Use default OG image as fallback, or custom image if specified in frontmatter
 const defaultOGImage = ogImage
   ? new URL(ogImage, Astro.site).toString()
-  : new URL('/public/og-images/aaron-roy-dot-com-og.png', Astro.site).toString();
+  : new URL('/og-images/aaron-roy-dot-com-og.png', Astro.site).toString();
 ---
 
 <!DOCTYPE html>
