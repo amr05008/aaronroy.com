@@ -2,7 +2,9 @@
 title: "How to stay ahead of online scammers"
 description: "Use this guide to help you improve your privacy, security, and safety on the internet (and hopefully avoid getting scammed)."
 pubDate: 2024-06-25
-categories: ["Thoughts and opinions"]
+categories: ["cybersecurity"]
+heroImage: "/og-images/stay-ahead-online-scammers.png"
+
 ---
 
 The internet is a wild place. Scammers and bad actors are everywhere. As a society, we’ve been thrust into chaos, with very little training on how to defend or protect ourselves. 
