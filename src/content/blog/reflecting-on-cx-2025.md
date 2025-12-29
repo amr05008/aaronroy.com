@@ -1,14 +1,14 @@
 ---
 title: "Reflecting on my first cyclocross season"
 description: "What I learned racing cyclocross for the first time in 2025, from finding practice sessions in NYC to surviving muddy courses."
-pubDate: 2025-12-26
+pubDate: 2025-12-28
 categories: ["Bikes"]
 heroImage: "/og-images/building-products-age-of-ai.png"
 ---
 
 I was fortunate enough to try out Cyclocross (”CX”) racing this year. 
 
-I’m not particularly good nor fast but I had so much fun trying out this new (to me) racing format. Especially if you participate in [Zwift Racing League](https://www.wtrl.racing/zwift-racing-league/), the CX season is a great compliment to any indoor training program. 
+I'm not particularly good nor fast but I had so much fun trying out this new (to me) racing format. Especially if you participate in [Zwift Racing League](https://www.wtrl.racing/zwift-racing-league/), the CX season is a great complement to any indoor training program. 
 
 I participated in four CX races in 2025. I finished three of them and one of them I had to bow out from with a gnarly mechanical. 
 
@@ -57,7 +57,7 @@ I had one of my best (worst?) falls of the year while practicing at Cunningham P
 
 ## Race report:
 
-Take the following with a grain of salt. I am brand new to CX racing overall, so my impressions are naive and based in very little experience thus far. 
+Take the following with a grain of salt. I am brand new to CX racing overall, so my impressions are naive and based on very little experience thus far. 
 
 ### [Hidden Valley CX](https://projectmayhemcx.com/hidden-valley-cx/)
 
@@ -95,7 +95,7 @@ I also rode in the novice 5 and open 4/5 races in this event.
 
 The course features a corn maze that quickly turned into a mud pit over the course of the morning. I started strong in the novice 5 race but fell six or so times during this race which put a damper on my finishing time. 
 
-There was a hill in particularly coming out of a corner that I took a terrible line on for the first few attempts and ended up off the bike for each attempt. 
+There was a hill in particular coming out of a corner that I took a terrible line on for the first few attempts and ended up off the bike for each attempt. 
 
 It was a cold morning (35 degrees Fahrenheit) and it started to rain over the course of the morning.  
 
@@ -117,8 +117,8 @@ I’d like to come back and attempt this course again next year as it’s a very
 
 ## What I learned racing this year:
 
-- If you are interesting in racing or trying cyclocross, just find an event and get started. The community is super inclusive and welcoming. I did my first race without having gotten any practice in prior. 
-- Cyclocross races are similar to Zwift races. They start very intense and your heart rate is often pinned for the majority of the race. It’s critical to find spots on the course to catch your breathe and bring your heart rate back down.
+- If you are interested in racing or trying cyclocross, just find an event and get started. The community is super inclusive and welcoming. I did my first race without having gotten any practice in prior.
+- Cyclocross races are similar to Zwift races. They start very intense and your heart rate is often pinned for the majority of the race. It's critical to find spots on the course to catch your breath and bring your heart rate back down.
 - You do not need fancy gear to get started. I used a 2020 Specialized Diverge I also use for Zwift. Started with clinchers for first race and practices. I experimented with tubeless tires for my last two races but I’m not skilled or fit enough to notice the impact.
 - Experiment with different tire pressures. I would pump my tires to 50+ PSI for riding to and from CX practice and then lower it down to the ~30 PSI range for practicing and racing. I found I was most comfortable handling my bike right around 30 PSI.
 - Be prepared to take a tumble or two. I took a lot of minor spills while practicing and while racing. I imagine most of them were due to my own mistakes (picking the wrong line, going too fast into a corner, etc), alas I went down a lot this first season.
