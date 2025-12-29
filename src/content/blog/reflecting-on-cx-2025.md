@@ -3,7 +3,7 @@ title: "Reflecting on my first cyclocross season"
 description: "What I learned racing cyclocross for the first time in 2025, from finding practice sessions in NYC to surviving muddy courses."
 pubDate: 2025-12-28
 categories: ["Bikes"]
-heroImage: "/og-images/building-products-age-of-ai.png"
+heroImage: "/og-images/reflecting-cx-2025-og.jpg"
 ---
 
 I was fortunate enough to try out Cyclocross (”CX”) racing this year. 
