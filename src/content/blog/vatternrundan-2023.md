@@ -2,10 +2,12 @@
 title: "A long day on the bike - Vätternrundan 2023"
 description: "Vätternrundan is one of the largest recreational cycling events in the world. This is my experience riding ~197 miles in Vätternrundan 2023."
 pubDate: 2023-08-14
-categories: ["Thoughts and opinions"]
+categories: ["Bikes"]
 ---
 
-![](/images/vatternrundan-2023-1759632216130.jpeg)
+<figure>
+  <img src="/images/vatternrundan-2023-1759632216130.jpeg" alt="Vätternrundan 2023" />
+</figure>
 
 I had the honor of participating in [Vätternrundan](https://vatternrundan.se/vatternrundan/en/) this past June with some Swedish friends living here in New York.
 
@@ -17,15 +19,21 @@ It was an incredible experience that was challenging, exciting and some of the m
 
 Woke up at 2:45 am for a 4:04 start time (sun was already up!)
 
-![](/images/vatternrundan-2023-1759632216162.jpg)
+<figure>
+  <img src="/images/vatternrundan-2023-1759632216162.jpg" alt="Early morning start" />
+</figure>
 
 First 65 miles flew by. We made it down to Jonkoping in 3:30. Pelotons of 50+ riders formed up. We got passed by teams of 30+ riders absolutely dropping the hammer.
 
-![](/images/vatternrundan-2023-1759632216195.jpg)
+<figure>
+  <img src="/images/vatternrundan-2023-1759632216195.jpg" alt="Riding in pelotons" />
+</figure>
 
 Pace dramatically slowed down past the Swedish meatballs in Jonkoping. Averaged 30 km/h at arrival, averaged 26 km/h for the next ~33 miles to the next rest stop.
 
-![](/images/vatternrundan-2023-1759632216224.jpg)
+<figure>
+  <img src="/images/vatternrundan-2023-1759632216224.jpg" alt="Rest stop" />
+</figure>
 
 Karlsborg (Mile 127) to Askersund (Mile 159) was the toughest segment for me. I got a bit hot and energy lagged.
 
@@ -35,8 +43,13 @@ Our total time, including stops, was ~14 hours, and our final total moving time 
 
 All in all, it was an incredible and exhausting day in the saddle.
 
-![](/images/vatternrundan-2023-1759632216254.jpeg)
+<figure>
+  <img src="/images/vatternrundan-2023-1759632216254.jpeg" alt="Finish celebration" />
+</figure>
 
-![Map of Vätternrundan](/images/vatternrundan-2023-1759632216287.png)
-
-The Route. Source: Vätternrundan SE
+<figure>
+  <img src="/images/vatternrundan-2023-1759632216287.png" alt="Map of Vätternrundan" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    The Route. Source: Vätternrundan SE
+  </figcaption>
+</figure>

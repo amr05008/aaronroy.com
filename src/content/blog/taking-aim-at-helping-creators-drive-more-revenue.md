@@ -2,7 +2,7 @@
 title: "Taking aim at helping creators drive more revenue"
 description: "What we did, how we did it and lessons learned from trying to help creators drive more revenue with Teachable Discover and Spotlight."
 pubDate: 2022-05-06
-categories: ["Thoughts and opinions"]
+categories: ["Projects"]
 heroImage: "/og-images/helping-creators-drive-more-revenue.png"
 ---
 
@@ -26,17 +26,23 @@ We realized the events we hosted alongside creators for Discover were great at g
 
 Spotlight was a course and live event platform that helped creators generate new leads, engage with their audience, and generate course sales. I imagined what we were doing with Spotlight as similar to the [Home Shopping Network](https://www.hsn.com/) but for creators. 
 
-![](/images/taking-aim-at-helping-creators-drive-more-revenue-1759632216581.jpg)
-
-_Doing my best Billy Mays impression (replay of event [here](https://www.youtube.com/watch?v=91Sx_zEzhu0))_
+<figure>
+  <img src="/images/taking-aim-at-helping-creators-drive-more-revenue-1759632216581.jpg" alt="Doing my best Billy Mays impression" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    Doing my best Billy Mays impression (replay of event <a href="https://www.youtube.com/watch?v=91Sx_zEzhu0" target="_blank" rel="noopener noreferrer">here</a>)
+  </figcaption>
+</figure>
 
 Spotlight was able to sidestep some of the hurdles Discover faced in building up demand because by focusing on co-hosted live events with creators, the participants, in turn, would promote heavily to their own audience. 
 
 Creators would use the [live events](https://www.youtube.com/watch?v=v19Q8QRH7J0) to launch new courses, promote content, drive awareness for premium offers, and test out potential new course content. We would promote the live events via paid media and to our own email list and then use our platform to deliver follow-up sales sequences to event attendees with limited-time offers and drive traffic to our mobile-optimized sales pages for conversions. 
 
-![](/images/taking-aim-at-helping-creators-drive-more-revenue-1759632216606.png)
-
-_Example sales page_
+<figure>
+  <img src="/images/taking-aim-at-helping-creators-drive-more-revenue-1759632216606.png" alt="Example sales page" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    Example sales page
+  </figcaption>
+</figure>
 
 Both Discover and Spotlight used an affiliate marketing model to generate revenue. Creators were able to keep the entirety of sales on Discover/Spotlight’s sales pages driven by their efforts and we took a commission for any sales driven by our marketing efforts (typically ~30%-50%, which was substantially lower than Udemy’s ~63% take rate). 
 

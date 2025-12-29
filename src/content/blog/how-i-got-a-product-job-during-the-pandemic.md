@@ -2,7 +2,7 @@
 title: "How I got a product role to save my startup"
 description: "Resources, templates and articles that helped a product job search in the midst of the Covid-19 pandemic."
 pubDate: 2021-02-06
-categories: ["Product Management", "Thoughts and opinions"]
+categories: ["Product Management", "Tutorials"]
 ---
 
 I’ve recently joined the rocketship that is [Teachable](https://teachable.com/) as a product manager for their burgeoning [Discover platform](https://discover.teachable.com/).
@@ -19,9 +19,7 @@ I first tried freelancing as a product manager through the [TopTal network](http
 
 With the pandemic throwing the state of the world into general uncertainty for the indefinite future, I decided to take a full reset about what I wanted to do with the majority of my time for the next few years.
 
-At one point in mid-May, I saw a tweet from [Nassim Taleb](https://twitter.com/nntaleb) that summarized my mindset at the time.
-
-https://twitter.com/nntaleb/status/1259972658889973760
+At one point in mid-May, I saw a tweet from [Nassim Taleb](https://twitter.com/nntaleb/status/1259972658889973760) that summarized my mindset at the time.
 
 The output of this reset for me was understanding that I wanted to work full-time in a vertical where I had genuine curiosity and interest, where I could apply what I’ve learned so far while also being pushed to continue to grow.
 
@@ -31,9 +29,12 @@ Taking the time to think about what interests you and why you want to work on th
 
 The first thing I did was put together a list of verticals and companies that fit my parameters.
 
-![My product targets](/images/how-i-got-a-product-job-during-the-pandemic-1759632216094.png)
-
-Some of the companies I was interested in
+<figure>
+  <img src="/images/how-i-got-a-product-job-during-the-pandemic-1759632216094.png" alt="My product targets" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    Some of the companies I was interested in
+  </figcaption>
+</figure>
 
 Once I was ready to start actively searching for a role, I invested some time cleaning up my [portfolio](https://aaronroy.com/category/portfolio/) and resume.
 
@@ -79,4 +80,4 @@ In addition to the templates I’ve shared above, I’ve also compiled some of t
 
 The job-hunting process is inherently stressful. The more you can relax and stay positive throughout the process, the easier the entire process becomes. For me, this meant riding my bike, reading books, and dedicated no screen time with my partner and dog to give my mind a rest. Take care of yourself, and good things will happen eventually. You got this!
 
-If you have a specific question or want another set of eyes on your product resume, feel free email me, aaron (at) aaronroy.com, or [reach out to me on Twitter](https://twitter.com/aaron_wa).
+If you have a specific question or want another set of eyes on your product resume, feel free to email me, aaron (at) aaronroy.com, or [reach out to me on Twitter](https://twitter.com/aaron_wa).

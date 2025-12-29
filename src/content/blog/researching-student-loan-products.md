@@ -2,7 +2,7 @@
 title: "Researching student loan products"
 description: "Looking for folks to fill out this survey on student loan pain points."
 pubDate: 2019-07-31
-categories: ["Product Management"]
+categories: ["Student Loans"]
 ---
 
 July 2019

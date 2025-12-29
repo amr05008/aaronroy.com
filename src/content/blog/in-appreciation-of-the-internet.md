@@ -2,7 +2,7 @@
 title: "In appreciation of the internet"
 description: "Some thoughts early in the Pandemic"
 pubDate: 2020-03-17
-categories: ["Thoughts and opinions"]
+categories: ["Life"]
 ---
 
 What a time to be alive!

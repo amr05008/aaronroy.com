@@ -2,7 +2,7 @@
 title: "How to set up two-factor verification on Yahoo"
 description: "Trying to set up a second method of verification on Yahoo? Use this step by step guide with screenshots."
 pubDate: 2024-06-25
-categories: ["Thoughts and opinions"]
+categories: ["Tutorials", "Cybersecurity"]
 ---
 
 While researching [ways to improve security and privacy](https://aaronroy.com/how-to-stay-ahead-of-online-scammers/) online, I noticed I couldn't easily find a how-to with examples for setting up two-factor verification for Yahoo email.

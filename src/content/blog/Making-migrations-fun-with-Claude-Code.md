@@ -2,7 +2,7 @@
 title: "Making migrations fun with Claude Code"
 description: "Claude Code made completing a boring migration fun. Here is how I used Claude Code to migrate my WordPress blog to Astro in just 6 hours."
 pubDate: 2025-10-10
-categories: ["Thoughts and opinions"]
+categories: ["Projects"]
 heroImage: "/og-images/making-migrations-fun-with-claude-code.png"
 ---
 I had a “simple” question as a starting point. How could I use Claude Code to swap my tour de france fantasy app from being hosted on Replit to a free tier option? 

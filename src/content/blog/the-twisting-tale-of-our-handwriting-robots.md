@@ -2,7 +2,7 @@
 title: "The Twisting Tale of Our Handwriting Robots "
 description: "The story of how hundreds of handwriting robots ended up in a studio in Bushwick."
 pubDate: 2024-08-29
-categories: ["Thoughts and opinions"]
+categories: ["Projects", "Startups"]
 ---
 
 In a loft next to [Roberta’s Pizza](https://www.robertaspizza.com/bushwick) in Brooklyn reside a fleet of Handwriting robots, sitting idle until the next time they are called into action. 
@@ -19,9 +19,12 @@ We put together an inventory of the physical assets and shopped it around to pro
 
 This asset removal provision is what proved to be a hurdle for the majority of interested parties, so the bid window closed without any proposals accepted by the Newell Leadership. 
 
-![](/images/the-twisting-tale-of-our-handwriting-robots-1759632217350.jpg)
-
-The handwriting robots set up inside of Josten's
+<figure>
+  <img src="/images/the-twisting-tale-of-our-handwriting-robots-1759632217350.jpg" alt="The handwriting robots set up inside of Josten's" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    The handwriting robots set up inside of Josten's
+  </figcaption>
+</figure>
 
 Faced with the prospect of all this incredible technology about to be sent to a landfill, I and a few others had a vision for what we could do with the robots, so we decided to take a chance, and we submitted a last-minute winning proposal. 
 
@@ -33,15 +36,21 @@ After the ink dried on our contract with Newell to purchase the assets, we flew 
 
 We moved everything off the floor of the Josten’s plant into a nearby storage unit, and we loaded up the truck with robots, tables, mailing equipment, and anything else we could fit and drove back north to start our own robot production studio in Bushwick. 
 
-![](/images/the-twisting-tale-of-our-handwriting-robots-1759632217375.jpg)
+<figure>
+  <img src="/images/the-twisting-tale-of-our-handwriting-robots-1759632217375.jpg" alt="The teardown of robots is almost complete" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    The teardown of robots is almost complete
+  </figcaption>
+</figure>
 
-The teardown of robots is almost complete
+<figure>
+  <img src="/images/the-twisting-tale-of-our-handwriting-robots-1759632217406.jpg" alt="Got our rental truck packed up and ready to drive north" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    Got our rental truck packed up and ready to drive north
+  </figcaption>
+</figure>
 
-![](/images/the-twisting-tale-of-our-handwriting-robots-1759632217406.jpg)
-
-Got our rental truck packed up and ready to drive north
-
-While we were at the Josten’s plant, we were able to sell some of the physical assets we just acquired back to the Josten’s team, which helped us jumpstart our cash reserves in the early days of starting Wami. 
+While we were at the Josten's plant, we were able to sell some of the physical assets we just acquired back to the Josten’s team, which helped us jumpstart our cash reserves in the early days of starting Wami. 
 
 Side note, [Hattie B’s](https://www.hattieb.com/) in Nashville has incredible fried chicken and is worth the hype. We made sure to make multiple pit stops there. 
 
@@ -49,9 +58,12 @@ Side note, [Hattie B’s](https://www.hattieb.com/) in Nashville has incredible 
 
 Once we had our business up and running with the Bushwick production studio, we decided to make our own agreement with Josten’s to sublease space and leverage their super skilled seasonal labor staff to run our operations back down in Tennesee. 
 
-![](/images/the-twisting-tale-of-our-handwriting-robots-1759632217434.jpg)
-
-Back up and running from the Clarksville plant
+<figure>
+  <img src="/images/the-twisting-tale-of-our-handwriting-robots-1759632217434.jpg" alt="Back up and running from the Clarksville plant" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    Back up and running from the Clarksville plant
+  </figcaption>
+</figure>
 
 In retrospect, this was a mistake in that 1) we didn’t have enough latent demand for our notes to provide an efficient return on investment for the upfront ~$100k+ cost of standing up this remote facility and 2) we naively didn't recognize how unequal our negotiating power was with the billion-dollar Josten’s company. 
 

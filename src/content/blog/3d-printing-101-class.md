@@ -2,7 +2,7 @@
 title: "3D Printing 101"
 description: "Recording from 3D Printing 101 - \"Intro to 3D Printing\" class I taught in 2015."
 pubDate: 2015-09-05
-categories: ["Product Management", "Selected Work"]
+categories: ["Presentations", "3D Printing"]
 ---
 
 _**"What would you make if you had a machine that could make almost anything?"**_
@@ -17,4 +17,12 @@ I would often hold these classes [in person](https://www.youtube.com/watch?v=kP4
 
 The video below is a recording from one of the online classes.
 
-https://youtu.be/GuxWrMpvtNs?si=OUkq4U9i8oT0Bk2-
+<div class="aspect-video max-w-2xl mx-auto">
+  <iframe
+    class="w-full h-full"
+    src="https://youtube.com/embed/GuxWrMpvtNs"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>

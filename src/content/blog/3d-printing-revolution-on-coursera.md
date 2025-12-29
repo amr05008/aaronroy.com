@@ -2,7 +2,7 @@
 title: "Check out \"The 3D Printing Revolution\" on Coursera"
 description: "Check out \"The 3D Printing Revolution\" course I contributed to on Coursera!"
 pubDate: 2018-05-04
-categories: ["Entrepreneurship", "Selected Work"]
+categories: ["Presentations", "3D Printing"]
 ---
 
 ![Aaron Roy - 3D Printing](/images/3d-printing-revolution-on-coursera-1759632215056.png)

@@ -2,7 +2,7 @@
 title: "How to manage students, 3D printers, and data at scale"
 description: "Presentation on how educators and engineers could manage students, 3D printers and data at scale."
 pubDate: 2018-10-13
-categories: ["Product Management", "Selected Work"]
+categories: ["Presentations", "3D Printing"]
 ---
 
 ![Aaron Roy - Speaking at Construct3D](/images/how-to-manage-students-3d-printers-and-data-at-scale-1759632215379.jpeg)

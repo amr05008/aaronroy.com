@@ -2,7 +2,7 @@
 title: "From idea to reality: How we brought 3DPrinterOS to life"
 description: "Insights and experiences gained from turning the idea of \"building the first operating system for 3D printing\" into reality."
 pubDate: 2020-04-01
-categories: ["Product Management", "Selected Work"]
+categories: ["Product Management", "3D Printing", "Projects"]
 ---
 
 [![](/images/how-we-brought-3dprinteros-to-life-1759632215490.gif)](https://www.loom.com/share/8d35b8aaa2fa4b6aba9ce05fe2ec000a)

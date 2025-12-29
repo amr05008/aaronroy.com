@@ -85,6 +85,24 @@ node scripts/update-yoast-descriptions.js /path/to/wordpress-export.xml
 
 This script extracts `_yoast_wpseo_metadesc` values from WordPress postmeta and updates the `description` field in blog post frontmatter. Hand-crafted Yoast descriptions are more SEO-optimized than auto-generated excerpts.
 
+## Content Analysis
+
+### Counting Categories
+
+To analyze category usage across all blog posts:
+
+```bash
+node scripts/count-categories.js
+```
+
+This script provides a full breakdown of:
+- All categories used in the blog
+- Number of posts per category
+- Complete list of post titles within each category
+- Total count of unique categories and analyzed posts
+
+Useful for content auditing, identifying popular topics, and planning future content strategy.
+
 ## Configuration
 
 - **Site metadata**: Centralized in `src/config.ts` (site title, description, author info, social profiles)

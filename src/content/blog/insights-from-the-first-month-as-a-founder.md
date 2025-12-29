@@ -2,7 +2,7 @@
 title: "Insights from the first month as a founder"
 description: "As I wrap up my first month of being back in the start-up game, here are 3 insights/reminders that I think may help my fellow founders and early employees."
 pubDate: 2019-05-29
-categories: ["Entrepreneurship"]
+categories: ["Startups"]
 ---
 
 As I wrap up my first full month of being back full-time in the start-up game at [Wami](https://wami.io), here are 3 insights/reminders that I think may help my fellow founders and early employees:

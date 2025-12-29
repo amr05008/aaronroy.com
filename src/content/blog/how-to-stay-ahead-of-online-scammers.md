@@ -2,7 +2,7 @@
 title: "How to stay ahead of online scammers"
 description: "Use this guide to help you improve your privacy, security, and safety on the internet (and hopefully avoid getting scammed)."
 pubDate: 2024-06-25
-categories: ["cybersecurity"]
+categories: ["Tutorials", "Cybersecurity"]
 heroImage: "/og-images/stay-ahead-online-scammers.png"
 
 ---
@@ -70,33 +70,56 @@ People use fake emails, websites, and text messages to try and convince you to t
 
 Scammers usually take a “spray-and-pray” approach, sending millions of these emails and texts out because, unfortunately, at least some folks will inadvertently fall for the ruse. Taking a moment to double-check that the sender’s information matches the content within the email or text will help prevent being tricked. You can also use tools such as [Google Safe Browing](https://transparencyreport.google.com/safe-browsing/search) to confirm if a URL is safe or contains suspicious content. Always be skeptical when you are asked to open a PDF or click a button to be taken to enter your login credentials when you didn’t request help. 
 
-This is an example of a phishing email I received. You can tell from the sending URL this is NOT from Sirius XM. This is not an email I’m going to click.
+This is an example of a phishing email I received. You can tell from the sending URL this is NOT from Sirius XM. This is not an email I'm going to click.
 
-![Example of phishing email ](/images/how-to-stay-ahead-of-online-scammers-1759632217023.jpg)
+<figure>
+  <img src="/images/how-to-stay-ahead-of-online-scammers-1759632217023.jpg" alt="Example of phishing email" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    Example of phishing email
+  </figcaption>
+</figure>
 
 This is an example of a phishing text. You can tell from the sender info that this is not the USPS and the link they are asking me to follow is not the same as their official website (usps.com).
 
-![Example of phishing text ](/images/how-to-stay-ahead-of-online-scammers-1759632217061.jpeg)
+<figure>
+  <img src="/images/how-to-stay-ahead-of-online-scammers-1759632217061.jpeg" alt="Example of phishing text" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    Example of phishing text
+  </figcaption>
+</figure>
 
 Beyond phishing, also be aware of [Pig Butchering](https://en.wikipedia.org/wiki/Pig_butchering_scam) scams. “Pig butchering” refers to a sophisticated, long-term online scam where the scammer (the “butcher”) builds a relationship with the victim (the “pig”) over time to “fatten them up” before executing the scam and stealing large sums of money. There are some [great examples](https://www.instagram.com/p/C8VN4rdS0jF/?igsh=dWVyN3c4aXBrMnpv) of folks messing with scammers attempting this type of scam. 
 
 Below is an example of someone trying to build a relationship with me via random text.  If an unknown number or email reaches out to you and tries to build a relationship, be skeptical.
 
-![Example of pig butchering text ](/images/how-to-stay-ahead-of-online-scammers-1759632217090.jpeg)
+<figure>
+  <img src="/images/how-to-stay-ahead-of-online-scammers-1759632217090.jpeg" alt="Example of pig butchering text" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    Example of pig butchering text
+  </figcaption>
+</figure>
 
 The primary place Pig Butchers use to gather info on you is from Facebook so I highly recommend editing your Facebook privacy settings to only allow “Friends” to see your content at a minimum (vs. having it set to public for the whole internet to see). The best way to do this is to go through the Facebook Privacy Checkup process which you can [access here](https://www.facebook.com/privacy/checkup/) (will require you to log into your own Facebook account). 
 
-![Facebook Privacy Checkup](/images/how-to-stay-ahead-of-online-scammers-1759632217119.png)
+<figure>
+  <img src="/images/how-to-stay-ahead-of-online-scammers-1759632217119.png" alt="Facebook Privacy Checkup" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    Facebook Privacy Checkup
+  </figcaption>
+</figure>
 
-## **Keep an eye on if your data’s been compromised** 
+## **Keep an eye on if your data's been compromised** 
 
 Even if you do things perfectly and you use strong passwords and 2FA, companies still get phished and hacked daily and your information will wind up public on the internet for scammers to find. 
 
 [Have I Been Pwned](https://haveibeenpwned.com/) allows you to search across multiple data breaches to see if your email address or phone number has been compromised.
 
-![](/images/how-to-stay-ahead-of-online-scammers-1759632217149.jpg)
-
-_This email address of mine has been in multiple data leaks_
+<figure>
+  <img src="/images/how-to-stay-ahead-of-online-scammers-1759632217149.jpg" alt="Have I Been Pwned results" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    This email address of mine has been in multiple data leaks
+  </figcaption>
+</figure>
 
 You can sign up to receive an email notification every time your personal information is found in a new data breach. Knowing your information has been involved in a breach will allow you to change your password (and perhaps change any other accounts where you reused that password). 
 
@@ -110,12 +133,17 @@ Scrolling my Venmo feed, I can not only see friends paying for babysitters and p
 
 Unless you want this information to be public, take a moment and update your settings with the instructions below:
 
-![](/images/how-to-stay-ahead-of-online-scammers-1759632217175.png)
+<figure>
+  <img src="/images/how-to-stay-ahead-of-online-scammers-1759632217175.png" alt="Venmo privacy settings instructions" />
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">
+    How to set Venmo transactions to private
+  </figcaption>
+</figure>
 
 These steps are at least a starting point to improve your security and privacy on the internet in 2024.
 
 I take the perspective that it’s impossible to prevent your data from being leaked online, so the best approach is to have the right protections to make sure one single breach won’t bring down your whole digital empire. 
 
-When in doubt that something feels sketchy on the internet, call a friend or feel free to [email me](mailto: aaron@aaronroy.com). My hope is that no one else has to end up in a situation where they hand over [$50,000 in a shoebox](https://www.thecut.com/article/amazon-scam-call-ftc-arrest-warrants.html) to a scam caller pretending to be a CIA agent. 
+When in doubt that something feels sketchy on the internet, call a friend or feel free to [email me](mailto:aaron@aaronroy.com). My hope is that no one else has to end up in a situation where they hand over [$50,000 in a shoebox](https://www.thecut.com/article/amazon-scam-call-ftc-arrest-warrants.html) to a scam caller pretending to be a CIA agent. 
 
 _(special thanks to_ [_Rosanna_](https://www.linkedin.com/in/rosannavolchok/) _and_ [_Eiwe_](https://www.linkedin.com/in/eiwelingefors/) _for reading drafts and giving feedback on this)_

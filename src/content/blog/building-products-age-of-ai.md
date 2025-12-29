@@ -2,7 +2,7 @@
 title: "Building products in the age of AI"
 description: "I recently had the opportunity to speak at NYU's Product Management Club about building products in the age of AI. Here's a walkthrough of my presentation with additional context and resources."
 pubDate: 2025-11-28
-categories: ["presentations", "product management", "ai"]
+categories: ["Presentations", "Product Management", "AI"]
 heroImage: "/og-images/building-products-age-of-ai.png"
 ---
 

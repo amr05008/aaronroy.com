@@ -2,7 +2,7 @@
 title: "Why startups should focus on staying alive"
 description: "The first order of business for a business is survive."
 pubDate: 2019-10-17
-categories: ["Entrepreneurship"]
+categories: ["Startups"]
 ---
 
 For the first few years of any company’s existence, people are naturally skeptical of its ability to endure. Especially in the B2B space, Enterprise and SMBs have no desire to purchase from a young company that may fold up shop as soon as the ink dries on the contract. The stakes of this skepticism are even higher for bootstrapped companies that lack the helpful TechCrunch or VentureBeat articles which highlight their latest funding round to aid in credibility. 
