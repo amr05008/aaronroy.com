@@ -1,15 +1,16 @@
 # Aaron Roy - Personal Blog
 
-Modern, fast static site built with Astro and Tailwind CSS. Migrated from WordPress and live at [aaronroy.com](https://aaronroy.com).
+A modern, fast static site built with Astro and Tailwind CSS. Live at [aaronroy.com](https://aaronroy.com).
 
 ## Tech Stack
 
-- **Astro** - Static site generator
-- **Tailwind CSS** - Styling
-- **MDX** - Markdown with JSX support
-- **TypeScript** - Type safety
+- **Astro 5.x** - Static site generator with TypeScript support
+- **Tailwind CSS** - Utility-first styling with typography plugin
+- **MDX** - Markdown with JSX capabilities
+- **Content Collections** - Type-safe content management
+- **Vercel** - Hosting and analytics
 
-## Getting Started
+## Quick Start
 
 ### Install Dependencies
 
@@ -37,91 +38,40 @@ npm run build
 npm run preview
 ```
 
-## Migrating from WordPress
-
-### Prerequisites
-
-1. Export your WordPress content:
-   - Go to WordPress Admin → Tools → Export
-   - Select "All content"
-   - Download the XML file
-
-### Run Migration Script
-
-```bash
-node scripts/migrate-wordpress.js /path/to/wordpress-export.xml
-```
-
-This script will:
-- Parse the WordPress XML export
-- Convert HTML content to Markdown
-- Extract frontmatter (title, date, description, categories)
-- Download and save images to `/public/images/`
-- Update image paths in the content
-- Create `.md` files in `/src/content/blog/`
-- Preserve URL slugs for SEO
-
-### Post-Migration Steps
-
-1. Review generated markdown files in `src/content/blog/`
-2. Check image downloads in `public/images/`
-3. Verify frontmatter is correct
-4. Test all post URLs to ensure they match WordPress URLs
-5. Update any hardcoded links or references
-
 ## Project Structure
 
 ```
 /
-├── public/               # Static assets
-│   ├── images/          # Blog post images (54+ images)
-│   │   └── og-default.png  # Default Open Graph image for social sharing
-│   ├── og-images/       # Custom OG images for individual posts
-│   ├── favicon.svg      # Custom branded favicon
+├── public/
+│   ├── images/          # Blog post images
+│   ├── og-images/       # Custom Open Graph images
+│   ├── favicon.svg      # Site favicon
 │   └── robots.txt       # Search engine directives
 ├── scripts/
-│   ├── migrate-wordpress.js        # WordPress XML to Markdown migration
-│   └── update-yoast-descriptions.js # Extract Yoast SEO descriptions
+│   ├── migrate-wordpress.js          # WordPress → Markdown migration
+│   ├── update-yoast-descriptions.js  # Extract Yoast SEO descriptions
+│   └── count-categories.js           # Content analysis utility
 ├── src/
-│   ├── config.ts        # Centralized site metadata (title, author, social profiles)
+│   ├── config.ts        # Site metadata (title, author, social profiles)
 │   ├── content/
-│   │   ├── blog/        # Blog posts (29 markdown files)
+│   │   ├── blog/        # Blog posts (Markdown/MDX)
 │   │   └── config.ts    # Content collections schema
 │   ├── data/
-│   │   └── highlights.ts # Homepage featured posts configuration
+│   │   └── highlights.ts # Homepage featured posts
 │   ├── layouts/
 │   │   ├── BaseLayout.astro   # Base HTML, SEO, Open Graph
 │   │   └── BlogPost.astro     # Blog template with JSON-LD
 │   ├── pages/
-│   │   ├── index.astro        # Homepage with Highlights
+│   │   ├── index.astro        # Homepage
 │   │   ├── about.astro        # About page
 │   │   ├── writing.astro      # Blog archive
-│   │   ├── 404.astro          # Custom branded 404 page
+│   │   ├── 404.astro          # Custom 404 page
 │   │   └── [...slug].astro    # Dynamic blog post routes
 │   └── styles/
-│       └── global.css         # Tailwind imports
-├── astro.config.mjs     # Astro config (site URL, integrations)
-├── CLAUDE.md           # Project documentation for AI assistance
-└── package.json
+│       └── global.css   # Tailwind imports
+└── docs/
+    └── MIGRATION.md     # WordPress migration guide
 ```
-
-## Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Import project in Vercel dashboard
-3. Vercel auto-detects Astro and configures build settings
-4. Deploy!
-
-Build command: `npm run build`
-Output directory: `dist`
-
-### Custom Domain
-
-1. Add your domain in Vercel dashboard
-2. Update DNS records as instructed
-3. SSL certificate will be automatically provisioned
 
 ## Content Management
 
@@ -132,101 +82,222 @@ Create a new `.md` or `.mdx` file in `src/content/blog/`:
 ```markdown
 ---
 title: "Your Post Title"
-description: "Brief description for SEO"
+description: "Brief SEO description (155 characters max recommended)"
 pubDate: 2025-01-15
 categories: ["Product Management", "Startups"]
+heroImage: "/og-images/your-post.png"  # Optional: Custom OG image for social sharing
 ---
 
 Your content here...
 ```
 
-### Updating Existing Posts
+**Frontmatter Fields:**
 
-Edit the markdown file directly. Add `updatedDate` to frontmatter if needed:
+- **`title`** (required) - Post title, used in page title and meta tags
+- **`description`** (required) - SEO meta description, shown in search results
+- **`pubDate`** (required) - Publication date (YYYY-MM-DD format)
+- **`categories`** (optional) - Array of category strings
+- **`heroImage`** (optional) - Path to custom Open Graph image (1200×630px recommended)
+- **`updatedDate`** (optional) - Date of last update (YYYY-MM-DD format)
+
+### Editing Existing Posts
+
+Edit the markdown file directly in `src/content/blog/`. If making significant changes, add an `updatedDate` field to frontmatter:
 
 ```yaml
 updatedDate: 2025-01-20
 ```
 
+### Adding Images with Captions
+
+Place images in `public/images/` (organized by post slug recommended):
+
+```markdown
+![Descriptive caption text](/images/your-post/image-name.jpg)
+```
+
+The alt text serves as the image caption and is important for accessibility and SEO.
+
+**Best Practices:**
+
+- Use descriptive, meaningful alt text (not just "image" or "photo")
+- Organize images in subdirectories by post slug (e.g., `/images/my-post-slug/`)
+- Optimize images before uploading (compress, resize to reasonable dimensions)
+- Use web-friendly formats (JPG for photos, PNG for graphics, SVG for logos)
+- Recommended max width: 1200px for blog content images
+
+**Example:**
+
+```markdown
+![Screenshot of the pmquiz.xyz interface showing question 1](/images/building-products-ai/quiz-interface.png)
+```
+
+### Custom Open Graph Images
+
+Create custom 1200×630px images for social sharing (LinkedIn, Twitter, Facebook):
+
+1. Design image at 1200×630px
+2. Save to `public/og-images/your-post-name.png`
+3. Add to frontmatter:
+
+```yaml
+heroImage: "/og-images/your-post-name.png"
+```
+
+If no custom image is set, the default fallback (`/images/og-default.png`) will be used.
+
+### Managing Homepage Highlights
+
+The homepage features a curated "Highlights" section. To update featured posts:
+
+1. Edit `src/data/highlights.ts`
+2. Update the array of post slugs in your preferred display order
+3. Changes hot-reload automatically in dev mode
+
+**Example:**
+
+```typescript
+export const highlights = [
+  'building-products-age-of-ai',
+  'making-migrations-fun-with-claude-code',
+  'reflecting-on-cx-2025',
+];
+```
+
+## Configuration
+
+### Site Metadata (src/config.ts)
+
+Centralized configuration for site-wide metadata:
+
+```typescript
+export const SITE = {
+  title: 'Aaron Roy',
+  description: 'Product manager, writer, and tech enthusiast',
+  url: 'https://aaronroy.com',
+};
+
+export const AUTHOR = {
+  name: 'Aaron Roy',
+  legalName: 'Aaron Roy',
+  email: 'aaron@aaronroy.com',
+  url: 'https://aaronroy.com',
+  location: 'Brooklyn, NY',
+  social: {
+    twitter: 'https://twitter.com/aaronmroy',
+    linkedin: 'https://linkedin.com/in/aaronmichaelroy',
+    github: 'https://github.com/amr05008',
+  },
+};
+```
+
+Updating `src/config.ts` automatically applies changes to:
+
+- Page titles and meta descriptions
+- Footer copyright notice
+- JSON-LD structured data (author and publisher)
+- Social profile links in structured data
+
+### Content Schema (src/content/config.ts)
+
+Content collections are defined with Zod schema validation:
+
+```typescript
+const blogCollection = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.date(),
+    updatedDate: z.date().optional(),
+    categories: z.array(z.string()).optional(),
+    heroImage: z.string().optional(),
+  }),
+});
+```
+
+### Styling
+
+Global styles use Tailwind CSS configured in `tailwind.config.mjs`:
+
+- **Typography plugin** - Enhanced prose styling for blog content
+- **Custom colors** - Can be extended in config
+- **Responsive breakpoints** - Default Tailwind breakpoints (sm, md, lg, xl)
+
+## Development Scripts
+
+### Content Analysis
+
+Analyze category usage across all blog posts:
+
+```bash
+node scripts/count-categories.js
+```
+
+Outputs:
+- All categories used in the blog
+- Number of posts per category
+- Complete list of post titles within each category
+- Total count of unique categories
+
+Useful for content auditing and planning.
+
 ## URL Structure
 
-- Homepage: `/`
-- Writing archive: `/writing`
-- Individual posts: `/post-slug` (matches WordPress structure)
-- About page: `/about`
+- **Homepage:** `/`
+- **Writing archive:** `/writing`
+- **Individual posts:** `/{slug}` (matches WordPress structure)
+- **About page:** `/about`
+- **404 page:** `/404`
 
-URLs are automatically generated from the markdown filename/slug to preserve WordPress URLs.
+URLs are automatically generated from markdown filenames to preserve SEO continuity with WordPress.
 
 ## SEO Features
 
-- **Meta descriptions**: All 29 posts have handcrafted SEO descriptions (100% coverage)
-- **Canonical URLs**: Match WordPress structure (`/{slug}`) for SEO preservation
-- **Open Graph & Twitter Cards**: Complete social sharing metadata with hybrid OG image system
-- **OG Images**: Default fallback at `/images/og-default.png` + custom per-post images via `heroImage` frontmatter
-- **Structured data**: JSON-LD BlogPosting schema with enhanced author metadata (includes social profiles)
-- **Centralized config**: Site metadata managed in `src/config.ts` (title, author, Twitter/LinkedIn/GitHub profiles)
-- **Sitemap**: Auto-generated at `/sitemap-index.xml` via @astrojs/sitemap
-- **robots.txt**: Configured with sitemap reference
-- **Custom favicon**: Branded icon in `public/favicon.svg`
-- **Analytics**: Vercel Analytics installed (privacy-friendly, no cookie consent needed)
+- **Meta descriptions** - All posts have handcrafted SEO descriptions
+- **Canonical URLs** - Set on all pages matching WordPress structure
+- **Open Graph & Twitter Cards** - Complete social sharing metadata
+- **OG Images** - Hybrid system with default fallback + custom per-post images
+- **Structured data** - JSON-LD BlogPosting schema with author social profiles
+- **Sitemap** - Auto-generated at `/sitemap-index.xml`
+- **robots.txt** - Configured with sitemap reference
+- **Analytics** - Vercel Analytics (privacy-friendly, no cookie consent needed)
 
-## Homepage Highlights
+## Deployment
 
-The homepage features a curated "Highlights" section instead of recent posts. To update:
+### Vercel (Current Hosting)
 
-1. Edit `src/data/highlights.ts`
-2. Update the array of post slugs in your preferred order
-3. Changes hot-reload automatically in dev mode
+1. Push code to GitHub
+2. Import project in Vercel dashboard
+3. Vercel auto-detects Astro and configures build settings
+4. Deploy!
 
-## Production Deployment
+**Build Settings:**
+- Build command: `npm run build`
+- Output directory: `dist`
+- Framework: Astro (auto-detected)
 
-### 🎉 LIVE IN PRODUCTION
+### Custom Domain
 
-**Site URL**: [https://aaronroy.com](https://aaronroy.com)
-**Preview/Staging**: [https://aaronroy-com.vercel.app](https://aaronroy-com.vercel.app)
-**Deployed**: October 6, 2025
+1. Add domain in Vercel dashboard (Settings → Domains)
+2. Update DNS records as instructed by Vercel
+3. SSL certificate automatically provisioned
+4. Both apex (aaronroy.com) and www supported
 
-### ✅ Completed Features
+## Migrating from WordPress
 
-**Content Migration:**
-- [x] All 29 WordPress posts migrated to Markdown
-- [x] 54+ images migrated to `public/images/`
-- [x] URL structure matches WordPress exactly (`/{slug}`)
-- [x] SEO descriptions on all 29 posts (100% coverage)
-- [x] Highlights feature for homepage curation
+See **[docs/MIGRATION.md](docs/MIGRATION.md)** for complete WordPress migration guide including:
 
-**SEO & Analytics:**
-- [x] Custom branded favicon installed
-- [x] Sitemap and robots.txt configured
-- [x] Vercel Analytics installed
-- [x] Custom 404 page created
-- [x] Hybrid OG image system (default + custom per-post)
-- [x] Enhanced JSON-LD structured data with author social profiles
-- [x] Centralized site configuration (`src/config.ts`)
-
-**Deployment:**
-- [x] Deployed to Vercel with SSL
-- [x] Custom domain configured (aaronroy.com + www)
-- [x] DNS cutover complete
-- [x] Production build tested (33 pages, ~1.2s build time)
-
-### 🔄 Domain Migration
-
-**Old domain**: [aaronmichaelroy.com](https://aaronmichaelroy.com) (active through 2029)
-**301 Redirects**: All URLs from old domain redirect to aaronroy.com
-**Google Search Console**: Change of Address submitted October 6, 2025
-
-The old domain will remain active with permanent 301 redirects to preserve SEO value from backlinks and catch long-tail traffic.
-
-### 📈 Future Enhancements
-
-- [ ] Submit sitemap to Google Search Console
-- [ ] Run Lighthouse audit for performance baseline
-- [ ] Consider adding RSS feed with `@astrojs/rss`
-- [ ] Image optimization (WebP format, compression)
-- [ ] Set up error tracking (Sentry or similar)
-- [ ] Mobile responsive testing on additional devices
+- WordPress XML export process
+- Running migration scripts
+- Image handling and downloads
+- SEO description extraction (Yoast)
+- Post-migration verification steps
+- Common issues and solutions
 
 ## License
 
-© 2025 Aaron Michael Roy. All rights reserved.
+© 2025 Aaron Roy. All rights reserved.
+
+## Built With
+
+This site was built using [Claude Code](https://www.claude.com/product/claude-code), an AI-powered coding assistant. Source code available at [github.com/amr05008/aaronroy.com](https://github.com/amr05008/aaronroy.com).
