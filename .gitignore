@@ -27,3 +27,8 @@ pnpm-debug.log*
 
 # drafts (local only)
 /drafts
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/

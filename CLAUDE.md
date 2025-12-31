@@ -27,7 +27,60 @@ npm run build
 
 # Preview production build
 npm run preview
+
+# Run smoke tests (builds first, then tests)
+npm run test
+
+# Run smoke tests only (skip build, faster)
+npm run test:quick
 ```
+
+## Testing
+
+The site uses Playwright for smoke testing. Tests validate that the site builds correctly and all pages load without errors.
+
+### What the Smoke Tests Cover
+
+- All static pages load (/, /writing, /about, /404)
+- All 31 blog posts return 200 status
+- Homepage displays the correct number of highlights
+- Writing archive contains all posts
+- Navigation links work correctly
+- Essential meta tags exist (title, description, canonical, OG)
+- 404 page renders for non-existent routes
+
+### Running Tests
+
+```bash
+# Full test (recommended before deploy)
+# Builds the site, starts preview server, runs all tests
+npm run test
+
+# Quick test (if you recently built)
+# Skips build, just runs tests against existing build
+npm run test:quick
+```
+
+### First-Time Setup
+
+Playwright requires browser binaries. Install them once:
+
+```bash
+npx playwright install chromium
+```
+
+### Test Files
+
+- `playwright.config.ts` - Playwright configuration
+- `tests/smoke.spec.ts` - All smoke tests
+
+### Adding New Blog Posts
+
+No test updates needed. The test suite automatically:
+- Reads blog posts from `src/content/blog/`
+- Imports highlights from `src/data/highlights.ts`
+
+Just add your post and run `npm run test` to verify everything works.
 
 ## Architecture & Routing
 

@@ -8,6 +8,7 @@ A modern, fast static site built with Astro and Tailwind CSS. Live at [aaronroy.
 - **Tailwind CSS** - Utility-first styling with typography plugin
 - **MDX** - Markdown with JSX capabilities
 - **Content Collections** - Type-safe content management
+- **Playwright** - Smoke testing
 - **Vercel** - Hosting and analytics
 
 ## Quick Start
@@ -38,6 +39,16 @@ npm run build
 npm run preview
 ```
 
+### Run Tests
+
+```bash
+# Full test (builds site first)
+npm run test
+
+# Quick test (uses existing build)
+npm run test:quick
+```
+
 ## Project Structure
 
 ```
@@ -47,6 +58,8 @@ npm run preview
 │   ├── og-images/       # Custom Open Graph images
 │   ├── favicon.svg      # Site favicon
 │   └── robots.txt       # Search engine directives
+├── tests/
+│   └── smoke.spec.ts   # Playwright smoke tests
 ├── scripts/
 │   ├── migrate-wordpress.js          # WordPress → Markdown migration
 │   ├── update-yoast-descriptions.js  # Extract Yoast SEO descriptions
@@ -240,6 +253,40 @@ Outputs:
 - Total count of unique categories
 
 Useful for content auditing and planning.
+
+## Testing
+
+The site uses Playwright for smoke testing. Tests automatically discover blog posts and validate the site works correctly.
+
+### What's Tested
+
+- All pages load (homepage, writing, about, 404)
+- All blog posts return 200 status
+- Homepage displays correct highlights
+- Navigation links work
+- Essential meta tags exist (title, description, canonical, OG)
+
+### Running Tests
+
+```bash
+# Recommended before deploying
+npm run test
+
+# Quick check (skip build)
+npm run test:quick
+```
+
+### First-Time Setup
+
+Install Playwright browsers once:
+
+```bash
+npx playwright install chromium
+```
+
+### Adding New Posts
+
+No test updates needed. Tests automatically read from `src/content/blog/` and `src/data/highlights.ts`.
 
 ## URL Structure
 
