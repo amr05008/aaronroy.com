@@ -89,6 +89,8 @@ Just add your post and run `npm run test` to verify everything works.
 - Writing archive: `/writing` (writing.astro)
 - Individual posts: `/{slug}` ([...slug].astro) - matches WordPress structure
 - About page: `/about` (about.astro)
+- Category listing: `/categories` (categories.astro)
+- Category archives: `/category/{slug}` (category/[slug].astro) - dynamic routes for each category
 
 ### Content Collections
 Blog posts live in `src/content/blog/` as `.md` or `.mdx` files. Schema defined in `src/content/config.ts`:
@@ -110,6 +112,42 @@ The homepage (`src/pages/index.astro`) displays a curated "Highlights" section i
 3. Changes hot-reload automatically in dev mode
 
 This approach provides explicit control over featured content without requiring redeployment-heavy frontmatter flags.
+
+### Category Pages
+
+The site includes a category browsing system with two page types:
+
+**Category Listing (`/categories`):**
+- Displays all 11 categories with post counts
+- Grid layout sorted by post count (descending), then alphabetically
+- Each category links to its archive page
+
+**Category Archives (`/category/{slug}`):**
+- Dynamic routes generated at build time via `getStaticPaths()`
+- Shows all posts within a category, sorted by date (newest first)
+- Each category page includes:
+  - Category name as heading
+  - Post count
+  - Full post listing with titles, dates, and descriptions
+  - Back link to `/categories`
+
+**Navigation:**
+- "Categories" link added to main header navigation
+- Category names on Writing page are clickable, linking to respective archive pages
+- Categories use URL-friendly slugs (e.g., "Product Management" → `product-management`)
+
+**Current Categories (11 total):**
+- Product Management (9 posts)
+- 3D Printing (7 posts)
+- Presentations (6 posts)
+- Projects (6 posts)
+- Tutorials (5 posts)
+- Startups (4 posts)
+- AI (3 posts)
+- Bikes (2 posts)
+- Cybersecurity (2 posts)
+- Student Loans (2 posts)
+- Life (1 post)
 
 ## WordPress Migration
 
@@ -553,3 +591,48 @@ SSL and DNS configured for custom domain (aaronroy.com).
 - Highlights feature allows dynamic content curation without code changes
 - Custom favicon installed for brand consistency
 - All SEO essentials in place for production deployment
+
+### 2026-01-01: Category Archive Pages Implementation
+
+**What we built/modified:**
+- Created category listing page at `/categories` showing all 11 categories with post counts
+- Implemented dynamic category archive pages at `/category/{slug}` using Astro's `getStaticPaths()`
+- Added "Categories" link to main header navigation in `BaseLayout.astro`
+- Made category names clickable on Writing page, linking to respective archive pages
+- Added `slugify()` helper function for URL-friendly category slugs
+- Created `PROJECT_IDEAS.md` (git-ignored) to track potential enhancement projects
+
+**Technical decisions:**
+- **Dynamic route generation**: Used `getStaticPaths()` in `category/[slug].astro` to generate static pages for all categories at build time
+- **Slugification approach**: Inline arrow function within `getStaticPaths()` to avoid scope issues with build-time execution
+- **Category mapping**: Built categoryMap to track category names and associated posts, preserving original casing while using lowercase slugs for URLs
+- **Grid layout**: 2-column grid on categories listing page for better visual organization
+- **Sorting strategy**: Categories sorted by post count (descending), then alphabetically for consistent ordering
+- **Navigation placement**: Added Categories between Writing and About in header for logical information architecture
+
+**Issues encountered:**
+- **Initial build error**: `slugify is not defined` - function was defined in frontmatter but not in scope during `getStaticPaths()` execution. Fixed by moving slugify logic inline within the function.
+- **No other issues**: Build completed successfully on first attempt after fix
+
+**Verification completed:**
+- ✅ Production build successful (47 pages, up from 33)
+- ✅ All 11 category pages generated correctly
+- ✅ Category listing page shows accurate post counts
+- ✅ Product Management category verified with all 9 posts displayed correctly
+- ✅ Clickable category links working on Writing page
+- ✅ "Categories" link added to main navigation
+- ✅ All pages follow consistent Tailwind styling
+
+**Build metrics:**
+- Pages before: 33 (homepage, writing, about, 404, 31 posts)
+- Pages after: 47 (added 1 category listing + 11 category archives + 2 dynamic routes)
+- Build time: ~3.74s (minimal impact)
+- Categories generated: 11 (Product Management, 3D Printing, Presentations, Projects, Tutorials, Startups, AI, Bikes, Cybersecurity, Student Loans, Life)
+
+**Outcomes:**
+- **Improved content discoverability**: Readers can now browse posts by topic instead of only chronological order
+- **Better SEO**: Category pages provide additional entry points for search traffic
+- **Enhanced navigation**: Three ways to find content (homepage highlights, chronological writing archive, topic-based categories)
+- **Zero maintenance overhead**: Categories automatically generated from existing frontmatter, no manual curation needed
+- **Scalable architecture**: Adding new categories requires no code changes, just adding category to post frontmatter
+- **Project tracking**: Created git-ignored PROJECT_IDEAS.md with 25 potential enhancement ideas for future sessions

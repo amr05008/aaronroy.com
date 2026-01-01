@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+
+// Count posts by category
+const categoryMap = new Map<string, number>();
+
+allPosts.forEach((post) => {
+  if (post.data.categories && post.data.categories.length > 0) {
+    post.data.categories.forEach((category) => {
+      categoryMap.set(category, (categoryMap.get(category) || 0) + 1);
+    });
+  }
+});
+
+// Convert to array and sort by post count (descending), then alphabetically
+const categories = Array.from(categoryMap.entries())
+  .map(([name, count]) => ({ name, count }))
+  .sort((a, b) => {
+    if (b.count !== a.count) return b.count - a.count;
+    return a.name.localeCompare(b.name);
+  });
+
+// Generate URL-friendly slug from category name
+function slugify(str: string) {
+  return str.toLowerCase().replace(/\s+/g, '-');
+}
+---
+
+<BaseLayout title="Categories" description="Browse articles by topic">
+  <div class="max-w-3xl mx-auto px-6 py-12">
+    <header class="mb-16">
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Categories</h1>
+      <p class="text-lg text-gray-600">
+        Browse {allPosts.length} articles organized by topic.
+      </p>
+    </header>
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      {categories.map((category) => (
+        <a
+          href={`/category/${slugify(category.name)}`}
+          class="block p-6 border border-gray-200 rounded-lg hover:border-blue-600 hover:shadow-md transition-all group"
+        >
+          <h2 class="text-xl font-semibold mb-2 group-hover:text-blue-600 transition-colors">
+            {category.name}
+          </h2>
+          <p class="text-gray-600">
+            {category.count} {category.count === 1 ? 'post' : 'posts'}
+          </p>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
