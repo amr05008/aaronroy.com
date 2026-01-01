@@ -11,30 +11,11 @@ The `session-start.sh` hook automatically sets up your environment when starting
 - Runs a build verification (`npm run build`)
 - Only runs in web sessions (detects via `CLAUDE_CODE_REMOTE` environment variable)
 
-**Setup Instructions:**
+**Setup:**
 
-1. Open Claude Code settings (gear icon in bottom-left)
-2. Add this SessionStart hook configuration:
+✅ Already configured! The hook is defined in `.claude/settings.json` and will run automatically when you start a Claude Code web session on this repository.
 
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "aaronroy.com",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/session-start.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-3. Start a new Claude Code web session to test
+No additional setup needed - just start a web session and the hook runs automatically.
 
 **Testing locally:**
 
