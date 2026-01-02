@@ -249,7 +249,8 @@ SSL and DNS configured for custom domain (aaronroy.com).
 
 ## Recent Changes
 
-- **2026-01-02**: Restructured session history to `.claude/` directory (this session)
+- **2026-01-02**: Abstracted session management to global `~/.claude/rules/session-management.md`
+- **2026-01-02**: Restructured session history to `.claude/` directory
 - **2026-01-02**: Code block copy buttons via Expressive Code
 - **2026-01-01**: Category archive pages (`/categories`, `/category/{slug}`)
 - **2025-10-10**: Centralized config (`src/config.ts`), OG image system
@@ -257,40 +258,4 @@ SSL and DNS configured for custom domain (aaronroy.com).
 
 ## Session Management
 
-### For Claude Code sessions:
-
-**Before making architectural changes:**
-- Check `.claude/decisions/` for existing rationale
-- Don't re-litigate solved problems without good reason
-
-**When asked about prior work:**
-- Check `.claude/sessions/` for detailed history
-- Use `.claude/sessions/index.md` for quick lookup by date or topic
-
-**At the end of significant sessions:**
-- Create a new session file: `.claude/sessions/YYYY-MM-DD-brief-description.md`
-- Update `.claude/sessions/index.md` with a one-line summary
-- If a major architectural decision was made, add to `.claude/decisions/`
-
-### Session file template:
-
-```markdown
----
-date: YYYY-MM-DD
-summary: One-line description
-tags: [relevant, tags]
-files_changed: [list, of, files]
----
-
-## What we built
-## Technical decisions
-## Issues encountered
-## Verification
-## Outcomes
-```
-
-## References
-
-- **Session history**: `.claude/sessions/` (detailed logs of each working session)
-- **Architecture decisions**: `.claude/decisions/` (rationale for key choices)
-- **Project ideas**: `PROJECT_IDEAS.md` (git-ignored, potential enhancements)
+@~/.claude/rules/session-management.md

@@ -4,6 +4,7 @@ Quick reference for all Claude Code working sessions on this project.
 
 | Date | Summary | Tags |
 |------|---------|------|
+| 2026-01-02 | [Abstracted session management to global rules](2026-01-02-abstract-session-management.md) | documentation, meta, workflow |
 | 2026-01-02 | [Restructured session history to .claude/](2026-01-02-session-restructuring.md) | documentation, meta |
 | 2026-01-02 | [Code block copy buttons via Expressive Code](2026-01-02-code-blocks.md) | enhancement, dx |
 | 2026-01-01 | [Category listing and archive pages](2026-01-01-category-pages.md) | feature, navigation |
@@ -22,3 +23,5 @@ Quick reference for all Claude Code working sessions on this project.
 - **feature**: 2026-01-01-category-pages
 - **enhancement**: 2026-01-02-code-blocks
 - **configuration**: 2025-10-10-centralized-config
+- **workflow**: 2026-01-02-abstract-session-management
+- **meta**: 2026-01-02-session-restructuring, 2026-01-02-abstract-session-management
