@@ -8,6 +8,7 @@ A modern, fast static site built with Astro and Tailwind CSS. Live at [aaronroy.
 - **Tailwind CSS** - Utility-first styling with typography plugin
 - **MDX** - Markdown with JSX capabilities
 - **Content Collections** - Type-safe content management
+- **Expressive Code** - Enhanced code blocks with syntax highlighting and copy buttons
 - **Playwright** - Smoke testing
 - **Vercel** - Hosting and analytics
 
@@ -144,6 +145,42 @@ The alt text serves as the image caption and is important for accessibility and 
 ```markdown
 ![Screenshot of the pmquiz.xyz interface showing question 1](/images/building-products-ai/quiz-interface.png)
 ```
+
+### Adding Code Blocks
+
+Code blocks automatically include a copy button and syntax highlighting powered by Expressive Code.
+
+**Basic usage:**
+
+````markdown
+```
+Your code here
+```
+````
+
+**With language-specific syntax highlighting:**
+
+````markdown
+```javascript
+const greeting = "Hello, world!";
+console.log(greeting);
+```
+````
+
+````markdown
+```bash
+npm install
+npm run dev
+```
+````
+
+**Features:**
+- **Copy button** - Automatically appears on all code blocks
+- **Dark theme** - Uses `github-dark` for better readability
+- **Syntax highlighting** - Supports 100+ languages when specified
+- **Mobile-friendly** - Touch-friendly copy button and horizontal scroll for long lines
+
+**Supported languages:** JavaScript, TypeScript, Python, Bash, Markdown, HTML, CSS, JSON, YAML, and many more. Simply add the language name after the opening triple backticks.
 
 ### Custom Open Graph Images
 

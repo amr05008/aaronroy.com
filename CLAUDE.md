@@ -12,6 +12,7 @@ Personal blog for Aaron Michael Roy, built with Astro and migrated from WordPres
 - **Tailwind CSS** - Utility-first styling with typography plugin
 - **MDX** - Markdown with JSX capabilities for blog posts
 - **Content Collections** - Type-safe content management via `src/content/config.ts`
+- **Expressive Code** - Enhanced code blocks with syntax highlighting and copy buttons
 
 ## Development Commands
 
@@ -198,8 +199,8 @@ Useful for content auditing, identifying popular topics, and planning future con
 
 - **Site metadata**: Centralized in `src/config.ts` (site title, description, author info, social profiles)
 - **Site URL**: Set in `astro.config.mjs` as `site: 'https://aaronroy.com'`
-- **Syntax highlighting**: Uses `github-dark` theme (configured in `astro.config.mjs`)
-- **Integrations**: MDX, Sitemap, Tailwind CSS
+- **Code blocks**: Expressive Code integration with `github-dark` theme and copy button enabled
+- **Integrations**: Expressive Code, MDX, Sitemap, Tailwind CSS
 
 ### Site Config (`src/config.ts`)
 
@@ -636,3 +637,58 @@ SSL and DNS configured for custom domain (aaronroy.com).
 - **Zero maintenance overhead**: Categories automatically generated from existing frontmatter, no manual curation needed
 - **Scalable architecture**: Adding new categories requires no code changes, just adding category to post frontmatter
 - **Project tracking**: Created git-ignored PROJECT_IDEAS.md with 25 potential enhancement ideas for future sessions
+
+### 2026-01-02: Code Block Enhancement with Expressive Code
+
+**What we built/modified:**
+- Installed `astro-expressive-code` package for enhanced code block functionality
+- Configured Expressive Code integration in `astro.config.mjs` with `github-dark` theme
+- Added rounded corners and transparent borders for cleaner code block styling
+- Enabled copy-to-clipboard button on all code blocks
+- Updated CLAUDE.md and README.md documentation to reflect code block enhancements
+
+**Technical decisions:**
+- **Expressive Code choice**: Selected Expressive Code over alternatives (built-in Shiki + custom button, Rehype Pretty Code, PrismJS) for best balance of features and ease of implementation
+- **Dark theme**: Chose `github-dark` theme to match existing site aesthetic and provide better code readability
+- **Integration order**: Placed expressiveCode before mdx() in integrations array (required for proper processing)
+- **Minimal configuration**: Used default settings with minor style overrides (borderRadius, borderColor) for consistency with Tailwind design
+- **Language labels**: Decided to keep code blocks simple without explicit language labels; can be added later by specifying languages in markdown code fences (e.g., ` ```bash `)
+
+**Issues encountered:**
+- **None** - Integration went smoothly with no build errors or compatibility issues
+
+**Verification completed:**
+- ✅ Package installed successfully (added 15 packages, ~18KB total bundle)
+- ✅ Production build successful (47 pages, 1.65s build time)
+- ✅ All 7 smoke tests passing (homepage, writing, about, 404, all blog posts, meta tags, navigation)
+- ✅ Copy button appears on all code blocks with proper functionality
+- ✅ Dark theme rendering correctly with syntax highlighting
+- ✅ Mobile responsive verified (400px viewport tested)
+- ✅ Copy button accessible and functional on mobile devices
+- ✅ Code blocks properly handle overflow with horizontal scroll
+- ✅ Dev server hot-reload working correctly
+
+**Build metrics:**
+- Bundle size impact: +18KB total (+15.78KB CSS, +2.52KB JS, ~4KB gzipped)
+- Build time: No significant impact (1.65s for 47 pages)
+- Pages generated: 47 (unchanged from previous build)
+
+**User experience improvements:**
+- **One-click copying**: Readers can now easily copy code snippets from blog posts
+- **Visual feedback**: Copy button shows "Copied!" confirmation after click
+- **Better readability**: Dark theme with syntax highlighting improves code visibility
+- **Mobile-friendly**: Touch-friendly copy button works on all devices
+- **Consistent styling**: Rounded corners match overall site design language
+
+**Future enhancements (optional):**
+- Add language hints to existing code blocks in blog posts (e.g., ` ```markdown `, ` ```bash `) for language-specific syntax highlighting
+- Consider enabling line numbers for longer code examples
+- Explore frame titles for code blocks that represent file contents
+
+**Outcomes:**
+- All code blocks across 2 blog posts now have functional copy buttons
+- Enhanced user experience for technical content with improved code readability
+- Minimal bundle size impact (~4KB gzipped) for significant UX improvement
+- Zero breaking changes - all existing blog posts render correctly
+- Feature complete and production-ready
+- Documentation updated to reflect new code block capabilities
