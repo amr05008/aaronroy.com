@@ -15,6 +15,9 @@ export default defineConfig({
         borderRadius: '0.5rem',
         borderColor: 'transparent',
       },
+      frames: {
+        showLanguage: true,
+      },
     }),
     mdx(),
     sitemap(),

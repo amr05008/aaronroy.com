@@ -13,7 +13,7 @@ I recently acquired [aaronroy.com](http://aaronroy.com) and [aaronroy.net](http:
 
 My starting prompt:
 
-```
+```plaintext
 I want to switch my website from aaronroy.com to aaronroy.com. I own both the domains already and have hosting already set up on aaronroy.com. What steps should I take to switch my website to aaronroy.com?
 ```
 
@@ -23,12 +23,12 @@ I appreciate that it starts the response with "Backup Your Website".
 
 I definitely needed some more clarification on the differences and benefits of add-on domains vs. parked domains. I was able to follow up my original prompts with:
 
-```
+```plaintext
 Can you explain the difference between add-on domains and parked domains with examples? When would I want to use one versus the other?
 ```
 
-```
-What’s the difference between parked domain and a domain redirect? Why would I park a domain instead of just redirecting?
+```plaintext
+What's the difference between parked domain and a domain redirect? Why would I park a domain instead of just redirecting?
 ```
 
 After weighing my options and how much time I felt like committing to this project, I ended up going with just parking my new domains.
@@ -37,7 +37,7 @@ Beyond helping me figure out hosting questions, I've also found ChatGPT useful t
 
 I was looking for a secure option beyond [Yubikey's](https://www.yubico.com/products/) to manage 2FA on a shared email account. With physical keys like the Yubikey for 2FA, best practice is to have a primary and a backup key set up for a single account so you don't accidentally lock yourself out if you lose the physical key. I was unsure if you had to follow the same approach with a secure passkey. My prompt:
 
-```
+```plaintext
 Do I need to create multiple passkeys for a single login account the same way I have a primary and a backup yubikey? 
 ```
 
@@ -57,16 +57,16 @@ ChatGPT is exceptional at supplying recipes combining random food items in your 
 
 Some prompts I've had success with:
 
-```
+```plaintext
 Tell me a few stir fry recipes using chicken, asparagus and rice
 ```
 
-```
-Please give me 3 different sub 15 minute marinades that can be used with baked salmon 
+```plaintext
+Please give me 3 different sub 15 minute marinades that can be used with baked salmon
 ```
 
-```
-What’s a crockpot recipe including vegetable broth, boneless chicken thighs and diced sweet potatoes? 
+```plaintext
+What's a crockpot recipe including vegetable broth, boneless chicken thighs and diced sweet potatoes?
 ```
 
 I've also found it useful in other ways around the kitchen, using it here to figure out how to clean a coffee grinder.

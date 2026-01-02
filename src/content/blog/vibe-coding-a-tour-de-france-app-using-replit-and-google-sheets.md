@@ -25,7 +25,7 @@ Step one was creating the prompt to use with the [Replit Agent](https://docs.rep
 
 Original prompt:
 
-```
+```markdown
 # Fantasy Tour De France Web App
 
 ## Context
