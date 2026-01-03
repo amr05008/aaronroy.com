@@ -102,9 +102,44 @@ Just add your post and run `npm run test` to verify everything works.
 ### Content Collections
 Blog posts live in `src/content/blog/` as `.md` or `.mdx` files. Schema defined in `src/content/config.ts`:
 - Required: `title`, `description`, `pubDate`
-- Optional: `updatedDate`, `categories`, `heroImage`
+- Optional: `updatedDate`, `categories`, `heroImage`, `draft`
 
 Posts are rendered via the catch-all route `[...slug].astro` which uses the `BlogPost` layout.
+
+### Draft System
+
+The blog supports a draft system for working on posts privately before publishing. Posts with `draft: true` in frontmatter are visible during development but excluded from production builds.
+
+**Creating a draft:**
+```markdown
+---
+title: "My Upcoming Post"
+description: "Still working on this"
+pubDate: 2026-01-03
+categories: ["AI"]
+draft: true
+---
+
+Work in progress content...
+```
+
+**Publishing a draft:**
+Change `draft: true` to `draft: false` or remove the `draft` field entirely (defaults to `false`).
+
+**Behavior by environment:**
+
+| Environment | Draft Visibility | Routes | RSS Feed |
+|------------|-----------------|--------|----------|
+| Dev (`npm run dev`) | ✅ Visible everywhere except RSS | ✅ Accessible at `/{slug}` | ❌ Excluded |
+| Production (`npm run build`) | ❌ Hidden everywhere | ❌ 404 if accessed | ❌ Excluded |
+| Preview (`npm run preview`) | ❌ Hidden (simulates production) | ❌ 404 | ❌ Excluded |
+
+**Implementation details:**
+- Filtering logic centralized in `src/utils/posts.ts`
+- All page queries use `getPublishedPosts()` helper
+- RSS feed uses `getPostsForRSS()` to exclude drafts in all modes
+- Smoke tests automatically detect and filter drafts
+- Example draft available at `src/content/blog/example-draft-post.md`
 
 ### Layouts
 - `BaseLayout.astro` - Base HTML structure, SEO meta tags, Open Graph, Twitter Cards

@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
 import { highlights } from '../data/highlights';
+import { getPublishedPosts } from '../utils/posts';
 
-const allPosts = await getCollection('blog');
+const allPosts = await getPublishedPosts();
 
 // Get highlighted posts in the order specified in highlights.ts
 const highlightedPosts = highlights

@@ -1,13 +1,36 @@
 import { test, expect } from "@playwright/test";
-import { readdirSync } from "fs";
+import { readdirSync, readFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
 // Dynamically read blog posts from content directory
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const contentDir = join(__dirname, "../src/content/blog");
-const blogPosts = readdirSync(contentDir)
-  .filter((file) => file.endsWith(".md") || file.endsWith(".mdx"))
+
+// Function to check if a post is a draft by reading its frontmatter
+function isDraft(filename: string): boolean {
+  const filePath = join(contentDir, filename);
+  const content = readFileSync(filePath, 'utf-8');
+
+  // Extract frontmatter
+  const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+  if (!frontmatterMatch) return false;
+
+  const frontmatter = frontmatterMatch[1];
+  // Check for draft: true
+  return /draft:\s*true/i.test(frontmatter);
+}
+
+const blogPostFiles = readdirSync(contentDir)
+  .filter((file) => file.endsWith(".md") || file.endsWith(".mdx"));
+
+// All blog posts (including drafts)
+const allBlogPosts = blogPostFiles
+  .map((file) => file.replace(/\.(md|mdx)$/, "").toLowerCase());
+
+// Published posts only (excluding drafts)
+const publishedPosts = blogPostFiles
+  .filter((file) => !isDraft(file))
   .map((file) => file.replace(/\.(md|mdx)$/, "").toLowerCase());
 
 // Import highlights from source of truth
@@ -37,10 +60,10 @@ test.describe("Smoke Tests", () => {
 
     await expect(page).toHaveTitle(/Writing/);
 
-    // Should have at least as many post links as we have posts
+    // Should have at least as many post links as we have published posts
     const postLinks = page.locator('main a[href^="/"]');
     const count = await postLinks.count();
-    expect(count).toBeGreaterThanOrEqual(blogPosts.length);
+    expect(count).toBeGreaterThanOrEqual(publishedPosts.length);
   });
 
   test("about page loads", async ({ page }) => {
@@ -60,7 +83,8 @@ test.describe("Smoke Tests", () => {
   test("all blog posts load", async ({ page }) => {
     const failures: string[] = [];
 
-    for (const slug of blogPosts) {
+    // Only test published posts (drafts should not have routes in production build)
+    for (const slug of publishedPosts) {
       const response = await page.goto(`/${slug}`);
       if (response?.status() !== 200) {
         failures.push(`/${slug} returned ${response?.status()}`);
@@ -71,8 +95,8 @@ test.describe("Smoke Tests", () => {
   });
 
   test("blog posts have required meta tags", async ({ page }) => {
-    // Test a sample post for meta tags
-    await page.goto(`/${blogPosts[0]}`);
+    // Test a sample published post for meta tags
+    await page.goto(`/${publishedPosts[0]}`);
 
     // Check essential meta tags exist
     const title = await page.locator("title").textContent();
@@ -123,12 +147,12 @@ test.describe("Smoke Tests", () => {
     expect(rssContent).toContain("<title>Aaron Roy</title>");
     expect(rssContent).toContain("<language>en-us</language>");
 
-    // Count items - should match blog post count
+    // Count items - should match published post count (drafts excluded)
     const itemMatches = rssContent!.match(/<item>/g);
-    expect(itemMatches?.length).toBe(blogPosts.length);
+    expect(itemMatches?.length).toBe(publishedPosts.length);
 
-    // Verify all posts are included
-    for (const slug of blogPosts) {
+    // Verify all published posts are included (drafts should not be in RSS)
+    for (const slug of publishedPosts) {
       expect(rssContent).toContain(`https://aaronroy.com/${slug}/`);
     }
   });
