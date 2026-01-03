@@ -4,6 +4,7 @@ Quick reference for all Claude Code working sessions on this project.
 
 | Date | Summary | Tags |
 |------|---------|------|
+| 2026-01-02 | [RSS feed with HTML content and absolute URLs](2026-01-02-add-rss-feed.md) | rss, seo, content-syndication, testing |
 | 2026-01-02 | [Abstracted session management to global rules](2026-01-02-abstract-session-management.md) | documentation, meta, workflow |
 | 2026-01-02 | [Restructured session history to .claude/](2026-01-02-session-restructuring.md) | documentation, meta |
 | 2026-01-02 | [Code block copy buttons via Expressive Code](2026-01-02-code-blocks.md) | enhancement, dx |
@@ -18,10 +19,13 @@ Quick reference for all Claude Code working sessions on this project.
 
 ## By Tag
 
-- **seo**: 2025-10-05-seo-highlights, 2025-10-06-domain-migration, 2025-10-10-og-images, 2025-10-10-centralized-config
+- **seo**: 2026-01-02-add-rss-feed, 2025-10-05-seo-highlights, 2025-10-06-domain-migration, 2025-10-10-og-images, 2025-10-10-centralized-config
 - **deployment**: 2025-10-05-predeployment-audit, 2025-10-06-production-deployment
 - **feature**: 2026-01-01-category-pages
 - **enhancement**: 2026-01-02-code-blocks
 - **configuration**: 2025-10-10-centralized-config
 - **workflow**: 2026-01-02-abstract-session-management
 - **meta**: 2026-01-02-session-restructuring, 2026-01-02-abstract-session-management
+- **rss**: 2026-01-02-add-rss-feed
+- **content-syndication**: 2026-01-02-add-rss-feed
+- **testing**: 2026-01-02-add-rss-feed

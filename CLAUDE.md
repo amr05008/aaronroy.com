@@ -13,6 +13,8 @@ Personal blog for Aaron Michael Roy, built with Astro and migrated from WordPres
 - **MDX** - Markdown with JSX capabilities for blog posts
 - **Content Collections** - Type-safe content management via `src/content/config.ts`
 - **Expressive Code** - Enhanced code blocks with syntax highlighting and copy buttons
+- **marked** - Markdown to HTML parser for RSS feed content
+- **@astrojs/rss** - RSS feed generation
 
 ## Development Commands
 
@@ -49,6 +51,9 @@ The site uses Playwright for smoke testing. Tests validate that the site builds 
 - Navigation links work correctly
 - Essential meta tags exist (title, description, canonical, OG)
 - 404 page renders for non-existent routes
+- RSS feed validity and post count
+- RSS auto-discovery link in page head
+- RSS links visible to users (footer and writing page)
 
 ### Running Tests
 
@@ -92,6 +97,7 @@ Just add your post and run `npm run test` to verify everything works.
 - About page: `/about` (about.astro)
 - Category listing: `/categories` (categories.astro)
 - Category archives: `/category/{slug}` (category/[slug].astro) - dynamic routes for each category
+- RSS feed: `/rss.xml` (rss.xml.ts) - Full-content RSS feed with HTML rendering
 
 ### Content Collections
 Blog posts live in `src/content/blog/` as `.md` or `.mdx` files. Schema defined in `src/content/config.ts`:
@@ -228,6 +234,12 @@ The site includes comprehensive SEO features:
 - **Sitemap**: Auto-generated via @astrojs/sitemap integration
 - **robots.txt**: Located in `public/robots.txt` with sitemap reference
 - **Homepage meta**: Custom description set in index.astro (not using generic fallback)
+- **RSS feed**: Full-content RSS feed at `/rss.xml`
+  - Markdown converted to HTML using `marked` library
+  - Absolute image URLs for proper display in feed readers
+  - Auto-discovery link in `<head>` tag on all pages
+  - User-facing links on Writing page and footer
+  - Author metadata included in feed items
 
 ### SEO Notes
 
@@ -249,6 +261,7 @@ SSL and DNS configured for custom domain (aaronroy.com).
 
 ## Recent Changes
 
+- **2026-01-02**: RSS feed implementation with full HTML content and absolute image URLs
 - **2026-01-02**: Abstracted session management to global `~/.claude/rules/session-management.md`
 - **2026-01-02**: Restructured session history to `.claude/` directory
 - **2026-01-02**: Code block copy buttons via Expressive Code

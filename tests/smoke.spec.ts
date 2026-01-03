@@ -8,7 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const contentDir = join(__dirname, "../src/content/blog");
 const blogPosts = readdirSync(contentDir)
   .filter((file) => file.endsWith(".md") || file.endsWith(".mdx"))
-  .map((file) => file.replace(/\.(md|mdx)$/, ""));
+  .map((file) => file.replace(/\.(md|mdx)$/, "").toLowerCase());
 
 // Import highlights from source of truth
 import { highlights } from "../src/data/highlights";
@@ -103,5 +103,53 @@ test.describe("Smoke Tests", () => {
     // Click home link (site title)
     await page.click('header a[href="/"]');
     await expect(page).toHaveURL(/\/$/);
+  });
+
+  test("RSS feed is valid and contains all posts", async ({ page }) => {
+    const response = await page.goto("/rss.xml");
+    expect(response?.status()).toBe(200);
+
+    // Check content type
+    const contentType = response?.headers()["content-type"];
+    expect(contentType).toContain("xml");
+
+    // Get raw RSS feed content (not browser-rendered HTML)
+    const rssContent = await response?.text();
+    expect(rssContent).toBeTruthy();
+
+    // Verify RSS structure
+    expect(rssContent).toContain('<rss version="2.0"');
+    expect(rssContent).toContain("<channel>");
+    expect(rssContent).toContain("<title>Aaron Roy</title>");
+    expect(rssContent).toContain("<language>en-us</language>");
+
+    // Count items - should match blog post count
+    const itemMatches = rssContent!.match(/<item>/g);
+    expect(itemMatches?.length).toBe(blogPosts.length);
+
+    // Verify all posts are included
+    for (const slug of blogPosts) {
+      expect(rssContent).toContain(`https://aaronroy.com/${slug}/`);
+    }
+  });
+
+  test("RSS feed has auto-discovery link", async ({ page }) => {
+    await page.goto("/");
+
+    const rssLink = page.locator('link[type="application/rss+xml"]');
+    await expect(rssLink).toHaveAttribute("href", "/rss.xml");
+    await expect(rssLink).toHaveAttribute("title", /RSS/);
+  });
+
+  test("RSS links are visible to users", async ({ page }) => {
+    // Check footer link
+    await page.goto("/");
+    const footerRssLink = page.locator('footer a[href="/rss.xml"]');
+    await expect(footerRssLink).toBeVisible();
+
+    // Check writing page link
+    await page.goto("/writing");
+    const writingRssLink = page.locator('a[href="/rss.xml"]').first();
+    await expect(writingRssLink).toBeVisible();
   });
 });
