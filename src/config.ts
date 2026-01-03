@@ -7,7 +7,7 @@
 
 export const SITE = {
   title: 'Aaron Roy',
-  description: 'Writing on building products, bikes, and random projects.',
+  description: 'Experiences and learnings on product, growth, bikes and whatever else I wander into.',
   url: 'https://aaronroy.com',
 } as const;
 
