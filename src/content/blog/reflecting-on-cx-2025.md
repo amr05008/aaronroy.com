@@ -36,11 +36,11 @@ I found this practice to be super helpful as the instructor, Keith, had us pract
 Additionally, right smack in the heart of Queens is [Cunningham Park](https://www.nycgovparks.org/parks/cunningham-park). This park is an absolute gem and was perfect for getting used to riding in different conditions. The park has a variety of different single track trails and multiple loops you can practice on to refine your skills. 
 
   <div class="aspect-[9/16] max-w-xs mx-auto">
-    <iframe 
+    <iframe
       class="w-full h-full"
-      src="https://youtube.com/embed/2mAUOfyoB7s?si=1GFyQNVzybc9Jyih" 
-      frameborder="0" 
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+      src="https://www.youtube.com/embed/2mAUOfyoB7s?si=1GFyQNVzybc9Jyih"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen>
     </iframe>
   </div>
@@ -66,11 +66,11 @@ I rode in the novice 5 and open 4/5 races in this event. We had dry conditions a
 In the first race, I took it quite slow on the first lap to get my bearings then improved my per lap times for each successive lap so I was pumped. 
 
   <div class="aspect-[9/16] max-w-xs mx-auto">
-    <iframe 
+    <iframe
       class="w-full h-full"
-      src="https://youtube.com/embed/6UdHnFohgbY?si=dMPv5X1DvV1Q9Zb5" 
-      frameborder="0" 
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+      src="https://www.youtube.com/embed/6UdHnFohgbY?si=dMPv5X1DvV1Q9Zb5"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen>
     </iframe>
   </div>

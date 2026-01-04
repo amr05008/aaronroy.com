@@ -12,7 +12,7 @@ I made the walkthrough video below as part of the 3DPrinterOS onboarding experie
 <div class="aspect-video max-w-2xl mx-auto">
   <iframe
     class="w-full h-full"
-    src="https://youtube.com/embed/CTgD52Cbits"
+    src="https://www.youtube.com/embed/CTgD52Cbits"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen>
