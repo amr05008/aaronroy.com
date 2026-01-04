@@ -106,6 +106,79 @@ Blog posts live in `src/content/blog/` as `.md` or `.mdx` files. Schema defined 
 
 Posts are rendered via the catch-all route `[...slug].astro` which uses the `BlogPost` layout.
 
+### Video Storage
+
+Videos for blog posts are stored in `public/videos/` with human-readable slugs.
+
+**Naming Convention:**
+- Pattern: `{descriptive-name}.mp4` or `{post-slug}-{description}.mp4`
+- Examples: `strava-mcp-tutorial.mp4`, `reflecting-cx-2025-cunningham-park.mp4`
+- Use lowercase with hyphens
+- Be descriptive but concise
+
+**Embedding Videos in Markdown:**
+
+Standard horizontal video:
+```html
+<video
+  controls
+  width="100%"
+  style="max-width: 800px; margin: 2rem auto; display: block; border-radius: 0.5rem;"
+  preload="metadata"
+>
+  <source src="/videos/strava-mcp-tutorial.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+```
+
+Vertical video (portrait):
+```html
+<div class="aspect-[9/16] max-w-xs mx-auto my-8">
+  <video
+    class="w-full h-full rounded-lg"
+    controls
+    preload="metadata"
+  >
+    <source src="/videos/cunningham-park-practice.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+```
+
+**When to Use Self-Hosted MP4 vs YouTube Embeds:**
+
+Use **self-hosted MP4** (`/videos/`) for:
+- Short Kap screen recordings (< 2 minutes)
+- Quick product demos and feature walkthroughs
+- Small file sizes (< 10MB)
+- Content you want to keep private or unlisted
+- Inline playback without external dependencies
+- Simple, focused demonstrations
+
+Use **YouTube embeds** for:
+- Long-form content (> 2 minutes)
+- Presentations, talks, or full tutorials
+- Large file sizes (> 20MB)
+- Content where you want quality options (360p, 720p, 1080p)
+- Videos that benefit from discoverability (YouTube search)
+- Content where you want engagement (comments, likes)
+- When you want detailed analytics
+
+**Video Guidelines for Self-Hosted MP4:**
+- Format: MP4 (H.264 codec recommended for maximum compatibility)
+- File size: Keep under 10MB for reasonable page load times
+- Dimensions: Max 1920x1080 for horizontal, 1080x1920 for vertical
+- Use captions/transcripts for accessibility when showing complex information
+
+**Compression:**
+Use [HandBrake](https://handbrake.fr/) or FFmpeg to compress large videos:
+```bash
+ffmpeg -i input.mp4 -vcodec h264 -acodec aac -crf 28 -preset slow output.mp4
+```
+
+**Future Enhancement:**
+MDX component wrapper planned for simplified syntax and enhanced features (lazy loading, poster images, analytics).
+
 ### Draft System
 
 The blog supports a draft system for working on posts privately before publishing. Posts with `draft: true` in frontmatter are visible during development but excluded from production builds.

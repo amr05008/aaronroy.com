@@ -57,6 +57,7 @@ npm run test:quick
 ├── public/
 │   ├── images/          # Blog post images
 │   ├── og-images/       # Custom Open Graph images
+│   ├── videos/          # Self-hosted MP4 videos
 │   ├── favicon.svg      # Site favicon
 │   └── robots.txt       # Search engine directives
 ├── tests/
@@ -144,6 +145,72 @@ The alt text serves as the image caption and is important for accessibility and 
 
 ```markdown
 ![Screenshot of the pmquiz.xyz interface showing question 1](/images/building-products-ai/quiz-interface.png)
+```
+
+### Adding Videos
+
+Videos are stored in `public/videos/` and embedded using HTML5 `<video>` tags in Markdown.
+
+**When to use self-hosted videos:**
+- Short Kap screen recordings (< 2 minutes)
+- Quick product demos and feature walkthroughs
+- Small file sizes (< 10MB)
+- Content you want to keep private or unlisted
+
+**When to use YouTube embeds:**
+- Long-form content (> 2 minutes)
+- Large file sizes (> 20MB)
+- Videos needing quality options (360p, 720p, 1080p)
+- Content where you want engagement and analytics
+
+**Naming Convention:**
+
+Use descriptive, human-readable names:
+- Pattern: `{descriptive-name}.mp4` or `{post-slug}-{description}.mp4`
+- Examples: `strava-mcp-tutorial.mp4`, `reflecting-cx-2025-cunningham-park.mp4`
+- Use lowercase with hyphens
+
+**Embedding a horizontal video:**
+
+```html
+<video
+  controls
+  width="100%"
+  style="max-width: 800px; margin: 2rem auto; display: block; border-radius: 0.5rem;"
+  preload="metadata"
+>
+  <source src="/videos/strava-mcp-tutorial.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+```
+
+**Embedding a vertical/portrait video:**
+
+```html
+<div class="aspect-[9/16] max-w-xs mx-auto my-8">
+  <video
+    class="w-full h-full rounded-lg"
+    controls
+    preload="metadata"
+  >
+    <source src="/videos/cunningham-park-practice.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+```
+
+**Video Guidelines:**
+- **Format:** MP4 with H.264 codec (maximum compatibility)
+- **File size:** Keep under 10MB for reasonable page load times
+- **Dimensions:** Max 1920×1080 for horizontal, 1080×1920 for vertical
+- **Accessibility:** Use captions/transcripts for complex information
+
+**Compressing videos:**
+
+Use [HandBrake](https://handbrake.fr/) (GUI) or FFmpeg (command-line):
+
+```bash
+ffmpeg -i input.mp4 -vcodec h264 -acodec aac -crf 28 -preset slow output.mp4
 ```
 
 ### Adding Code Blocks

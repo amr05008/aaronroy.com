@@ -4,6 +4,7 @@ Quick reference for all Claude Code working sessions on this project.
 
 | Date | Summary | Tags |
 |------|---------|------|
+| 2026-01-03 | [Video storage infrastructure for Kap recordings](2026-01-03-add-video-storage.md) | video, documentation, infrastructure |
 | 2026-01-03 | [Blog draft system with frontmatter-based filtering](2026-01-03-add-draft-system.md) | feature, draft-system, content-management |
 | 2026-01-02 | [RSS feed with HTML content and absolute URLs](2026-01-02-add-rss-feed.md) | rss, seo, content-syndication, testing |
 | 2026-01-02 | [Abstracted session management to global rules](2026-01-02-abstract-session-management.md) | documentation, meta, workflow |
@@ -20,10 +21,13 @@ Quick reference for all Claude Code working sessions on this project.
 
 ## By Tag
 
+- **video**: 2026-01-03-add-video-storage
+- **infrastructure**: 2026-01-03-add-video-storage
 - **feature**: 2026-01-03-add-draft-system, 2026-01-01-category-pages
 - **draft-system**: 2026-01-03-add-draft-system
 - **content-management**: 2026-01-03-add-draft-system
 - **seo**: 2026-01-02-add-rss-feed, 2025-10-05-seo-highlights, 2025-10-06-domain-migration, 2025-10-10-og-images, 2025-10-10-centralized-config
+- **documentation**: 2026-01-03-add-video-storage, 2026-01-02-abstract-session-management, 2026-01-02-session-restructuring, 2025-10-05-documentation-sync
 - **deployment**: 2025-10-05-predeployment-audit, 2025-10-06-production-deployment
 - **enhancement**: 2026-01-02-code-blocks
 - **configuration**: 2025-10-10-centralized-config
