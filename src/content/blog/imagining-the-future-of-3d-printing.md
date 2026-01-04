@@ -10,7 +10,7 @@ I gave an interview with Disruptive magazine at the 3D Printshow on the current 
   <div class="aspect-video max-w-2xl mx-auto">
     <iframe
       class="w-full h-full"
-      src="https://youtube.com/embed/lKraDHpSUHE"
+      src="https://www.youtube.com/embed/lKraDHpSUHE"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen>

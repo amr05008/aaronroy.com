@@ -12,7 +12,7 @@ It's quite strange to make predictions right now about how businesses will reope
 <div class="aspect-video max-w-2xl mx-auto">
   <iframe
     class="w-full h-full"
-    src="https://youtube.com/embed/Y8_aWndM7Dw"
+    src="https://www.youtube.com/embed/Y8_aWndM7Dw"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen>
