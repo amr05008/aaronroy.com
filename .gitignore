@@ -38,3 +38,4 @@ PROJECT_IDEAS.md
 
 # Machine-specific Claude Code settings
 .claude/settings.local.json
+.claude/mcp.json
