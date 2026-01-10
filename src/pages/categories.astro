@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getPublishedPosts } from '../utils/posts';
+import { getPublishedPosts, slugify } from '../utils/posts';
 
 const allPosts = await getPublishedPosts();
 
@@ -22,11 +22,6 @@ const categories = Array.from(categoryMap.entries())
     if (b.count !== a.count) return b.count - a.count;
     return a.name.localeCompare(b.name);
   });
-
-// Generate URL-friendly slug from category name
-function slugify(str: string) {
-  return str.toLowerCase().replace(/\s+/g, '-');
-}
 ---
 
 <BaseLayout title="Categories" description="Browse articles by topic">

@@ -176,4 +176,70 @@ test.describe("Smoke Tests", () => {
     const writingRssLink = page.locator('a[href="/rss.xml"]').first();
     await expect(writingRssLink).toBeVisible();
   });
+
+  test("blog posts display categories with working links", async ({ page }) => {
+    // Test post with multiple categories
+    await page.goto("/experiments-with-strava-mcp");
+
+    // Verify categories are displayed
+    const categoryLinks = page.locator('header a[href^="/category/"]');
+    await expect(categoryLinks).toHaveCount(2); // AI, Bikes
+
+    // Verify category links have correct hrefs
+    const firstCategory = categoryLinks.first();
+    await expect(firstCategory).toHaveAttribute("href", "/category/ai");
+
+    const secondCategory = categoryLinks.nth(1);
+    await expect(secondCategory).toHaveAttribute("href", "/category/bikes");
+
+    // Verify categories are comma-separated (normalize whitespace)
+    const metadataDiv = page.locator('header div.flex.items-center').first();
+    const metadataText = await metadataDiv.textContent();
+    const normalizedText = metadataText?.replace(/\s+/g, ' ').trim();
+    expect(normalizedText).toContain("AI , Bikes");
+
+    // Test navigation
+    await firstCategory.click();
+    await expect(page).toHaveURL(/\/category\/ai/);
+    await expect(page.locator("h1")).toContainText("AI");
+  });
+
+  test("blog posts with single category display correctly", async ({ page }) => {
+    // Test post with one category
+    await page.goto("/3d-printing-and-guns");
+
+    const categoryLinks = page.locator('header a[href^="/category/"]');
+    await expect(categoryLinks).toHaveCount(1);
+
+    // Verify no trailing comma
+    const metadataDiv = page.locator('header div.flex.items-center').first();
+    const metadataText = await metadataDiv.textContent();
+    expect(metadataText).toMatch(/3D Printing[^,]/); // No comma after single category
+  });
+
+  test("blog posts handle category URL slugification correctly", async ({ page }) => {
+    // Test that "Product Management" becomes "product-management"
+    await page.goto("/unlocking-revenue-with-product-led-growth");
+
+    const categoryLink = page.locator('header a[href^="/category/"]').first();
+    await expect(categoryLink).toHaveAttribute("href", "/category/product-management");
+
+    // Verify link text remains human-readable
+    await expect(categoryLink).toHaveText("Product Management");
+
+    // Test that 3D Printing becomes "3d-printing"
+    await page.goto("/3d-printing-and-guns");
+    const threeDLink = page.locator('header a[href^="/category/"]').first();
+    await expect(threeDLink).toHaveAttribute("href", "/category/3d-printing");
+  });
+
+  test("category links use consistent styling", async ({ page }) => {
+    await page.goto("/experiments-with-strava-mcp");
+
+    const categoryLink = page.locator('header a[href^="/category/"]').first();
+
+    // Verify Tailwind classes are applied
+    await expect(categoryLink).toHaveClass(/hover:text-blue-600/);
+    await expect(categoryLink).toHaveClass(/transition-colors/);
+  });
 });

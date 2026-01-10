@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getPublishedPosts } from '../utils/posts';
+import { getPublishedPosts, slugify } from '../utils/posts';
 
 const allPosts = (await getPublishedPosts()).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -17,11 +17,6 @@ const postsByYear = allPosts.reduce((acc, post) => {
 }, {} as Record<number, typeof allPosts>);
 
 const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
-
-// Generate URL-friendly slug from category name
-function slugify(str: string) {
-  return str.toLowerCase().replace(/\s+/g, '-');
-}
 ---
 
 <BaseLayout title="Writing" description="Articles about product management, startups, and technology">

@@ -37,3 +37,12 @@ export async function getPostsForRSS(): Promise<CollectionEntry<'blog'>[]> {
   // Always filter drafts, regardless of environment
   return allPosts.filter(post => !post.data.draft);
 }
+
+/**
+ * Generate URL-friendly slug from category name
+ * Converts to lowercase and replaces spaces with hyphens
+ * Example: "Product Management" -> "product-management"
+ */
+export function slugify(str: string): string {
+  return str.toLowerCase().replace(/\s+/g, '-');
+}

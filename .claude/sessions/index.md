@@ -4,6 +4,7 @@ Quick reference for all Claude Code working sessions on this project.
 
 | Date | Summary | Tags |
 |------|---------|------|
+| 2026-01-10 | [Add clickable category links to blog post metadata](2026-01-10-add-category-links.md) | feature, blog, categories, tests |
 | 2026-01-03 | [Video storage infrastructure for Kap recordings](2026-01-03-add-video-storage.md) | video, documentation, infrastructure |
 | 2026-01-03 | [Blog draft system with frontmatter-based filtering](2026-01-03-add-draft-system.md) | feature, draft-system, content-management |
 | 2026-01-02 | [RSS feed with HTML content and absolute URLs](2026-01-02-add-rss-feed.md) | rss, seo, content-syndication, testing |

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import { AUTHOR } from '../config';
+import { slugify } from '../utils/posts';
 
 interface Props {
   title: string;
@@ -46,6 +47,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
         </time>
         <span>•</span>
         <span>{readingTime} min read</span>
+        {categories && categories.length > 0 && (
+          <>
+            <span>•</span>
+            <span>
+              {categories.map((category, index) => (
+                <><a
+                  href={`/category/${slugify(category)}`}
+                  class="hover:text-blue-600 transition-colors"
+                >{category}</a>{index < categories.length - 1 && ', '}</>
+              ))}
+            </span>
+          </>
+        )}
       </div>
 
       {updatedDate && (

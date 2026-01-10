@@ -36,6 +36,9 @@ npm run test
 
 # Run smoke tests only (skip build, faster)
 npm run test:quick
+
+# Wrap up session (interactive: analyze changes, document, commit, push)
+npm run wrap
 ```
 
 ## Testing
@@ -54,6 +57,7 @@ The site uses Playwright for smoke testing. Tests validate that the site builds 
 - RSS feed validity and post count
 - RSS auto-discovery link in page head
 - RSS links visible to users (footer and writing page)
+- **Category links on blog posts** (display, navigation, URL slugification, styling)
 
 ### Running Tests
 
@@ -249,7 +253,12 @@ The site includes a category browsing system with two page types:
 **Navigation:**
 - "Categories" link added to main header navigation
 - Category names on Writing page are clickable, linking to respective archive pages
+- **Blog posts display all categories** as clickable links in the metadata line (after reading time)
+  - All categories shown (not just first), comma-separated
+  - Consistent styling with hover effects
+  - Each category links to `/category/{slug}` archive page
 - Categories use URL-friendly slugs (e.g., "Product Management" → `product-management`)
+- Shared `slugify()` utility in `src/utils/posts.ts` ensures consistent URL generation
 
 **Current Categories (11 total):**
 - Product Management (9 posts)
@@ -369,6 +378,7 @@ SSL and DNS configured for custom domain (aaronroy.com).
 
 ## Recent Changes
 
+- **2026-01-10**: Blog posts display clickable category links in metadata; added smoke tests for category functionality
 - **2026-01-02**: RSS feed implementation with full HTML content and absolute image URLs
 - **2026-01-02**: Abstracted session management to global `~/.claude/rules/session-management.md`
 - **2026-01-02**: Restructured session history to `.claude/` directory
