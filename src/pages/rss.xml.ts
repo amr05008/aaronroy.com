@@ -50,7 +50,6 @@ export async function GET(context: APIContext) {
         categories: post.data.categories,
         link: `/${post.slug}/`,
         content: absoluteContent,
-        author: `${AUTHOR.email} (${AUTHOR.name})`,
       };
     }),
     customData: `<language>en-us</language>`,
