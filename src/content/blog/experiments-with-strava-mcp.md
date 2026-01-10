@@ -2,7 +2,7 @@
 title: "Experiments with Strava MCP"
 description: "Testing out the Strava MCP server to analyze eight years of cycling data with Claude. Includes a step-by-step tutorial to set it up yourself."
 pubDate: 2026-01-10
-categories: ["AI", "Bikes"]
+categories: ["Bikes","AI"]
 heroImage: "/og-images/strava-mcp-og.png"
 ---
 
