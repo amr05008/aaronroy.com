@@ -6,7 +6,9 @@ categories: ["Bikes","AI"]
 heroImage: "/og-images/strava-mcp-og.png"
 ---
 
-I love analyzing my cycling data. I've spent countless hours over the years poring over ride and race performance on [Strava](https://www.strava.com), [Zwiftracing.app](http://zwiftracing.app), [Zwiftpower.com](http://zwiftpower.com) and [Intervals.icu](http://intervals.icu), so when I learned about the [Strava Model Context Protocol ("MCP") server](https://github.com/r-huijts/strava-mcp) by [R.Huijts](https://github.com/r-huijts), I had to test it out.
+I love analyzing my cycling data. 
+
+I've spent countless hours over the years poring over ride and race performance on [Strava](https://www.strava.com), [Zwiftracing.app](http://zwiftracing.app), [Zwiftpower.com](http://zwiftpower.com) and [Intervals.icu](http://intervals.icu), so when I learned about the [Strava Model Context Protocol ("MCP") server](https://github.com/r-huijts/strava-mcp) by [R.Huijts](https://github.com/r-huijts), I had to test it out.
 
 The MCP lets [Claude](https://claude.ai/) talk directly to your Strava account and analyze your data in ways the Strava UI can't.
 
