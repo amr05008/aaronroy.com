@@ -84,7 +84,7 @@ If you are interested in testing out this MCP, follow the steps below.
 
 ## How to Set It Up
 
-The first version of this MCP server took took me ~15-30 minutes to set up. The creator of the MCP made some great improvements and now the full process takes ~10 minutes or less to get set up. Updated instructions below. 
+The first version of this MCP server took me ~15-30 minutes to set up. The creator of the MCP made some great improvements and now the full process takes ~10 minutes or less to get set up. Updated instructions below. 
 
 ### Step 1: Create a Strava API Application
 
@@ -131,7 +131,7 @@ Just say to Claude:
 
 A browser window will open. If it doesn’t automatically open, visit `http://localhost:8111/auth`
 
-Once you have the local host window open, enter your Strava API credentials (the client ID and the client Secret): 
+Once you have the localhost window open, enter your Strava API credentials (the client ID and the client secret): 
 
 ![MCP setup screen](/images/Experiments%20with%20Strava%20MCP/connect-strava-mcp.png)
 
@@ -145,7 +145,7 @@ Once authorized, you should be good to go.
 
 ### Step 4: Test It
 
-Open Claude and ask: "Show me my recent Strava activities" or "Which strava profile do you have access to?"
+Open Claude and ask: "Show me my recent Strava activities" or "Which Strava profile do you have access to?"
 
 If it works, Claude will pull your Strava profile and/or activity data and display it.
 
@@ -153,7 +153,7 @@ If it works, Claude will pull your Strava profile and/or activity data and displ
 
 That's it! You're now set up and ready to explore your Strava data far beyond what you could do in Strava alone.
 
-If you run into any issues along the way, screenshot or copy and paste in your issues directly into Claude and just ask for help.
+If you run into any issues along the way, screenshot or copy and paste your error messages directly into Claude and just ask for help.
 
 ## What's Next
 
