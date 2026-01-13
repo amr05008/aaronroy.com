@@ -84,9 +84,7 @@ If you are interested in testing out this MCP, follow the steps below.
 
 ## How to Set It Up
 
-The full process takes about ~15 minutes if everything goes smoothly.
-
-It did not go smoothly for me but I'll walk you through the key steps and flag where I got stuck so you can avoid the same issues.
+The first version of this MCP server took took me ~15-30 minutes to set up. The creator of the MCP made some great improvements and now the full process takes ~10 minutes or less to get set up. Updated instructions below. 
 
 ### Step 1: Create a Strava API Application
 
@@ -101,57 +99,7 @@ It did not go smoothly for me but I'll walk you through the key steps and flag w
 
     ![Strava API application setup screen](/images/Experiments%20with%20Strava%20MCP/strava-api-setup.png)
 
-### Step 2: Clone and Build the MCP Server
-
-```bash
-# Clone the repository
-git clone https://github.com/r-huijts/strava-mcp.git
-
-# Navigate into the folder
-cd strava-mcp
-
-# Install dependencies
-npm install
-
-# Build the project
-npm run build
-```
-
-Here's where I hit my first snag. Running 'npm run build' gave me a "JavaScript heap out of memory" error.
-
-```bash
-FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
-```
-
-I just kept feeding the errors I was getting into Claude and eventually found my way around.
-
-For my specific problem, the workaround was skipping type checking and just compiling the code at the build step.
-
-```bash
-npx tsc --skipLibCheck --noCheck
-```
-
-### Step 3: Run the Authentication Script
-
-Back in your terminal (still in the `strava-mcp` folder):
-
-```bash
-npx tsx scripts/setup-auth.ts
-```
-
-The script will:
-
-1. Ask for your **Client ID** — paste it and press Enter
-2. Ask for your **Client Secret** — paste it and press Enter
-3. Open a browser window to Strava's authorization page
-4. Click "Authorize" on Strava. After you click 'Authorize', **you'll be redirected to a localhost URL that won't load - that's fine**! The script captures the authorization code from the URL and exchanges it for tokens automatically.
-
-    ![Strava authorization screen](/images/Experiments%20with%20Strava%20MCP/authorize.png)
-
-5. You'll be redirected to a localhost URL — the script captures this automatically
-6. The script creates/updates a `.env` file with your tokens
-
-### Step 4: Configure Claude Desktop
+### Step 2: Configure Claude Desktop
 
 Find your Claude Desktop config file:
 
@@ -164,25 +112,38 @@ Edit the file to add the Strava MCP server:
 {
   "mcpServers": {
     "strava": {
-      "command": "node",
-      "args": [
-        "/full/path/to/strava-mcp/dist/server.js"
-      ]
+      "command": "npx",
+      "args": ["-y", "strava-mcp-server"]
     }
   }
 }
 ```
 
-Replace `/full/path/to/strava-mcp` with the actual path where you cloned the repo. For example:
-
-- macOS: `/Users/yourname/strava-mcp/dist/server.js`
-- Windows: `C:\\Users\\yourname\\strava-mcp\\dist\\server.js`
-
-The path must be exact. Use the full path to wherever you cloned the strava-mcp repository. Save the file, then completely quit Claude Desktop (Cmd+Q) and restart it.
+Save the file, then completely quit Claude Desktop (Cmd+Q) and restart it.
 
 If you already have other MCP servers set up, just add a comma after the previous server's closing brace and add the Strava configuration.
 
-### Step 5: Test It
+### **Step 3: Connect Your Strava**
+
+Just say to Claude:
+
+`"Connect my Strava account"`
+
+A browser window will open. If it doesn’t automatically open, visit `http://localhost:8111/auth`
+
+Once you have the local host window open, enter your Strava API credentials (the client ID and the client Secret): 
+
+![MCP setup screen](/images/Experiments%20with%20Strava%20MCP/connect-strava-mcp.png)
+
+Authorize the app: 
+
+![Authorize Strava MCP screen](/images/Experiments%20with%20Strava%20MCP/strava-authorize.png)
+
+Once authorized, you should be good to go.
+
+![Strava MCP authorize success](/images/Experiments%20with%20Strava%20MCP/strava-mcp-success.png)
+
+### Step 4: Test It
 
 Open Claude and ask: "Show me my recent Strava activities" or "Which strava profile do you have access to?"
 
