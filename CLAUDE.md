@@ -58,6 +58,7 @@ The site uses Playwright for smoke testing. Tests validate that the site builds 
 - RSS auto-discovery link in page head
 - RSS links visible to users (footer and writing page)
 - **Category links on blog posts** (display, navigation, URL slugification, styling)
+- **Older/newer post navigation** (both columns, edge cases, valid links)
 
 ### Running Tests
 
@@ -222,6 +223,9 @@ Change `draft: true` to `draft: false` or remove the `draft` field entirely (def
 - `BaseLayout.astro` - Base HTML structure, SEO meta tags, Open Graph, Twitter Cards
 - `BlogPost.astro` - Blog post template with reading time calculation and JSON-LD structured data
 
+### Components
+- `PostNavigation.astro` - Older/newer post navigation rendered after each blog post article. Shows chronologically adjacent posts with title links and a "View Archive" link to `/writing`. Posts sorted ascending by date with secondary slug sort for deterministic ordering.
+
 ### Homepage Features
 
 The homepage (`src/pages/index.astro`) displays a curated "Highlights" section instead of recent posts. To manage which posts appear:
@@ -378,6 +382,7 @@ SSL and DNS configured for custom domain (aaronroy.com).
 
 ## Recent Changes
 
+- **2026-02-03**: Older/newer post navigation at bottom of blog posts with smoke tests
 - **2026-01-10**: Blog posts display clickable category links in metadata; added smoke tests for category functionality
 - **2026-01-02**: RSS feed implementation with full HTML content and absolute image URLs
 - **2026-01-02**: Abstracted session management to global `~/.claude/rules/session-management.md`

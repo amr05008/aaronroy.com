@@ -1,0 +1,41 @@
+---
+interface Props {
+  olderPost: { slug: string; title: string } | null;
+  newerPost: { slug: string; title: string } | null;
+}
+
+const { olderPost, newerPost } = Astro.props;
+
+if (!olderPost && !newerPost) return;
+---
+
+<nav aria-label="Post navigation" class="max-w-3xl mx-auto px-6 mt-16 pt-8 border-t border-gray-200">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div>
+      {olderPost && (
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-sm font-semibold text-gray-900 uppercase">Older</span>
+            <span class="text-gray-300">·</span>
+            <a href="/writing" class="text-sm font-semibold text-blue-600 hover:underline">View Archive</a>
+          </div>
+          <a href={`/${olderPost.slug}`} class="text-xl font-semibold text-blue-600 hover:underline transition-colors">
+            {olderPost.title}
+          </a>
+        </div>
+      )}
+    </div>
+    <div class="md:text-right">
+      {newerPost && (
+        <div>
+          <div class="flex items-center gap-2 mb-3 md:justify-end">
+            <span class="text-sm font-semibold text-gray-900 uppercase">Newer</span>
+          </div>
+          <a href={`/${newerPost.slug}`} class="text-xl font-semibold text-blue-600 hover:underline transition-colors">
+            {newerPost.title}
+          </a>
+        </div>
+      )}
+    </div>
+  </div>
+</nav>

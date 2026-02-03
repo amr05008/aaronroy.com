@@ -3,20 +3,32 @@ import { type CollectionEntry } from 'astro:content';
 import BlogPost from '../layouts/BlogPost.astro';
 import { getPublishedPosts } from '../utils/posts';
 
+type AdjacentPost = { slug: string; title: string } | null;
+
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
-  return posts.map((post) => ({
+  // Ascending by date; secondary sort on slug for deterministic order when dates match
+  const sorted = posts.sort((a, b) =>
+    a.data.pubDate.valueOf() - b.data.pubDate.valueOf() || a.slug.localeCompare(b.slug)
+  );
+  return sorted.map((post, i) => ({
     params: { slug: post.slug },
-    props: post,
+    props: {
+      post,
+      olderPost: sorted[i - 1] ? { slug: sorted[i - 1].slug, title: sorted[i - 1].data.title } : null,
+      newerPost: sorted[i + 1] ? { slug: sorted[i + 1].slug, title: sorted[i + 1].data.title } : null,
+    },
   }));
 }
 
-type Props = CollectionEntry<'blog'>;
-
-const post = Astro.props;
+const { post, olderPost, newerPost } = Astro.props as {
+  post: CollectionEntry<'blog'>;
+  olderPost: AdjacentPost;
+  newerPost: AdjacentPost;
+};
 const { Content } = await post.render();
 ---
 
-<BlogPost {...post.data}>
+<BlogPost {...post.data} olderPost={olderPost} newerPost={newerPost}>
   <Content />
 </BlogPost>

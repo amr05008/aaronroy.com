@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import PostNavigation from '../components/PostNavigation.astro';
 import { AUTHOR } from '../config';
 import { slugify } from '../utils/posts';
 
@@ -10,9 +11,11 @@ interface Props {
   updatedDate?: Date;
   heroImage?: string;
   categories?: string[];
+  olderPost?: { slug: string; title: string } | null;
+  newerPost?: { slug: string; title: string } | null;
 }
 
-const { title, description, pubDate, updatedDate, heroImage, categories } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, categories, olderPost, newerPost } = Astro.props;
 
 // Calculate reading time (rough estimate: 200 words per minute)
 const content = await Astro.slots.render('default');
@@ -87,6 +90,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
       <slot />
     </div>
   </article>
+
+  <PostNavigation olderPost={olderPost ?? null} newerPost={newerPost ?? null} />
 
   <!-- Structured Data for SEO -->
   <script type="application/ld+json" set:html={JSON.stringify({

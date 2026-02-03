@@ -185,23 +185,23 @@ test.describe("Smoke Tests", () => {
     const categoryLinks = page.locator('header a[href^="/category/"]');
     await expect(categoryLinks).toHaveCount(2); // AI, Bikes
 
-    // Verify category links have correct hrefs
+    // Verify category links have correct hrefs (order matches frontmatter: Bikes, AI)
     const firstCategory = categoryLinks.first();
-    await expect(firstCategory).toHaveAttribute("href", "/category/ai");
+    await expect(firstCategory).toHaveAttribute("href", "/category/bikes");
 
     const secondCategory = categoryLinks.nth(1);
-    await expect(secondCategory).toHaveAttribute("href", "/category/bikes");
+    await expect(secondCategory).toHaveAttribute("href", "/category/ai");
 
     // Verify categories are comma-separated (normalize whitespace)
     const metadataDiv = page.locator('header div.flex.items-center').first();
     const metadataText = await metadataDiv.textContent();
     const normalizedText = metadataText?.replace(/\s+/g, ' ').trim();
-    expect(normalizedText).toContain("AI , Bikes");
+    expect(normalizedText).toContain("Bikes, AI");
 
     // Test navigation
     await firstCategory.click();
-    await expect(page).toHaveURL(/\/category\/ai/);
-    await expect(page.locator("h1")).toContainText("AI");
+    await expect(page).toHaveURL(/\/category\/bikes/);
+    await expect(page.locator("h1")).toContainText("Bikes");
   });
 
   test("blog posts with single category display correctly", async ({ page }) => {
@@ -241,5 +241,61 @@ test.describe("Smoke Tests", () => {
     // Verify Tailwind classes are applied
     await expect(categoryLink).toHaveClass(/hover:text-blue-600/);
     await expect(categoryLink).toHaveClass(/transition-colors/);
+  });
+
+  test("post navigation shows both older and newer on mid-archive post", async ({ page }) => {
+    await page.goto("/unlocking-revenue-with-product-led-growth");
+
+    const nav = page.locator('nav[aria-label="Post navigation"]');
+    await expect(nav).toBeVisible();
+
+    // Should show both OLDER and NEWER labels
+    await expect(nav.getByText("Older")).toBeVisible();
+    await expect(nav.getByText("Newer")).toBeVisible();
+
+    // Should have VIEW ARCHIVE link pointing to /writing
+    const archiveLink = nav.locator('a[href="/writing"]');
+    await expect(archiveLink).toBeVisible();
+
+    // Should have two post title links
+    const postLinks = nav.locator('a[href^="/"]:not([href="/writing"])');
+    const count = await postLinks.count();
+    expect(count).toBe(2);
+  });
+
+  test("post navigation shows only newer on oldest post", async ({ page }) => {
+    await page.goto("/imagining-the-future-of-3d-printing");
+
+    const nav = page.locator('nav[aria-label="Post navigation"]');
+    await expect(nav).toBeVisible();
+
+    // Should show NEWER but not OLDER
+    await expect(nav.getByText("Newer")).toBeVisible();
+    await expect(nav.getByText("Older")).not.toBeVisible();
+  });
+
+  test("post navigation shows only older on newest post", async ({ page }) => {
+    await page.goto("/experiments-with-strava-mcp");
+
+    const nav = page.locator('nav[aria-label="Post navigation"]');
+    await expect(nav).toBeVisible();
+
+    // Should show OLDER but not NEWER
+    await expect(nav.getByText("Older")).toBeVisible();
+    await expect(nav.getByText("Newer")).not.toBeVisible();
+  });
+
+  test("post navigation links point to valid post slugs", async ({ page }) => {
+    await page.goto("/unlocking-revenue-with-product-led-growth");
+
+    const nav = page.locator('nav[aria-label="Post navigation"]');
+    const postLinks = nav.locator('a[href^="/"]:not([href="/writing"])');
+
+    const count = await postLinks.count();
+    for (let i = 0; i < count; i++) {
+      const href = await postLinks.nth(i).getAttribute("href");
+      const slug = href?.replace(/^\//, "");
+      expect(publishedPosts).toContain(slug);
+    }
   });
 });
