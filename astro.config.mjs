@@ -8,6 +8,7 @@ import expressiveCode from 'astro-expressive-code';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://aaronroy.com',
+  trailingSlash: 'always',
   integrations: [
     expressiveCode({
       themes: ['github-dark'],
