@@ -27,7 +27,7 @@ const highlightedPosts = highlights
     <section>
       <div class="flex items-center justify-between mb-8">
         <h2 class="text-2xl font-semibold">Highlights</h2>
-        <a href="/writing" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+        <a href="/writing/" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">
           View all →
         </a>
       </div>
@@ -35,7 +35,7 @@ const highlightedPosts = highlights
       <div class="space-y-10">
         {highlightedPosts.map((post) => (
           <article class="group">
-            <a href={`/${post.slug}`} class="block">
+            <a href={`/${post.slug}/`} class="block">
               <h3 class="text-xl font-semibold mb-2 group-hover:text-blue-600 transition-colors">
                 {post.data.title}
               </h3>

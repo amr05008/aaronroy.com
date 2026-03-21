@@ -50,12 +50,12 @@ test.describe("Smoke Tests", () => {
     await expect(highlightLinks).toHaveCount(highlights.length);
 
     // Check navigation exists (in header)
-    await expect(page.locator('header a[href="/writing"]')).toBeVisible();
-    await expect(page.locator('header a[href="/about"]')).toBeVisible();
+    await expect(page.locator('header a[href="/writing/"]')).toBeVisible();
+    await expect(page.locator('header a[href="/about/"]')).toBeVisible();
   });
 
   test("writing page loads and has posts", async ({ page }) => {
-    const response = await page.goto("/writing");
+    const response = await page.goto("/writing/");
     expect(response?.status()).toBe(200);
 
     await expect(page).toHaveTitle(/Writing/);
@@ -67,14 +67,14 @@ test.describe("Smoke Tests", () => {
   });
 
   test("about page loads", async ({ page }) => {
-    const response = await page.goto("/about");
+    const response = await page.goto("/about/");
     expect(response?.status()).toBe(200);
 
     await expect(page).toHaveTitle(/About/);
   });
 
   test("404 page renders correctly", async ({ page }) => {
-    const response = await page.goto("/this-page-does-not-exist");
+    const response = await page.goto("/this-page-does-not-exist/");
     expect(response?.status()).toBe(404);
 
     await expect(page.locator("text=Page Not Found")).toBeVisible();
@@ -85,9 +85,9 @@ test.describe("Smoke Tests", () => {
 
     // Only test published posts (drafts should not have routes in production build)
     for (const slug of publishedPosts) {
-      const response = await page.goto(`/${slug}`);
+      const response = await page.goto(`/${slug}/`);
       if (response?.status() !== 200) {
-        failures.push(`/${slug} returned ${response?.status()}`);
+        failures.push(`/${slug}/ returned ${response?.status()}`);
       }
     }
 
@@ -96,7 +96,7 @@ test.describe("Smoke Tests", () => {
 
   test("blog posts have required meta tags", async ({ page }) => {
     // Test a sample published post for meta tags
-    await page.goto(`/${publishedPosts[0]}`);
+    await page.goto(`/${publishedPosts[0]}/`);
 
     // Check essential meta tags exist
     const title = await page.locator("title").textContent();
@@ -117,12 +117,12 @@ test.describe("Smoke Tests", () => {
     await page.goto("/");
 
     // Click writing link
-    await page.click('a[href="/writing"]');
-    await expect(page).toHaveURL(/\/writing/);
+    await page.click('a[href="/writing/"]');
+    await expect(page).toHaveURL(/\/writing\//);
 
     // Click about link
-    await page.click('a[href="/about"]');
-    await expect(page).toHaveURL(/\/about/);
+    await page.click('a[href="/about/"]');
+    await expect(page).toHaveURL(/\/about\//);
 
     // Click home link (site title)
     await page.click('header a[href="/"]');
@@ -172,14 +172,14 @@ test.describe("Smoke Tests", () => {
     await expect(footerRssLink).toBeVisible();
 
     // Check writing page link
-    await page.goto("/writing");
+    await page.goto("/writing/");
     const writingRssLink = page.locator('a[href="/rss.xml"]').first();
     await expect(writingRssLink).toBeVisible();
   });
 
   test("blog posts display categories with working links", async ({ page }) => {
     // Test post with multiple categories
-    await page.goto("/experiments-with-strava-mcp");
+    await page.goto("/experiments-with-strava-mcp/");
 
     // Verify categories are displayed
     const categoryLinks = page.locator('header a[href^="/category/"]');
@@ -187,10 +187,10 @@ test.describe("Smoke Tests", () => {
 
     // Verify category links have correct hrefs (order matches frontmatter: Bikes, AI)
     const firstCategory = categoryLinks.first();
-    await expect(firstCategory).toHaveAttribute("href", "/category/bikes");
+    await expect(firstCategory).toHaveAttribute("href", "/category/bikes/");
 
     const secondCategory = categoryLinks.nth(1);
-    await expect(secondCategory).toHaveAttribute("href", "/category/ai");
+    await expect(secondCategory).toHaveAttribute("href", "/category/ai/");
 
     // Verify categories are comma-separated (normalize whitespace)
     const metadataDiv = page.locator('header div.flex.items-center').first();
@@ -206,7 +206,7 @@ test.describe("Smoke Tests", () => {
 
   test("blog posts with single category display correctly", async ({ page }) => {
     // Test post with one category
-    await page.goto("/3d-printing-and-guns");
+    await page.goto("/3d-printing-and-guns/");
 
     const categoryLinks = page.locator('header a[href^="/category/"]');
     await expect(categoryLinks).toHaveCount(1);
@@ -219,22 +219,22 @@ test.describe("Smoke Tests", () => {
 
   test("blog posts handle category URL slugification correctly", async ({ page }) => {
     // Test that "Product Management" becomes "product-management"
-    await page.goto("/unlocking-revenue-with-product-led-growth");
+    await page.goto("/unlocking-revenue-with-product-led-growth/");
 
     const categoryLink = page.locator('header a[href^="/category/"]').first();
-    await expect(categoryLink).toHaveAttribute("href", "/category/product-management");
+    await expect(categoryLink).toHaveAttribute("href", "/category/product-management/");
 
     // Verify link text remains human-readable
     await expect(categoryLink).toHaveText("Product Management");
 
     // Test that 3D Printing becomes "3d-printing"
-    await page.goto("/3d-printing-and-guns");
+    await page.goto("/3d-printing-and-guns/");
     const threeDLink = page.locator('header a[href^="/category/"]').first();
-    await expect(threeDLink).toHaveAttribute("href", "/category/3d-printing");
+    await expect(threeDLink).toHaveAttribute("href", "/category/3d-printing/");
   });
 
   test("category links use consistent styling", async ({ page }) => {
-    await page.goto("/experiments-with-strava-mcp");
+    await page.goto("/experiments-with-strava-mcp/");
 
     const categoryLink = page.locator('header a[href^="/category/"]').first();
 
@@ -244,7 +244,7 @@ test.describe("Smoke Tests", () => {
   });
 
   test("post navigation shows both older and newer on mid-archive post", async ({ page }) => {
-    await page.goto("/unlocking-revenue-with-product-led-growth");
+    await page.goto("/unlocking-revenue-with-product-led-growth/");
 
     const nav = page.locator('nav[aria-label="Post navigation"]');
     await expect(nav).toBeVisible();
@@ -253,18 +253,18 @@ test.describe("Smoke Tests", () => {
     await expect(nav.getByText("Older")).toBeVisible();
     await expect(nav.getByText("Newer")).toBeVisible();
 
-    // Should have VIEW ARCHIVE link pointing to /writing
-    const archiveLink = nav.locator('a[href="/writing"]');
+    // Should have VIEW ARCHIVE link pointing to /writing/
+    const archiveLink = nav.locator('a[href="/writing/"]');
     await expect(archiveLink).toBeVisible();
 
     // Should have two post title links
-    const postLinks = nav.locator('a[href^="/"]:not([href="/writing"])');
+    const postLinks = nav.locator('a[href^="/"]:not([href="/writing/"])');
     const count = await postLinks.count();
     expect(count).toBe(2);
   });
 
   test("post navigation shows only newer on oldest post", async ({ page }) => {
-    await page.goto("/imagining-the-future-of-3d-printing");
+    await page.goto("/imagining-the-future-of-3d-printing/");
 
     const nav = page.locator('nav[aria-label="Post navigation"]');
     await expect(nav).toBeVisible();
@@ -275,7 +275,7 @@ test.describe("Smoke Tests", () => {
   });
 
   test("post navigation shows only older on newest post", async ({ page }) => {
-    await page.goto("/experiments-with-strava-mcp");
+    await page.goto("/glutenornot-free-ingredient-scanner-celiac-disease/");
 
     const nav = page.locator('nav[aria-label="Post navigation"]');
     await expect(nav).toBeVisible();
@@ -286,15 +286,15 @@ test.describe("Smoke Tests", () => {
   });
 
   test("post navigation links point to valid post slugs", async ({ page }) => {
-    await page.goto("/unlocking-revenue-with-product-led-growth");
+    await page.goto("/unlocking-revenue-with-product-led-growth/");
 
     const nav = page.locator('nav[aria-label="Post navigation"]');
-    const postLinks = nav.locator('a[href^="/"]:not([href="/writing"])');
+    const postLinks = nav.locator('a[href^="/"]:not([href="/writing/"])');
 
     const count = await postLinks.count();
     for (let i = 0; i < count; i++) {
       const href = await postLinks.nth(i).getAttribute("href");
-      const slug = href?.replace(/^\//, "");
+      const slug = href?.replace(/^\//, "").replace(/\/$/, "");
       expect(publishedPosts).toContain(slug);
     }
   });
