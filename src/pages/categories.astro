@@ -36,7 +36,7 @@ const categories = Array.from(categoryMap.entries())
     <div class="grid gap-6 sm:grid-cols-2">
       {categories.map((category) => (
         <a
-          href={`/category/${slugify(category.name)}`}
+          href={`/category/${slugify(category.name)}/`}
           class="block p-6 border border-gray-200 rounded-lg hover:border-blue-600 hover:shadow-md transition-all group"
         >
           <h2 class="text-xl font-semibold mb-2 group-hover:text-blue-600 transition-colors">

@@ -75,8 +75,8 @@ test.describe("Smoke Tests", () => {
     await expect(latestLinks).toHaveCount(expectedLatestCount);
 
     // Check navigation exists (in header)
-    await expect(page.locator('header a[href="/writing"]')).toBeVisible();
-    await expect(page.locator('header a[href="/about"]')).toBeVisible();
+    await expect(page.locator('header a[href="/writing/"]')).toBeVisible();
+    await expect(page.locator('header a[href="/about/"]')).toBeVisible();
   });
 
   test("writing page loads and has posts", async ({ page }) => {
@@ -112,7 +112,7 @@ test.describe("Smoke Tests", () => {
     for (const slug of publishedPosts) {
       const response = await page.goto(`/${slug}/`);
       if (response?.status() !== 200) {
-        failures.push(`/${slug} returned ${response?.status()}`);
+        failures.push(`/${slug}/ returned ${response?.status()}`);
       }
     }
 
@@ -141,15 +141,14 @@ test.describe("Smoke Tests", () => {
   test("navigation links work", async ({ page }) => {
     await page.goto("/");
 
-    // Header nav links exist and point to the expected destinations.
-    // (Links are emitted without trailing slashes; the preview server serves
-    // the canonical trailing-slash URLs, so we verify destinations via goto
-    // rather than clicking through — a bare-path click 404s under `astro preview`.)
-    await expect(page.locator('header a[href="/writing"]')).toBeVisible();
-    await expect(page.locator('header a[href="/about"]')).toBeVisible();
+    // Header nav links carry canonical trailing-slash hrefs and click through
+    // without a 301 (bare paths 404 under `astro preview` with trailingSlash: 'always').
+    await expect(page.locator('header a[href="/writing/"]')).toBeVisible();
+    await expect(page.locator('header a[href="/about/"]')).toBeVisible();
     await expect(page.locator('header a[href="/"]')).toBeVisible();
 
-    expect((await page.goto("/writing/"))?.status()).toBe(200);
+    await page.click('header a[href="/writing/"]');
+    await expect(page).toHaveURL(/\/writing\//);
     await expect(page).toHaveTitle(/Writing/);
 
     expect((await page.goto("/about/"))?.status()).toBe(200);
@@ -216,10 +215,10 @@ test.describe("Smoke Tests", () => {
 
     // Verify category links have correct hrefs (order matches frontmatter: Bikes, Tutorials)
     const firstCategory = categoryLinks.first();
-    await expect(firstCategory).toHaveAttribute("href", "/category/bikes");
+    await expect(firstCategory).toHaveAttribute("href", "/category/bikes/");
 
     const secondCategory = categoryLinks.nth(1);
-    await expect(secondCategory).toHaveAttribute("href", "/category/tutorials");
+    await expect(secondCategory).toHaveAttribute("href", "/category/tutorials/");
 
     // Verify categories are comma-separated (normalize whitespace)
     const metadataDiv = page.locator('header div.flex.items-center').first();
@@ -227,12 +226,9 @@ test.describe("Smoke Tests", () => {
     const normalizedText = metadataText?.replace(/\s+/g, ' ').trim();
     expect(normalizedText).toContain("Bikes, Tutorials");
 
-    // Test navigation to the category archive. The link href is emitted
-    // without a trailing slash; navigate to the canonical URL the preview
-    // server serves (a bare-path click 404s under `astro preview`).
-    expect(await firstCategory.getAttribute("href")).toBe("/category/bikes");
-    const bikesResponse = await page.goto("/category/bikes/");
-    expect(bikesResponse?.status()).toBe(200);
+    // Click through to the category archive (canonical trailing-slash href).
+    await firstCategory.click();
+    await expect(page).toHaveURL(/\/category\/bikes\//);
     await expect(page.locator("h1")).toContainText("Bikes");
   });
 
@@ -254,7 +250,7 @@ test.describe("Smoke Tests", () => {
     await page.goto("/lessons-learned-refinancing-student-loan-debt/");
 
     const categoryLink = page.locator('header a[href^="/category/"]').first();
-    await expect(categoryLink).toHaveAttribute("href", "/category/student-loans");
+    await expect(categoryLink).toHaveAttribute("href", "/category/student-loans/");
 
     // Verify link text remains human-readable
     await expect(categoryLink).toHaveText("Student Loans");
@@ -262,7 +258,7 @@ test.describe("Smoke Tests", () => {
     // Test that 3D Printing becomes "3d-printing"
     await page.goto("/3d-printing-and-guns/");
     const threeDLink = page.locator('header a[href^="/category/"]').first();
-    await expect(threeDLink).toHaveAttribute("href", "/category/3d-printing");
+    await expect(threeDLink).toHaveAttribute("href", "/category/3d-printing/");
   });
 
   test("category links use consistent styling", async ({ page }) => {
@@ -285,12 +281,12 @@ test.describe("Smoke Tests", () => {
     await expect(nav.getByText("Older")).toBeVisible();
     await expect(nav.getByText("Newer")).toBeVisible();
 
-    // Should have VIEW ARCHIVE link pointing to /writing
-    const archiveLink = nav.locator('a[href="/writing"]');
+    // Should have VIEW ARCHIVE link pointing to /writing/
+    const archiveLink = nav.locator('a[href="/writing/"]');
     await expect(archiveLink).toBeVisible();
 
     // Should have two post title links
-    const postLinks = nav.locator('a[href^="/"]:not([href="/writing"])');
+    const postLinks = nav.locator('a[href^="/"]:not([href="/writing/"])');
     const count = await postLinks.count();
     expect(count).toBe(2);
   });
@@ -321,12 +317,12 @@ test.describe("Smoke Tests", () => {
     await page.goto("/unlocking-revenue-with-product-led-growth/");
 
     const nav = page.locator('nav[aria-label="Post navigation"]');
-    const postLinks = nav.locator('a[href^="/"]:not([href="/writing"])');
+    const postLinks = nav.locator('a[href^="/"]:not([href="/writing/"])');
 
     const count = await postLinks.count();
     for (let i = 0; i < count; i++) {
       const href = await postLinks.nth(i).getAttribute("href");
-      const slug = href?.replace(/^\//, "");
+      const slug = href?.replace(/^\//, "").replace(/\/$/, "");
       expect(publishedPosts).toContain(slug);
     }
   });

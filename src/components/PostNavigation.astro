@@ -17,9 +17,9 @@ if (!olderPost && !newerPost) return;
           <div class="flex items-center gap-2 mb-3">
             <span class="text-sm font-semibold text-gray-900 uppercase">Older</span>
             <span class="text-gray-300">·</span>
-            <a href="/writing" class="text-sm font-semibold text-blue-600 hover:underline">View Archive</a>
+            <a href="/writing/" class="text-sm font-semibold text-blue-600 hover:underline">View Archive</a>
           </div>
-          <a href={`/${olderPost.slug}`} class="text-xl font-semibold text-blue-600 hover:underline transition-colors">
+          <a href={`/${olderPost.slug}/`} class="text-xl font-semibold text-blue-600 hover:underline transition-colors">
             {olderPost.title}
           </a>
         </div>
@@ -31,7 +31,7 @@ if (!olderPost && !newerPost) return;
           <div class="flex items-center gap-2 mb-3 md:justify-end">
             <span class="text-sm font-semibold text-gray-900 uppercase">Newer</span>
           </div>
-          <a href={`/${newerPost.slug}`} class="text-xl font-semibold text-blue-600 hover:underline transition-colors">
+          <a href={`/${newerPost.slug}/`} class="text-xl font-semibold text-blue-600 hover:underline transition-colors">
             {newerPost.title}
           </a>
         </div>
