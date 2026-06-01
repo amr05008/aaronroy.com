@@ -1,6 +1,7 @@
 // Featured blog posts to display on the homepage
 // Update this array to change which posts are highlighted and their order
 export const highlights = [
+  'how-to-build-a-personal-morning-briefing',
   'giving-agents-personal-context',
   'glutenornot-free-ingredient-scanner-celiac-disease',
   'experiments-with-strava-mcp',

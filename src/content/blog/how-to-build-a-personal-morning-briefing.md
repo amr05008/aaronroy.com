@@ -70,7 +70,7 @@ Read the last 24 hours of messages in SLACK_CHANNEL. Summarize WHAT_MATTERS_TO_M
 Use TONE for the writing voice throughout. No preamble. No "here's your brief." Just the brief.
 ```
 
-## Claude Cowork "Scheduled Tasks" vs. Claude Code "Routines"
+## Claude Cowork Scheduled Tasks vs. Claude Code Routines
 
 Claude Cowork's scheduled tasks require your computer to be on or in "keep awake" mode.
 
