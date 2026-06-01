@@ -48,7 +48,7 @@ The site uses Playwright for smoke testing. Tests validate that the site builds 
 ### What the Smoke Tests Cover
 
 - All static pages load (/, /writing, /about, /404)
-- All 31 blog posts return 200 status
+- All published blog posts return 200 status
 - Homepage displays the correct number of highlights
 - Writing archive contains all posts
 - Navigation links work correctly
@@ -241,7 +241,7 @@ This approach provides explicit control over featured content without requiring 
 The site includes a category browsing system with two page types:
 
 **Category Listing (`/categories`):**
-- Displays all 11 categories with post counts
+- Displays all categories with post counts
 - Grid layout sorted by post count (descending), then alphabetically
 - Each category links to its archive page
 
@@ -264,18 +264,12 @@ The site includes a category browsing system with two page types:
 - Categories use URL-friendly slugs (e.g., "Product Management" → `product-management`)
 - Shared `slugify()` utility in `src/utils/posts.ts` ensures consistent URL generation
 
-**Current Categories (11 total):**
-- Product Management (9 posts)
-- 3D Printing (7 posts)
-- Presentations (6 posts)
-- Projects (6 posts)
-- Tutorials (5 posts)
-- Startups (4 posts)
-- AI (3 posts)
-- Bikes (2 posts)
-- Cybersecurity (2 posts)
-- Student Loans (2 posts)
-- Life (1 post)
+**Categories:**
+Posts are tagged across categories such as Product Management, 3D Printing,
+Presentations, Projects, Tutorials, Startups, AI, Bikes, Cybersecurity, Student
+Loans, and Life. Run `node scripts/count-categories.js` for the current breakdown
+and per-category post counts (counts drift as posts are added, so they're not
+hardcoded here).
 
 ## WordPress Migration
 
@@ -346,7 +340,7 @@ To update author information site-wide, edit `src/config.ts`. Changes automatica
 
 The site includes comprehensive SEO features:
 
-- **Meta descriptions**: All 29 posts have handcrafted SEO descriptions
+- **Meta descriptions**: All posts have handcrafted SEO descriptions
 - **Canonical URLs**: Set on all pages to match WordPress URL structure (/{slug})
 - **Open Graph tags**: Complete OG and Twitter Card metadata in BaseLayout
 - **Structured data**: JSON-LD BlogPosting schema on all blog posts with enhanced author metadata
@@ -379,6 +373,10 @@ Optimized for Vercel:
 - Astro auto-detected by Vercel
 
 SSL and DNS configured for custom domain (aaronroy.com).
+
+Blog content (new posts, edits, highlights) is committed directly to `main` — Vercel
+auto-deploys on every push, so no branch or PR is needed to publish. "Going live"
+means pushing to `main`.
 
 ## Recent Changes
 

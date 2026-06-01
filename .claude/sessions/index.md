@@ -4,6 +4,7 @@ Quick reference for all Claude Code working sessions on this project.
 
 | Date | Summary | Tags |
 |------|---------|------|
+| 2026-06-01 | [Morning briefing workshop blog post](2026-06-01-add-morning-briefing-post.md) | blog, content, ai, tutorials |
 | 2026-02-03 | [Older/newer post navigation component](2026-02-03-add-post-navigation.md) | navigation, component, blog |
 | 2026-01-10 | [Add clickable category links to blog post metadata](2026-01-10-add-category-links.md) | feature, blog, categories, tests |
 | 2026-01-03 | [Video storage infrastructure for Kap recordings](2026-01-03-add-video-storage.md) | video, documentation, infrastructure |
