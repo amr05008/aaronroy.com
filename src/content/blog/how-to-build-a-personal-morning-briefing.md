@@ -6,7 +6,7 @@ categories: ["Tutorials", "AI"]
 heroImage: "/og-images/daily-briefing-og.png"
 ---
 
-Teaching is one of my favorite ways to explore the depths of a topic I enjoy or am actively exploring.
+Teaching is one of my favorite ways to explore the depths of a topic I enjoy or am actively digging into.
 
 One of the many idealized paths I could imagine for a later version of myself is becoming a professor, filling my days with teaching and exploring topics with a new generation of students.
 
