@@ -1,11 +1,23 @@
 ---
 date: 2026-06-01
-summary: Full SEO + AEO audit of the live site, grounded in code review and a Google Search Console export
-tags: [seo, aeo, audit, analysis, gsc]
+summary: SEO + AEO audit of the live site, then implemented the structured-data, AEO, and technical-SEO baseline (7 items)
+tags: [seo, aeo, audit, analysis, gsc, structured-data, schema, implementation]
 ---
 
 ## Summary
-Produced a comprehensive SEO and AEO (AI answer-engine optimization) audit of aaronroy.com, delivered as `SEO-AEO-AUDIT.md` at the repo root. Combined a code-level review (layouts, schema, config, robots, sitemap, RSS), live-site verification (curl of rendered HTML/JSON-LD), and analysis of a 12-month Google Search Console export (queries + pages). No code changes — analysis + prioritized roadmap only.
+Produced a comprehensive SEO and AEO (AI answer-engine optimization) audit of aaronroy.com (delivered as gitignored `SEO-AEO-AUDIT.md`), then implemented the highest-priority groundwork across 5 commits: the full author **entity graph** (Person/ProfilePage + WebSite + unified `@id` + enriched BlogPosting), the **AEO baseline** (`llms.txt` + AI-crawler `robots.txt`), and the **technical baseline** (`og:type=article` + `article:*`). Audit scorecard moved Technical SEO A−→A, Structured data C+→A−, AEO/GEO C→B.
+
+## Implementation (commits, in order)
+- `0ba9e8b` **S1** — `Person`/`ProfilePage` on `/about` + entity facts centralized in `src/config.ts`; added `public/images/aaron-roy.jpg` headshot (schema-only, not displayed)
+- `41b4b20` **S3 + A4** — `WebSite` schema on homepage; stable `@id` (`#person`) unifying author across `/about`, homepage, and all posts
+- `3da1450` **S2** — enriched `BlogPosting` JSON-LD (image, mainEntityOfPage, inLanguage, keywords, articleSection, timeRequired)
+- `c6bb48c` **A1 + A2** — `public/llms.txt` curated map; `public/robots.txt` explicit AI-crawler welcome (chose "all incl. training")
+- `0967a8d` **T1** — `og:type="article"` + `article:*` meta on posts (via new `ogType`/`publishedTime`/`modifiedTime` props on `BaseLayout`)
+
+Parallel agent (same session) shipped `2b23ec7`: dependency `npm audit fix` (22→3 advisories) + fixed the pre-existing trailing-slash smoke-test failures (suite now 18/18 green = working verification gate).
+
+## Original audit summary
+Combined a code-level review (layouts, schema, config, robots, sitemap, RSS), live-site verification (curl of rendered HTML/JSON-LD), and analysis of a 12-month Google Search Console export (queries + pages).
 
 ## Changes
 - Added `SEO-AEO-AUDIT.md` (repo root, non-published) — scorecard, findings with `file:line` refs and impact×effort, GSC-driven opportunities, prioritized P0–P3 roadmap, and MCP/tooling recommendations.

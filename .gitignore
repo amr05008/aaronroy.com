@@ -40,3 +40,6 @@ SEO-AEO-AUDIT.md
 # Machine-specific Claude Code settings
 .claude/settings.local.json
 .claude/mcp.json
+
+# Claude Code agent worktrees (transient)
+.claude/worktrees/

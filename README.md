@@ -59,7 +59,8 @@ npm run test:quick
 │   ├── og-images/       # Custom Open Graph images
 │   ├── videos/          # Self-hosted MP4 videos
 │   ├── favicon.svg      # Site favicon
-│   └── robots.txt       # Search engine directives
+│   ├── robots.txt       # Search engine + AI crawler directives
+│   └── llms.txt         # Curated site map for AI tools (AEO)
 ├── tests/
 │   └── smoke.spec.ts   # Playwright smoke tests
 ├── scripts/
@@ -406,11 +407,12 @@ URLs are automatically generated from markdown filenames to preserve SEO continu
 
 - **Meta descriptions** - All posts have handcrafted SEO descriptions
 - **Canonical URLs** - Set on all pages matching WordPress structure
-- **Open Graph & Twitter Cards** - Complete social sharing metadata
+- **Open Graph & Twitter Cards** - Complete social sharing metadata; posts use `og:type="article"` with `article:published_time`/`modified_time`/`author`
 - **OG Images** - Hybrid system with default fallback + custom per-post images
-- **Structured data** - JSON-LD BlogPosting schema with author social profiles
+- **Structured data** - Unified JSON-LD entity graph: `Person`/`ProfilePage` on `/about`, `WebSite` on the homepage, and enriched `BlogPosting` on posts, all referencing one author `@id` (`#person`)
 - **Sitemap** - Auto-generated at `/sitemap-index.xml`
-- **robots.txt** - Configured with sitemap reference
+- **robots.txt** - Allows all crawlers and explicitly welcomes AI crawlers (GPTBot, ClaudeBot, PerplexityBot, etc.)
+- **llms.txt** - Curated Markdown map of the site for AI tools (Answer Engine Optimization)
 - **Analytics** - Vercel Analytics (privacy-friendly, no cookie consent needed)
 
 ## Deployment
