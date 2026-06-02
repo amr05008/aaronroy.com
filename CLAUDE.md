@@ -350,7 +350,8 @@ The site includes comprehensive SEO features:
   - The `/about` page emits `ProfilePage` → `Person` structured data (built from `AUTHOR` in `src/config.ts`) with a stable `@id`, making Aaron a machine-readable entity for the Knowledge Graph and AI answer engines
   - The homepage emits a `WebSite` node; the homepage publisher and every `BlogPosting` author/publisher reference the same Person `@id` (`#person`), so the whole site resolves to one author entity
 - **Sitemap**: Auto-generated via @astrojs/sitemap integration
-- **robots.txt**: Located in `public/robots.txt` with sitemap reference
+- **robots.txt**: Located in `public/robots.txt`. Allows all crawlers and explicitly welcomes AI crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, etc., including training) with a sitemap + `/llms.txt` reference
+- **llms.txt** (AEO): `public/llms.txt` is a hand-curated Markdown map for AI tools — identity statement + featured posts + topic links + projects. It is **static and manually maintained**, so update it when adding a notable evergreen post (mirrors the homepage highlights philosophy)
 - **Homepage meta**: Custom description set in index.astro (not using generic fallback)
 - **RSS feed**: Full-content RSS feed at `/rss.xml`
   - Markdown converted to HTML using `marked` library

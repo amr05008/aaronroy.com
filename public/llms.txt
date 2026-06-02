@@ -1,0 +1,43 @@
+# Aaron Roy
+
+> Product leader and builder based in Brooklyn, NY. I write about product management, building with AI (Claude Code, MCP servers, prompt engineering), side projects, 3D printing, cycling, and startups. Currently Product Director at Manychat and co-founder of Wami.
+
+I'm a product person by trade — not an engineer, but increasingly technical through AI tooling. I tend to build something and then write about what I learned: how it works, what it cost, what broke, and what I'd do differently. This site collects that writing.
+
+## About
+
+- [About Aaron Roy](https://aaronroy.com/about/): Career (Manychat, Teachable, Bond/Wami, 3DPrinterOS), background, and how to get in touch.
+
+## Featured writing
+
+- [How to build a personal morning briefing](https://aaronroy.com/how-to-build-a-personal-morning-briefing/): A hands-on workshop recap, with the prompts and examples to build your own scheduled AI briefing.
+- [Giving agents personal context](https://aaronroy.com/giving-agents-personal-context/): Bringing my voice, opinions, and expertise into LLMs with a simple markdown-over-MCP system.
+- [GlutenOrNot: a free ingredient scanner for celiac disease](https://aaronroy.com/glutenornot-free-ingredient-scanner-celiac-disease/): A free app that reads ingredient labels and tells you if something contains gluten — photo to verdict, no accounts.
+- [Experiments with Strava MCP](https://aaronroy.com/experiments-with-strava-mcp/): Connecting Claude to eight years of cycling data via the Strava MCP server, with a setup tutorial.
+- [Building products in the age of AI](https://aaronroy.com/building-products-age-of-ai/): A talk for NYU's Product Management Club on how AI changes what product people can build.
+- [Making migrations fun with Claude Code](https://aaronroy.com/making-migrations-fun-with-claude-code/): How I migrated this blog from WordPress to Astro in about six hours with Claude Code.
+- [Vibe coding a Tour de France app with Replit and Google Sheets](https://aaronroy.com/vibe-coding-a-tour-de-france-app-using-replit-and-google-sheets/): Building a fantasy cycling UI without being an engineer.
+- [The twisting tale of our handwriting robots](https://aaronroy.com/the-twisting-tale-of-our-handwriting-robots/): How a fleet of handwriting robots ended up in a Bushwick studio — the Bond/Wami story.
+- [How to stay ahead of online scammers](https://aaronroy.com/how-to-stay-ahead-of-online-scammers/): A practical security guide for non-technical readers.
+
+## Browse by topic
+
+- [Product management](https://aaronroy.com/category/product-management/)
+- [AI](https://aaronroy.com/category/ai/)
+- [Projects](https://aaronroy.com/category/projects/)
+- [Tutorials](https://aaronroy.com/category/tutorials/)
+- [3D printing](https://aaronroy.com/category/3d-printing/)
+- [Startups](https://aaronroy.com/category/startups/)
+- [Bikes](https://aaronroy.com/category/bikes/)
+
+## Projects
+
+- [GlutenOrNot](https://glutenornot.com): Free celiac ingredient scanner (web + iOS), built with Claude.
+- [Wami](https://wami.io): Handwriting-robot company I co-founded — luxury-brand notes at scale, run out of Bushwick.
+- [personal-context](https://github.com/amr05008/personal-context): Open-source MCP server that gives LLMs my voice, opinions, and expertise.
+
+## More
+
+- [All writing](https://aaronroy.com/writing/)
+- [Categories](https://aaronroy.com/categories/)
+- [RSS feed](https://aaronroy.com/rss.xml)

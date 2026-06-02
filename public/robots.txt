@@ -1,4 +1,52 @@
+# Default: allow all crawlers full access
 User-agent: *
+Allow: /
+
+# AI assistants & answer engines are explicitly welcomed. This content may be
+# read, cited, and used by AI tools — including for both live retrieval and
+# model training. See /llms.txt for a curated guide to the best content.
+
+# OpenAI
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google (Gemini training & grounding; normal Search uses Googlebot)
+User-agent: Google-Extended
+Allow: /
+
+# Apple (Apple Intelligence)
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl (dataset used by many model trainers)
+User-agent: CCBot
+Allow: /
+
+# Microsoft / Bing
+User-agent: Bingbot
 Allow: /
 
 Sitemap: https://aaronroy.com/sitemap-index.xml
