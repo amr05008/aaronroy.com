@@ -9,6 +9,8 @@ export const SITE = {
   title: 'Aaron Roy',
   description: 'Experiences and learnings on product, growth, bikes and whatever else I wander into.',
   url: 'https://aaronroy.com',
+  // Stable schema.org @id for the site as a WebSite entity (homepage schema)
+  id: 'https://aaronroy.com/#website',
 } as const;
 
 export const AUTHOR = {

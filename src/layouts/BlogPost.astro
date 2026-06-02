@@ -103,6 +103,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
     "dateModified": (updatedDate || pubDate).toISOString(),
     "author": {
       "@type": "Person",
+      "@id": AUTHOR.id,
       "name": AUTHOR.name,
       "url": AUTHOR.url,
       "sameAs": [
@@ -112,9 +113,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
       ]
     },
     "publisher": {
-      "@type": "Person",
-      "name": AUTHOR.name,
-      "url": AUTHOR.url
+      "@id": AUTHOR.id
     }
   })} />
 </BaseLayout>
