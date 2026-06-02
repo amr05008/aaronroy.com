@@ -24,6 +24,10 @@ const readingTime = Math.ceil(wordCount / 200);
 
 // Format canonical URL to match WordPress structure
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+
+// Absolute image URL for structured data — use the post's heroImage when set,
+// otherwise the site default OG image (mirrors BaseLayout's og:image fallback).
+const schemaImage = new URL(heroImage ?? '/og-images/aaron-roy-dot-com-og.png', Astro.site).toString();
 ---
 
 <BaseLayout title={title} description={description} canonicalURL={canonicalURL} ogImage={heroImage}>
@@ -99,8 +103,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
     "@type": "BlogPosting",
     "headline": title,
     "description": description,
+    "url": canonicalURL,
+    "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalURL },
+    "image": schemaImage,
     "datePublished": pubDate.toISOString(),
     "dateModified": (updatedDate || pubDate).toISOString(),
+    "inLanguage": "en-US",
+    "timeRequired": `PT${readingTime}M`,
+    ...(categories && categories.length > 0 ? {
+      "keywords": categories,
+      "articleSection": categories[0],
+    } : {}),
     "author": {
       "@type": "Person",
       "@id": AUTHOR.id,
