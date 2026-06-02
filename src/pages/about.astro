@@ -1,8 +1,49 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { AUTHOR, SITE } from '../config';
+
+// Structured data: identify Aaron as a machine-readable entity so search
+// engines (Knowledge Graph) and AI answer engines can attribute and cite him.
+// The Person carries a stable @id (AUTHOR.id) reused across the site.
+const profileSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  url: `${SITE.url}/about/`,
+  name: 'About Aaron Roy',
+  mainEntity: {
+    '@type': 'Person',
+    '@id': AUTHOR.id,
+    name: AUTHOR.name,
+    url: SITE.url,
+    image: `${SITE.url}${AUTHOR.image}`,
+    email: `mailto:${AUTHOR.email}`,
+    jobTitle: AUTHOR.jobTitle,
+    description: AUTHOR.bio,
+    worksFor: AUTHOR.affiliations.map((org) => ({
+      '@type': 'Organization',
+      name: org.name,
+      ...('url' in org ? { url: org.url } : {}),
+    })),
+    alumniOf: {
+      '@type': 'CollegeOrUniversity',
+      name: AUTHOR.alumniOf,
+    },
+    homeLocation: {
+      '@type': 'Place',
+      name: AUTHOR.location,
+    },
+    knowsAbout: AUTHOR.knowsAbout,
+    sameAs: [
+      AUTHOR.social.twitter,
+      AUTHOR.social.linkedin,
+      AUTHOR.social.github,
+    ],
+  },
+};
 ---
 
 <BaseLayout title="About" description="Learn more about Aaron Roy">
+  <script type="application/ld+json" set:html={JSON.stringify(profileSchema)} />
   <div class="max-w-3xl mx-auto px-6 py-16">
     <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-12">About Me</h1>
 

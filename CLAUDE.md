@@ -328,13 +328,14 @@ Useful for content auditing, identifying popular topics, and planning future con
 The `src/config.ts` file contains centralized site metadata used across all layouts and pages:
 
 - `SITE`: Site title, description, and URL
-- `AUTHOR`: Author name, legal name (for copyright), email, location, and social profile URLs
+- `AUTHOR`: Author name, legal name (for copyright), email, location, and social profile URLs. Also carries the entity facts used to build `Person` structured data — a stable schema.org `id` (`https://aaronroy.com/#person`), `image` (headshot), `jobTitle`, `bio`, `affiliations` (becomes `worksFor`), `alumniOf`, and `knowsAbout` (topical-authority signals)
 
 To update author information site-wide, edit `src/config.ts`. Changes automatically apply to:
 - Page titles and meta descriptions
 - Footer copyright notice
 - JSON-LD structured data (author and publisher fields)
 - Social profile links in structured data
+- The `Person` / `ProfilePage` schema on `/about` (entity facts above)
 
 ## SEO Optimizations
 
@@ -346,6 +347,7 @@ The site includes comprehensive SEO features:
 - **Structured data**: JSON-LD BlogPosting schema on all blog posts with enhanced author metadata
   - Includes author name, URL, and `sameAs` array linking to Twitter, LinkedIn, and GitHub profiles
   - Helps search engines understand author identity across platforms for rich results
+  - The `/about` page emits `ProfilePage` → `Person` structured data (built from `AUTHOR` in `src/config.ts`) with a stable `@id`, making Aaron a machine-readable entity for the Knowledge Graph and AI answer engines
 - **Sitemap**: Auto-generated via @astrojs/sitemap integration
 - **robots.txt**: Located in `public/robots.txt` with sitemap reference
 - **Homepage meta**: Custom description set in index.astro (not using generic fallback)

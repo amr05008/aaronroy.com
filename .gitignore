@@ -35,6 +35,7 @@ pnpm-debug.log*
 
 # Local project planning (not committed)
 PROJECT_IDEAS.md
+SEO-AEO-AUDIT.md
 
 # Machine-specific Claude Code settings
 .claude/settings.local.json
