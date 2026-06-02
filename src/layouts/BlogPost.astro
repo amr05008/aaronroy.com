@@ -30,7 +30,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 const schemaImage = new URL(heroImage ?? '/og-images/aaron-roy-dot-com-og.png', Astro.site).toString();
 ---
 
-<BaseLayout title={title} description={description} canonicalURL={canonicalURL} ogImage={heroImage}>
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalURL={canonicalURL}
+  ogImage={heroImage}
+  ogType="article"
+  publishedTime={pubDate.toISOString()}
+  modifiedTime={(updatedDate || pubDate).toISOString()}
+>
   <article class="max-w-3xl mx-auto px-6 py-12">
     <!-- Back link -->
     <div class="mb-8">
