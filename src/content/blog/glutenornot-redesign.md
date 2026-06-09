@@ -73,7 +73,7 @@ Once we settled on a design direction, Claude Design produced the full design se
 
 ## What else
 
-In addition to the new iOS version, the redesigned **web app is live now** at [glutenornot.com](https://glutenornot.com/) — you can upload a photo of a label and get a verdict.
+In addition to the new iOS version, the redesigned **web app is live now** at [glutenornot.com](https://glutenornot.com/), you can upload a photo of a label and get a verdict.
 
 As always, it's still free, you don't need to make an account, and we still don't track what you scan.
 And it's all open source, so you can read the code yourself [on GitHub](https://github.com/amr05008/glutenornot.com).
