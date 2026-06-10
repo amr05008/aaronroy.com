@@ -17,7 +17,7 @@ In this new release, the verdict is the only color in the app. Everything else i
 
 <figure>
   <img src="/images/glutenornot-before-after.png" alt="The old teal result screen next to the new neutral one with a full-bleed red Unsafe verdict" />
-  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">Before and after — same verdict, very different confidence.</figcaption>
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">Before and after shots. Same verdict, much easier to parse.</figcaption>
 </figure>
 
 Scanning is way better in this new version. The new designs better support label detection, restaurant menu results and ingredient labels.
@@ -47,7 +47,7 @@ A redesign would not be complete without a new app icon:
 
 <figure>
   <img src="/images/glutenornot-icon.png" alt="The new GlutenOrNot app icon" />
-  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">New icon. The leaf is gone.</figcaption>
+  <figcaption class="text-center text-sm text-gray-600 mt-2 italic">Goodbye leaf, hello sleek traffic light</figcaption>
 </figure>
 
 ## How the redesign came together
