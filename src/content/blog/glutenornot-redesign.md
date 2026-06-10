@@ -20,7 +20,7 @@ In this new release, the verdict is the only color in the app. Everything else i
   <figcaption class="text-center text-sm text-gray-600 mt-2 italic">Before and after — same verdict, very different confidence.</figcaption>
 </figure>
 
-Scanning got more capable, too. The new designs better support label detection, restaurant menu results and ingredient labels.
+Scanning is way better in this new version. The new designs better support label detection, restaurant menu results and ingredient labels.
 
 <figure>
   <img src="/images/glutenornot-screens.png" alt="The new scan, menu, and safe screens" />
@@ -36,7 +36,7 @@ Scanning got more capable, too. The new designs better support label detection, 
     /images/glutenornot-new-unsafe.png  — full-bleed red "Unsafe" verdict
 -->
 
-The leaf mark has also been replaced. The new mark is a scan reticle with three dots: red, amber, green, and those dots are the only place the brand uses color.
+The leaf mark is gone and the new mark is a scan reticle with three dots: red, amber, green (traffic light vibes).
 
 <figure>
   <img src="/images/glutenornot-mark-colors.png" alt="The new GlutenOrNot mark and the three verdict colors" />
@@ -73,7 +73,7 @@ Once we settled on a design direction, Claude Design produced the full design se
 
 ## What else
 
-In addition to the new iOS version, the redesigned **web app is live now** at [glutenornot.com](https://glutenornot.com/), you can upload a photo of a label and get a verdict.
+In addition to the new iOS version, the redesigned web app is live now at [glutenornot.com](https://glutenornot.com/), you can upload a photo of a label and get a verdict.
 
 As always, it's still free, you don't need to make an account, and we still don't track what you scan.
 And it's all open source, so you can read the code yourself [on GitHub](https://github.com/amr05008/glutenornot.com).
