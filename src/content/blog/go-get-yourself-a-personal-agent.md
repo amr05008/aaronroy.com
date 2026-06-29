@@ -170,7 +170,11 @@ Here's how my set up works at the moment:
 
 **Give your agent a real memory, not just a session.**
 
-Beyond the live conversation, the agent keeps a folder of one-fact-per-file notes it can read back later, who's who, what I'm working on, decisions we've made. Now that there are two agents, they sync that memory back and forth every 4 hours, so they share one brain (ish).
+Work with your agent to figure out the right memory system set up. 
+
+Less is more in terms of making it useful context, as if the memory is too big, the agent will only load part of it (thus ending up worse off) so our memory set up only loads critical rules or facts about active projects every session, while everything else can be called only when needed or archived so it doesn’t cause confusion.
+
+Now that there are two agents, they sync that memory back and forth every 4 hours, so they share one brain (ish).
 
 **Take security seriously.**
 
