@@ -2,7 +2,7 @@
 title: "Covidsupplies.NYC - Helping source PPE in NYC"
 description: "How we combined our powers in product, 3D printing, marketing and figuring stuff out to source and distribute PPE in NYC."
 pubDate: 2020-05-04
-categories: ["Projects", "3D Printing"]
+categories: ["Projects", "3D Printing", "Wami"]
 ---
 <div style="position: relative; padding-bottom: 61.32879045996593%; height: 0;"><iframe src="https://www.loom.com/embed/934dec15558d42a6aa558a8d0fba1f3e" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 

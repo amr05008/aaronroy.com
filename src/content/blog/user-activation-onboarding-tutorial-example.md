@@ -2,7 +2,7 @@
 title: "Example onboarding tutorial for increasing user activation"
 description: "Example onboarding tutorial video I created at 3DPrinterOS to help activate free signups into active users."
 pubDate: 2016-05-04
-categories: ["Tutorials", "Product Management"]
+categories: ["Tutorials", "Product"]
 ---
 
 One of the biggest challenges we faced in the early days of [3DPrinterOS](https://3dprinteros.com) was turning new user signups into active users. We noticed pretty early into our launch that users would signup for our free account tier and then go dark before adding their first 3d printer or some other high-value action in the system. 

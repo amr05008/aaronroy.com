@@ -2,7 +2,7 @@
 title: "Some of my favorite products in 2018"
 description: "My favorite products of 2018 "
 pubDate: 2018-12-16
-categories: ["Product Management"]
+categories: ["Product"]
 ---
 
 With 2018 just about to come to a close, what better way to spend a rainy Sunday morning in Brooklyn then to list out a few of my favorite products I used this year. In no particular order…

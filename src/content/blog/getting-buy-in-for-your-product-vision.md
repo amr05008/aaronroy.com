@@ -2,7 +2,7 @@
 title: "Getting buy-in for your product vision"
 description: "Example presentation used for getting buy-in for product vision and direction with cross-functional team members and leadership."
 pubDate: 2018-01-06
-categories: ["Product Management"]
+categories: ["Product", "Bond"]
 ---
 
 We faced an existential crisis at Bond to figure out how to become profitable once Newell Brands acquired us. We knew we had to pivot from 1x1 handwritten notes into something more scalable and with better margins. 

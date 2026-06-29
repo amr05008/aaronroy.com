@@ -1,5 +1,5 @@
 ---
-title: "Useful (and silly) ways I use ChatGPT"
+title: "Useful (and silly) ways I use ChatGPT - 2024 Edition"
 description: "Some useful and silly ways I've used ChatGPT in my day to day life."
 pubDate: 2024-05-28
 categories: ["Tutorials"]

@@ -2,7 +2,7 @@
 title: "Unlocking revenue with product-led growth"
 description: "Lessons learned experimenting with product-led growth (PLG) strategies to unlock self-service revenue growth."
 pubDate: 2020-05-01
-categories: ["Product Management"]
+categories: ["Product"]
 ---
 
 I joined [Bond](https://www.linkedin.com/company/bond-inc/) shortly after its acquisition by [Newell Brands](https://www.newellbrands.com/). Bond produced [robotic handwritten notes](https://www.youtube.com/watch?v=vrAyX9vVJCE) at scale for B2B and B2C use cases.

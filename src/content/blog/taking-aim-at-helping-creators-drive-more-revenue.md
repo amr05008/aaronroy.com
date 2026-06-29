@@ -2,7 +2,7 @@
 title: "Taking aim at helping creators drive more revenue"
 description: "What we did, how we did it and lessons learned from trying to help creators drive more revenue with Teachable Discover and Spotlight."
 pubDate: 2022-05-06
-categories: ["Projects"]
+categories: ["Projects", "Teachable" ]
 heroImage: "/og-images/helping-creators-drive-more-revenue.png"
 ---
 
