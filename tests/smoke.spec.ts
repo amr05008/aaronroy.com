@@ -250,14 +250,14 @@ test.describe("Smoke Tests", () => {
   });
 
   test("blog posts handle category URL slugification correctly", async ({ page }) => {
-    // Test that "Product Management" becomes "product-management"
-    await page.goto("/unlocking-revenue-with-product-led-growth/");
+    // Test that "Student Loans" becomes "student-loans"
+    await page.goto("/lessons-learned-refinancing-student-loan-debt/");
 
     const categoryLink = page.locator('header a[href^="/category/"]').first();
-    await expect(categoryLink).toHaveAttribute("href", "/category/product-management");
+    await expect(categoryLink).toHaveAttribute("href", "/category/student-loans");
 
     // Verify link text remains human-readable
-    await expect(categoryLink).toHaveText("Product Management");
+    await expect(categoryLink).toHaveText("Student Loans");
 
     // Test that 3D Printing becomes "3d-printing"
     await page.goto("/3d-printing-and-guns/");
