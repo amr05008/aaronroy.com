@@ -32,6 +32,7 @@ pnpm-debug.log*
 /test-results/
 /playwright-report/
 /playwright/.cache/
+.playwright-mcp/
 
 # Local project planning (not committed)
 PROJECT_IDEAS.md
