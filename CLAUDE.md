@@ -49,7 +49,7 @@ The site uses Playwright for smoke testing. Tests validate that the site builds 
 
 - All static pages load (/, /writing, /about, /404)
 - All published blog posts return 200 status
-- Homepage displays the correct number of highlights
+- Homepage displays the latest N posts (capped at `LATEST_COUNT`)
 - Writing archive contains all posts
 - Navigation links work correctly
 - Essential meta tags exist (title, description, canonical, OG)
@@ -89,7 +89,7 @@ npx playwright install chromium
 
 No test updates needed. The test suite automatically:
 - Reads blog posts from `src/content/blog/`
-- Imports highlights from `src/data/highlights.ts`
+- Derives the homepage's latest-post count from the content directory
 
 Just add your post and run `npm run test` to verify everything works.
 
@@ -228,13 +228,16 @@ Change `draft: true` to `draft: false` or remove the `draft` field entirely (def
 
 ### Homepage Features
 
-The homepage (`src/pages/index.astro`) displays a curated "Highlights" section instead of recent posts. To manage which posts appear:
+The homepage (`src/pages/index.astro`) displays a "Latest" section: the most
+recent published posts, newest first, capped at `LATEST_COUNT` (currently 7).
+This is recency-driven (Simon-Willison-style) rather than hand-curated, so newly
+published posts surface automatically with no manual upkeep.
 
-1. Edit `src/data/highlights.ts`
-2. Update the array of post slugs in desired display order
-3. Changes hot-reload automatically in dev mode
+To change how many posts appear, edit `LATEST_COUNT` in `src/pages/index.astro`
+(and keep the matching `LATEST_COUNT` in `tests/smoke.spec.ts` in sync).
 
-This approach provides explicit control over featured content without requiring redeployment-heavy frontmatter flags.
+(History: the homepage previously used a hand-curated `src/data/highlights.ts`
+list. That was removed in favor of recency — see git history if you need it back.)
 
 ### Category Pages
 
@@ -351,7 +354,7 @@ The site includes comprehensive SEO features:
   - The homepage emits a `WebSite` node; the homepage publisher and every `BlogPosting` author/publisher reference the same Person `@id` (`#person`), so the whole site resolves to one author entity
 - **Sitemap**: Auto-generated via @astrojs/sitemap integration
 - **robots.txt**: Located in `public/robots.txt`. Allows all crawlers and explicitly welcomes AI crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, etc., including training) with a sitemap + `/llms.txt` reference
-- **llms.txt** (AEO): `public/llms.txt` is a hand-curated Markdown map for AI tools — identity statement + featured posts + topic links + projects. It is **static and manually maintained**, so update it when adding a notable evergreen post (mirrors the homepage highlights philosophy)
+- **llms.txt** (AEO): `public/llms.txt` is a hand-curated Markdown map for AI tools — identity statement + featured posts + topic links + projects. It is **static and manually maintained**, so update it when adding a notable evergreen post (this is the one place curation still lives, now that the homepage is recency-driven)
 - **Homepage meta**: Custom description set in index.astro (not using generic fallback)
 - **RSS feed**: Full-content RSS feed at `/rss.xml`
   - Markdown converted to HTML using `marked` library

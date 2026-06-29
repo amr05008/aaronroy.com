@@ -1,15 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { highlights } from '../data/highlights';
 import { getPublishedPosts } from '../utils/posts';
 import { SITE, AUTHOR } from '../config';
 
-const allPosts = await getPublishedPosts();
-
-// Get highlighted posts in the order specified in highlights.ts
-const highlightedPosts = highlights
-  .map(slug => allPosts.find(post => post.slug === slug))
-  .filter(post => post !== undefined);
+// Homepage leads with the most recent writing (Simon-Willison-style recency,
+// not a hand-curated best-of). Newest first, capped at the latest few.
+const LATEST_COUNT = 7;
+const latestPosts = (await getPublishedPosts())
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, LATEST_COUNT);
 
 // Structured data: establish the site as a WebSite entity, published by the
 // same Person (AUTHOR.id) defined on /about, so every page resolves to one
@@ -39,17 +38,17 @@ const websiteSchema = {
       </h1>
     </section>
 
-    <!-- Highlights Section -->
+    <!-- Latest Section -->
     <section>
       <div class="flex items-center justify-between mb-8">
-        <h2 class="text-2xl font-semibold">Highlights</h2>
+        <h2 class="text-2xl font-semibold">Latest</h2>
         <a href="/writing" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">
           View all →
         </a>
       </div>
 
       <div class="space-y-10">
-        {highlightedPosts.map((post) => (
+        {latestPosts.map((post) => (
           <article class="group">
             <a href={`/${post.slug}`} class="block">
               <h3 class="text-xl font-semibold mb-2 group-hover:text-blue-600 transition-colors">

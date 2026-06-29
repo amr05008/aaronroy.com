@@ -56,21 +56,23 @@ const sortedPublished = blogPostFiles
 const oldestPostSlug = sortedPublished[0].slug;
 const newestPostSlug = sortedPublished[sortedPublished.length - 1].slug;
 
-// Import highlights from source of truth
-import { highlights } from "../src/data/highlights";
+// Homepage shows the latest N published posts (must match LATEST_COUNT in
+// src/pages/index.astro).
+const LATEST_COUNT = 7;
+const expectedLatestCount = Math.min(LATEST_COUNT, publishedPosts.length);
 
 test.describe("Smoke Tests", () => {
-  test("homepage loads and has highlights", async ({ page }) => {
+  test("homepage loads and shows latest posts", async ({ page }) => {
     const response = await page.goto("/");
     expect(response?.status()).toBe(200);
 
     // Check page title
     await expect(page).toHaveTitle(/Aaron Roy/);
 
-    // Check highlights section exists with correct number of posts
+    // Check latest section shows the expected number of posts
     // Selector targets article links (excludes "View all" link)
-    const highlightLinks = page.locator("main article a");
-    await expect(highlightLinks).toHaveCount(highlights.length);
+    const latestLinks = page.locator("main article a");
+    await expect(latestLinks).toHaveCount(expectedLatestCount);
 
     // Check navigation exists (in header)
     await expect(page.locator('header a[href="/writing"]')).toBeVisible();
@@ -210,20 +212,20 @@ test.describe("Smoke Tests", () => {
 
     // Verify categories are displayed
     const categoryLinks = page.locator('header a[href^="/category/"]');
-    await expect(categoryLinks).toHaveCount(2); // AI, Bikes
+    await expect(categoryLinks).toHaveCount(2); // Bikes, Tutorials
 
-    // Verify category links have correct hrefs (order matches frontmatter: Bikes, AI)
+    // Verify category links have correct hrefs (order matches frontmatter: Bikes, Tutorials)
     const firstCategory = categoryLinks.first();
     await expect(firstCategory).toHaveAttribute("href", "/category/bikes");
 
     const secondCategory = categoryLinks.nth(1);
-    await expect(secondCategory).toHaveAttribute("href", "/category/ai");
+    await expect(secondCategory).toHaveAttribute("href", "/category/tutorials");
 
     // Verify categories are comma-separated (normalize whitespace)
     const metadataDiv = page.locator('header div.flex.items-center').first();
     const metadataText = await metadataDiv.textContent();
     const normalizedText = metadataText?.replace(/\s+/g, ' ').trim();
-    expect(normalizedText).toContain("Bikes, AI");
+    expect(normalizedText).toContain("Bikes, Tutorials");
 
     // Test navigation to the category archive. The link href is emitted
     // without a trailing slash; navigate to the canonical URL the preview

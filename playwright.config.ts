@@ -20,7 +20,11 @@ export default defineConfig({
   webServer: {
     command: "npm run preview",
     url: "http://localhost:4321",
-    reuseExistingServer: true,
+    // Always spin up a fresh production preview. Reusing an existing server
+    // silently tests against whatever is already on :4321 — e.g. a running
+    // `npm run dev`, which renders drafts and skips the fresh build, producing
+    // false pass/fail results.
+    reuseExistingServer: false,
     timeout: 120000,
   },
 });
