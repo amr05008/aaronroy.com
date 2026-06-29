@@ -6,7 +6,9 @@ categories: ["Agents", "Projects", "Tutorials"]
 heroImage: "/og-images/personal-agents-pipi-og.png"
 ---
 
-I think you should build a personal agent. Out of all the fun and wild stuff I've explored this past year personal agents are the most useful, the most interesting and now the foundation I layer new projects on top of.
+I think you should build a personal agent. 
+
+Out of all the fun and wild stuff I've explored this past year personal agents are the most useful, the most interesting and now the foundation I layer new projects on top of.
 
 Having access to an always on, super helpful assistant, accessible from my computer, phone, wherever, has changed how I use the internet.
 
