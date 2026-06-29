@@ -4,7 +4,6 @@ description: "Personal agents have changed how I use the internet. Here's how I 
 pubDate: 2026-06-28
 categories: ["Agents", "Projects", "Tutorials"]
 heroImage: "/og-images/personal-agents-pipi-og.png"
-draft: false
 ---
 
 I think you should build a personal agent. Out of all the fun and wild stuff I've explored this past year personal agents are the most useful, the most interesting and now the foundation I layer new projects on top of.
@@ -95,7 +94,7 @@ The twitter-watcher agent checks on topics and accounts I want it to follow, det
 
 Building on top of the channels foundation above, you can have your personal agent(s) present in the same channels these external agents are posting via webhook and then you can task your personal agent to go get more info or expand on a topic.
 
-I tasked Pi Pi to go get me more information on how people are using the new Claude Tag tool and to bring it back to the channel to complement the info from the #signals post, without me ever having to login or use twitter.
+I tasked Pi Pi to go get me more information on how people are using the new [Claude Tag](https://support.claude.com/en/articles/15594475-what-is-claude-tag) tool and to bring it back to the channel to complement the info from the #signals post, without me ever having to login or use twitter.
 
 <figure>
   <img src="/images/personal-agents/twitter-watcher-agent.png" alt="Agent in channel going to fetch additional information about info posted via webhook" />
@@ -145,7 +144,7 @@ In the past few weeks, I've added a second agent ("Agent M1") into the mix who l
 
 The laptop gives this new agent more power for running research tasks, has much greater storage on device and now I can start to experiment with outsourcing some of my tasks to local LLMs. The single Pi is still going strong, I just wanted to tinker and happened to have this machine handy.
 
-I've also granted Agent M1 more responsibilities and tool access than I was willing to give to the Raspberry Pi. Agent M1 has write and read access to my GlutenOrNot app and has MCP access to Sentry and Posthog so it can detect/investigate issues and review/submit PRs to fix things with guardrails on what it can act on autonomously.
+I've also granted Agent M1 more responsibilities and tool access than I was willing to give to the Raspberry Pi. Agent M1 has write and read access to my GlutenOrNot app and has MCP access to [Sentry](https://sentry.io/welcome/) and [Posthog](https://posthog.com/) so it can detect/investigate issues and review/submit PRs to fix things with guardrails on what it can act on autonomously.
 
 This image below is Agent M1 reviewing a PR created by Pi Pi for debugging API failures on my app.
 
