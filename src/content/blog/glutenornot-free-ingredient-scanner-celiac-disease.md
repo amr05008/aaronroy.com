@@ -2,7 +2,7 @@
 title: "GlutenOrNot: A free ingredient scanner for celiac disease"
 description: "Introducing GlutenOrNot, a free web and mobile app that scans ingredient labels and tells you if something contains gluten."
 pubDate: 2026-02-04
-categories: ["Projects", "AI"]
+categories: ["Projects", "GlutenOrNot"]
 heroImage: "/og-images/glutenornot-og.png"
 ---
 

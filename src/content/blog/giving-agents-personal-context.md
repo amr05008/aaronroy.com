@@ -2,7 +2,7 @@
 title: "Giving agents personal context"
 description: "Exploring how to bring my voice, context and preferences into different LLMs and machines"
 pubDate: 2026-04-07
-categories: ["AI", "Projects"]
+categories: ["Agents", "Projects"]
 heroImage: "/og-images/personal-context-og.png"
 ---
 

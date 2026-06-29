@@ -2,7 +2,7 @@
 title: "How to build a personal morning briefing"
 description: "Hands-on workshop recap. Includes prompts and examples to help you build your own personalized morning briefing."
 pubDate: 2026-06-01
-categories: ["Tutorials", "AI"]
+categories: ["Tutorials", "Agents"]
 heroImage: "/og-images/daily-briefing-og.png"
 ---
 

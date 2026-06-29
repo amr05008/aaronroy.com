@@ -2,7 +2,7 @@
 title: "Draft: Testing the Draft System"
 description: "This is a draft post used to test the draft system functionality. It should only be visible during development."
 pubDate: 2026-01-03
-categories: ["AI"]
+categories: ["Bikes"]
 draft: true
 ---
 

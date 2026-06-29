@@ -2,7 +2,7 @@
 title: "GlutenOrNot version 1.2 - check out the fresh coat of paint"
 description: "New redesigned release of GlutenOrNot for iOS and web is live. New version delivers improved barcode and restaurant menu verdicts."
 pubDate: 2026-06-08
-categories: ["Projects"]
+categories: ["Projects", "GlutenOrNot"]
 heroImage: "/og-images/glutenornot-before-after-og.png"
 draft: false
 ---
