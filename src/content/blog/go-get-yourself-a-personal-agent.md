@@ -4,7 +4,7 @@ description: "Personal agents have changed how I use the internet. Here's how I 
 pubDate: 2026-06-28
 categories: ["Agents", "Projects", "Tutorials"]
 heroImage: "/og-images/personal-agents-pipi-og.png"
-draft: true
+draft: false
 ---
 
 I think you should build a personal agent. Out of all the fun and wild stuff I've explored this past year personal agents are the most useful, the most interesting and now the foundation I layer new projects on top of.
@@ -170,11 +170,13 @@ Here's how my set up works at the moment:
 
 **Give your agent a real memory, not just a session.**
 
-Work with your agent to figure out the right memory system set up. 
+Work with your agent to figure out the right memory system setup. 
 
-Less is more in terms of making it useful context, as if the memory is too big, the agent will only load part of it (thus ending up worse off) so our memory set up only loads critical rules or facts about active projects every session, while everything else can be called only when needed or archived so it doesn’t cause confusion.
+Less is more in terms of making it useful context. Everything in memory loads into context every session, so if it grows too big the agent will miss the important stuff in the noise. 
 
-Now that there are two agents, they sync that memory back and forth every 4 hours, so they share one brain (ish).
+Our memory setup only loads critical rules or facts about active projects every session, while everything else can be called only when needed or archived so it doesn’t cause confusion.
+
+Now that there are two agents, they sync their memory back and forth every 4 hours, so they share one brain (ish).
 
 **Take security seriously.**
 
