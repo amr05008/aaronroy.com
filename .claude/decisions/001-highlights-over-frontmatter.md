@@ -1,7 +1,12 @@
 # ADR 001: Homepage Highlights via Config File vs Frontmatter
 
 **Date**: 2025-10-05
-**Status**: Accepted
+**Status**: Superseded (2026-06-28) — the homepage no longer uses curated
+highlights at all. It now shows a recency-driven "Latest" feed (the N most
+recent published posts), and `src/data/highlights.ts` was removed. The
+maintenance burden noted below (remembering to hand-edit the list) is the
+reason for the change. See session
+[2026-06-28-replace-highlights-with-latest-feed](../sessions/2026-06-28-replace-highlights-with-latest-feed.md).
 **Related session**: [2025-10-05-seo-highlights](../sessions/2025-10-05-seo-highlights.md)
 
 ## Context

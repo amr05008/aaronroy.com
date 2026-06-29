@@ -72,8 +72,6 @@ npm run test:quick
 │   ├── content/
 │   │   ├── blog/        # Blog posts (Markdown/MDX)
 │   │   └── config.ts    # Content collections schema
-│   ├── data/
-│   │   └── highlights.ts # Homepage featured posts
 │   ├── layouts/
 │   │   ├── BaseLayout.astro   # Base HTML, SEO, Open Graph
 │   │   └── BlogPost.astro     # Blog template with JSON-LD
@@ -264,23 +262,15 @@ heroImage: "/og-images/your-post-name.png"
 
 If no custom image is set, the default fallback (`/images/og-default.png`) will be used.
 
-### Managing Homepage Highlights
+### Homepage Latest Feed
 
-The homepage features a curated "Highlights" section. To update featured posts:
+The homepage shows a "Latest" section: the most recent published posts,
+newest first, capped at `LATEST_COUNT` (currently 7). It's recency-driven
+rather than hand-curated, so new posts surface automatically with no manual
+upkeep.
 
-1. Edit `src/data/highlights.ts`
-2. Update the array of post slugs in your preferred display order
-3. Changes hot-reload automatically in dev mode
-
-**Example:**
-
-```typescript
-export const highlights = [
-  'building-products-age-of-ai',
-  'making-migrations-fun-with-claude-code',
-  'reflecting-on-cx-2025',
-];
-```
+To change how many posts appear, edit `LATEST_COUNT` in `src/pages/index.astro`
+(and keep the matching `LATEST_COUNT` in `tests/smoke.spec.ts` in sync).
 
 ## Configuration
 
@@ -367,7 +357,7 @@ The site uses Playwright for smoke testing. Tests automatically discover blog po
 
 - All pages load (homepage, writing, about, 404)
 - All blog posts return 200 status
-- Homepage displays correct highlights
+- Homepage displays the latest N posts (capped at `LATEST_COUNT`)
 - Navigation links work
 - Essential meta tags exist (title, description, canonical, OG)
 
@@ -391,7 +381,7 @@ npx playwright install chromium
 
 ### Adding New Posts
 
-No test updates needed. Tests automatically read from `src/content/blog/` and `src/data/highlights.ts`.
+No test updates needed. Tests automatically read from `src/content/blog/`.
 
 ## URL Structure
 

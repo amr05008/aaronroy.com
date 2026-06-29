@@ -4,6 +4,7 @@ Quick reference for all Claude Code working sessions on this project.
 
 | Date | Summary | Tags |
 |------|---------|------|
+| 2026-06-28 | [Replace homepage highlights with a recency-driven Latest feed; test footgun + Dependabot triage](2026-06-28-replace-highlights-with-latest-feed.md) | homepage, testing, security, seo |
 | 2026-06-01 | [SEO + AEO audit, then shipped the structured-data/AEO/technical baseline](2026-06-01-investigate-seo-aeo-audit.md) | seo, aeo, audit, schema, structured-data, gsc |
 | 2026-06-01 | [Morning briefing workshop blog post](2026-06-01-add-morning-briefing-post.md) | blog, content, ai, tutorials |
 | 2026-02-03 | [Older/newer post navigation component](2026-02-03-add-post-navigation.md) | navigation, component, blog |

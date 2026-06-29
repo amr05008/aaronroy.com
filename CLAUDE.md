@@ -381,7 +381,7 @@ Optimized for Vercel:
 
 SSL and DNS configured for custom domain (aaronroy.com).
 
-Blog content (new posts, edits, highlights) is committed directly to `main` — Vercel
+Blog content (new posts, edits) is committed directly to `main` — Vercel
 auto-deploys on every push, so no branch or PR is needed to publish. "Going live"
 means pushing to `main`.
 
