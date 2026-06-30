@@ -403,13 +403,20 @@ so it's safe to deploy before the PostHog project exists.
 - `PUBLIC_POSTHOG_KEY` — project public key (`phc_…`). Set in Vercel (Production + Preview) and local `.env`.
 - `PUBLIC_POSTHOG_HOST` — optional; defaults to the same-origin **reverse-proxy path `/zuko`**.
 
-**Reverse proxy (adblock resistance):** `vercel.json` rewrites `/zuko/*` → PostHog
-(`/static` + `/array` → `us-assets.i.posthog.com`, catch-all → `us.i.posthog.com`), so the browser
+**Reverse proxy (adblock resistance):** `vercel.json` rewrites `/zuko/*` → PostHog, so the browser
 only ever talks to `aaronroy.com` — adblockers that filter by third-party domain can't drop it. The
 SDK's `api_host` is `/zuko`; `ui_host` stays `https://us.posthog.com` so the toolbar/links resolve.
 The non-obvious path name is deliberate (PostHog docs: blockers catch `/ingest`, `/analytics`, etc.).
-Note `trailingSlash: true` is fine here — Vercel skips the slash-redirect for `.js` paths and PostHog's
-endpoints already use trailing slashes.
+
+⚠️ **`trailingSlash: true` (needed for blog SEO) conflicts with a wildcard proxy.** A
+`/zuko/:path*` catch-all does NOT match trailing-slash paths — and posthog-js, when given a custom
+`api_host`, POSTs captures to `/zuko/e/` (legacy endpoint, with trailing slash). That 404'd silently
+and pageviews stopped landing. **Fix:** explicit *literal* rewrites for each trailing-slash endpoint
+(`/zuko/e/`, `/zuko/i/v0/e/`, `/zuko/flags/`, `/zuko/decide/`) — literal sources match where `:path*`
+doesn't. The `/static` + `/array` wildcards (no trailing slash, `.js`) → `us-assets.i.posthog.com`;
+the literal endpoints + final `/zuko/:path*` catch-all → `us.i.posthog.com`. Verified 2026-06-30:
+a real pageview POSTs to `/zuko/e/` → 200 → lands in the project. **If you add an endpoint, add its
+literal rewrite** or it'll silently 404.
 
 See `.env.example`. **Verify after deploy:** load the site and confirm network requests go to
 `aaronroy.com/zuko/*` (not `*.posthog.com`) and return 200; then check the PostHog project's events
