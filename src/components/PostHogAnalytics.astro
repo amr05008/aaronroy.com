@@ -2,7 +2,9 @@
 // PostHog analytics — privacy-conscious config (see CLAUDE.md → Analytics).
 // Wired via build-time env vars so the public key isn't hardcoded:
 //   PUBLIC_POSTHOG_KEY   — the project's public key (phc_...)  [required]
-//   PUBLIC_POSTHOG_HOST  — ingestion host (defaults to US cloud) [optional]
+//   PUBLIC_POSTHOG_HOST  — ingestion host [optional]. Defaults to the same-origin
+//     reverse-proxy path `/zuko` (see vercel.json rewrites), which routes through
+//     aaronroy.com so adblockers don't see a third-party PostHog request.
 // When PUBLIC_POSTHOG_KEY is unset, NOTHING is emitted — safe to deploy before
 // the PostHog project exists. Vercel Analytics (in BaseLayout) is left untouched.
 const POSTHOG_KEY = import.meta.env.PUBLIC_POSTHOG_KEY;
@@ -12,11 +14,14 @@ const POSTHOG_KEY = import.meta.env.PUBLIC_POSTHOG_KEY;
     import posthog from 'posthog-js';
 
     const key = import.meta.env.PUBLIC_POSTHOG_KEY;
-    const host = import.meta.env.PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com';
+    // Same-origin reverse proxy (vercel.json rewrites /zuko/* -> PostHog) so
+    // adblockers can't filter the request by third-party domain.
+    const host = import.meta.env.PUBLIC_POSTHOG_HOST || '/zuko';
 
     if (key) {
       posthog.init(key, {
         api_host: host,
+        ui_host: 'https://us.posthog.com', // toolbar/links resolve to real PostHog UI
         // --- Privacy posture: anonymous, no recordings, honor Do Not Track ---
         person_profiles: 'identified_only', // never create profiles for anonymous readers
         disable_session_recording: true,    // no session replay of visitors

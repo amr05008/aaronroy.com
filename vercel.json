@@ -1,3 +1,17 @@
 {
-  "trailingSlash": true
+  "trailingSlash": true,
+  "rewrites": [
+    {
+      "source": "/zuko/static/:path*",
+      "destination": "https://us-assets.i.posthog.com/static/:path*"
+    },
+    {
+      "source": "/zuko/array/:path*",
+      "destination": "https://us-assets.i.posthog.com/array/:path*"
+    },
+    {
+      "source": "/zuko/:path*",
+      "destination": "https://us.i.posthog.com/:path*"
+    }
+  ]
 }

@@ -401,12 +401,19 @@ Two layers, both privacy-conscious:
 **Wiring:** build-time env vars. The component **emits nothing when `PUBLIC_POSTHOG_KEY` is unset**,
 so it's safe to deploy before the PostHog project exists.
 - `PUBLIC_POSTHOG_KEY` — project public key (`phc_…`). Set in Vercel (Production + Preview) and local `.env`.
-- `PUBLIC_POSTHOG_HOST` — optional; defaults to `https://us.i.posthog.com` (US cloud). Set for EU.
+- `PUBLIC_POSTHOG_HOST` — optional; defaults to the same-origin **reverse-proxy path `/zuko`**.
 
-See `.env.example`. **Verify after deploy:** load the site, then check the PostHog project's events
-(or query via the PostHog MCP). **Follow-up worth doing:** for an adblock-heavy dev audience, a
-reverse proxy (PostHog served through an `aaronroy.com` path via Vercel rewrites) materially improves
-capture — not yet set up.
+**Reverse proxy (adblock resistance):** `vercel.json` rewrites `/zuko/*` → PostHog
+(`/static` + `/array` → `us-assets.i.posthog.com`, catch-all → `us.i.posthog.com`), so the browser
+only ever talks to `aaronroy.com` — adblockers that filter by third-party domain can't drop it. The
+SDK's `api_host` is `/zuko`; `ui_host` stays `https://us.posthog.com` so the toolbar/links resolve.
+The non-obvious path name is deliberate (PostHog docs: blockers catch `/ingest`, `/analytics`, etc.).
+Note `trailingSlash: true` is fine here — Vercel skips the slash-redirect for `.js` paths and PostHog's
+endpoints already use trailing slashes.
+
+See `.env.example`. **Verify after deploy:** load the site and confirm network requests go to
+`aaronroy.com/zuko/*` (not `*.posthog.com`) and return 200; then check the PostHog project's events
+(or query via the PostHog MCP).
 
 ## Recent Changes
 
