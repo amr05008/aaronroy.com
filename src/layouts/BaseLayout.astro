@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Analytics from '@vercel/analytics/astro';
+import PostHogAnalytics from '../components/PostHogAnalytics.astro';
 import { SITE, AUTHOR } from '../config';
 
 interface Props {
@@ -92,5 +93,6 @@ const defaultOGImage = ogImage
       </div>
     </footer>
     <Analytics />
+    <PostHogAnalytics />
   </body>
 </html>

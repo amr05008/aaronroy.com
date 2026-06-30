@@ -385,6 +385,29 @@ Blog content (new posts, edits) is committed directly to `main` — Vercel
 auto-deploys on every push, so no branch or PR is needed to publish. "Going live"
 means pushing to `main`.
 
+## Analytics
+
+Two layers, both privacy-conscious:
+
+- **Vercel Analytics** (`@vercel/analytics`, in `BaseLayout.astro`) — left as-is.
+- **PostHog** (`src/components/PostHogAnalytics.astro`) — the **queryable** layer that feeds the
+  `content-studio` `/content-plan` loop: referral sources (did a thread drive reads?), per-post
+  traffic, time-on-page, and link clicks.
+
+**Privacy posture:** anonymous (`person_profiles: 'identified_only'` — no profiles for readers),
+**no** session recording, honors **Do Not Track** (`respect_dnt`). Captures pageviews (carrying
+`$referrer`/UTM), page-leave (time-on-page), and autocaptured clicks (incl. outbound "give" links).
+
+**Wiring:** build-time env vars. The component **emits nothing when `PUBLIC_POSTHOG_KEY` is unset**,
+so it's safe to deploy before the PostHog project exists.
+- `PUBLIC_POSTHOG_KEY` — project public key (`phc_…`). Set in Vercel (Production + Preview) and local `.env`.
+- `PUBLIC_POSTHOG_HOST` — optional; defaults to `https://us.i.posthog.com` (US cloud). Set for EU.
+
+See `.env.example`. **Verify after deploy:** load the site, then check the PostHog project's events
+(or query via the PostHog MCP). **Follow-up worth doing:** for an adblock-heavy dev audience, a
+reverse proxy (PostHog served through an `aaronroy.com` path via Vercel rewrites) materially improves
+capture — not yet set up.
+
 ## Recent Changes
 
 - **2026-02-03**: Older/newer post navigation at bottom of blog posts with smoke tests

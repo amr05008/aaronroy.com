@@ -1,0 +1,31 @@
+---
+// PostHog analytics — privacy-conscious config (see CLAUDE.md → Analytics).
+// Wired via build-time env vars so the public key isn't hardcoded:
+//   PUBLIC_POSTHOG_KEY   — the project's public key (phc_...)  [required]
+//   PUBLIC_POSTHOG_HOST  — ingestion host (defaults to US cloud) [optional]
+// When PUBLIC_POSTHOG_KEY is unset, NOTHING is emitted — safe to deploy before
+// the PostHog project exists. Vercel Analytics (in BaseLayout) is left untouched.
+const POSTHOG_KEY = import.meta.env.PUBLIC_POSTHOG_KEY;
+---
+{POSTHOG_KEY && (
+  <script>
+    import posthog from 'posthog-js';
+
+    const key = import.meta.env.PUBLIC_POSTHOG_KEY;
+    const host = import.meta.env.PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com';
+
+    if (key) {
+      posthog.init(key, {
+        api_host: host,
+        // --- Privacy posture: anonymous, no recordings, honor Do Not Track ---
+        person_profiles: 'identified_only', // never create profiles for anonymous readers
+        disable_session_recording: true,    // no session replay of visitors
+        respect_dnt: true,                  // skip capture when the browser sends DNT
+        // --- What we DO want: traffic, referrers, time-on-page, link clicks ---
+        capture_pageview: true,             // pageviews (carries $referrer / UTM)
+        capture_pageleave: true,            // needed for time-on-page + bounce
+        autocapture: true,                  // clicks — incl. outbound "give" links
+      });
+    }
+  </script>
+)}
