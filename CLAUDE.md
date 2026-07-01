@@ -422,8 +422,22 @@ See `.env.example`. **Verify after deploy:** load the site and confirm network r
 `aaronroy.com/zuko/*` (not `*.posthog.com`) and return 200; then check the PostHog project's events
 (or query via the PostHog MCP).
 
+**Querying via the PostHog MCP:** the aaronroy.com project is **id `491375`** (token `phc_xw9…`).
+⚠️ The MCP defaults to the *GlutenOrNot* project (`457245`) — always `switch-project` to `491375`
+first, or every query silently targets the wrong site. Pageviews carry `$pathname`,
+`$referring_domain`, and `$referrer`; outbound clicks land on `$autocapture` under
+`$external_click_url`. Bot/automation is classified at query time via `$virt_is_bot` /
+`$virt_traffic_type` (UA-based, so only catches JS-executing crawlers).
+
+**Dashboard:** [Blog Analytics — Traffic & Sources](https://us.posthog.com/project/491375/dashboard/1782625)
+(pinned) — total pageviews, pageviews over time, pageviews by post/page, referring sources, and
+outbound link clicks, all last-30-days. The pageview tiles exclude UA-detected bots **and** legacy
+`/hynews/*` WordPress paths (old-URL scanners that present as a real browser, so the bot filter alone
+misses them). Filters are scoped per-insight, not project-wide.
+
 ## Recent Changes
 
+- **2026-06-30**: Built the PostHog "Blog Analytics — Traffic & Sources" dashboard (pageviews per post, referring sources, outbound clicks) with bot + `/hynews/` legacy-path filters
 - **2026-02-03**: Older/newer post navigation at bottom of blog posts with smoke tests
 - **2026-01-10**: Blog posts display clickable category links in metadata; added smoke tests for category functionality
 - **2026-01-02**: RSS feed implementation with full HTML content and absolute image URLs
