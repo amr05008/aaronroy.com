@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { readdirSync, readFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
+import { LATEST_COUNT } from "../src/config";
 
 // Dynamically read blog posts from content directory
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -56,9 +57,8 @@ const sortedPublished = blogPostFiles
 const oldestPostSlug = sortedPublished[0].slug;
 const newestPostSlug = sortedPublished[sortedPublished.length - 1].slug;
 
-// Homepage shows the latest N published posts (must match LATEST_COUNT in
-// src/pages/index.astro).
-const LATEST_COUNT = 7;
+// Homepage shows the latest N published posts (LATEST_COUNT lives in
+// src/config.ts, shared with src/pages/index.astro).
 const expectedLatestCount = Math.min(LATEST_COUNT, publishedPosts.length);
 
 test.describe("Smoke Tests", () => {

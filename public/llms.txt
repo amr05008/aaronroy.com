@@ -22,8 +22,8 @@ I'm a product person by trade — not an engineer, but increasingly technical th
 
 ## Browse by topic
 
-- [Product management](https://aaronroy.com/category/product-management/)
-- [AI](https://aaronroy.com/category/ai/)
+- [Product](https://aaronroy.com/category/product/)
+- [Agents](https://aaronroy.com/category/agents/)
 - [Projects](https://aaronroy.com/category/projects/)
 - [Tutorials](https://aaronroy.com/category/tutorials/)
 - [3D printing](https://aaronroy.com/category/3d-printing/)

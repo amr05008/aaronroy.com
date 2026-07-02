@@ -5,6 +5,10 @@
  * that is used across multiple pages and layouts.
  */
 
+// How many posts the homepage "Latest" section shows. Shared with the smoke
+// tests so the cap can't silently drift between the page and its test.
+export const LATEST_COUNT = 7;
+
 export const SITE = {
   title: 'Aaron Roy',
   description: 'Experiences and learnings on product, growth, bikes and whatever else I wander into.',

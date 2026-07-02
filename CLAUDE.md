@@ -113,76 +113,10 @@ Posts are rendered via the catch-all route `[...slug].astro` which uses the `Blo
 
 ### Video Storage
 
-Videos for blog posts are stored in `public/videos/` with human-readable slugs.
-
-**Naming Convention:**
-- Pattern: `{descriptive-name}.mp4` or `{post-slug}-{description}.mp4`
-- Examples: `strava-mcp-tutorial.mp4`, `reflecting-cx-2025-cunningham-park.mp4`
-- Use lowercase with hyphens
-- Be descriptive but concise
-
-**Embedding Videos in Markdown:**
-
-Standard horizontal video:
-```html
-<video
-  controls
-  width="100%"
-  style="max-width: 800px; margin: 2rem auto; display: block; border-radius: 0.5rem;"
-  preload="metadata"
->
-  <source src="/videos/strava-mcp-tutorial.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-```
-
-Vertical video (portrait):
-```html
-<div class="aspect-[9/16] max-w-xs mx-auto my-8">
-  <video
-    class="w-full h-full rounded-lg"
-    controls
-    preload="metadata"
-  >
-    <source src="/videos/cunningham-park-practice.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</div>
-```
-
-**When to Use Self-Hosted MP4 vs YouTube Embeds:**
-
-Use **self-hosted MP4** (`/videos/`) for:
-- Short Kap screen recordings (< 2 minutes)
-- Quick product demos and feature walkthroughs
-- Small file sizes (< 10MB)
-- Content you want to keep private or unlisted
-- Inline playback without external dependencies
-- Simple, focused demonstrations
-
-Use **YouTube embeds** for:
-- Long-form content (> 2 minutes)
-- Presentations, talks, or full tutorials
-- Large file sizes (> 20MB)
-- Content where you want quality options (360p, 720p, 1080p)
-- Videos that benefit from discoverability (YouTube search)
-- Content where you want engagement (comments, likes)
-- When you want detailed analytics
-
-**Video Guidelines for Self-Hosted MP4:**
-- Format: MP4 (H.264 codec recommended for maximum compatibility)
-- File size: Keep under 10MB for reasonable page load times
-- Dimensions: Max 1920x1080 for horizontal, 1080x1920 for vertical
-- Use captions/transcripts for accessibility when showing complex information
-
-**Compression:**
-Use [HandBrake](https://handbrake.fr/) or FFmpeg to compress large videos:
-```bash
-ffmpeg -i input.mp4 -vcodec h264 -acodec aac -crf 28 -preset slow output.mp4
-```
-
-**Future Enhancement:**
-MDX component wrapper planned for simplified syntax and enhanced features (lazy loading, poster images, analytics).
+No videos are in use yet. If a post needs one: short self-hosted MP4s (< 2 min,
+< 10 MB, H.264) go in `public/videos/` with kebab-case names; anything longer
+gets a YouTube embed. Full conventions and embed snippets are in git history
+(CLAUDE.md before 2026-07-02).
 
 ### Draft System
 
@@ -233,8 +167,8 @@ recent published posts, newest first, capped at `LATEST_COUNT` (currently 7).
 This is recency-driven (Simon-Willison-style) rather than hand-curated, so newly
 published posts surface automatically with no manual upkeep.
 
-To change how many posts appear, edit `LATEST_COUNT` in `src/pages/index.astro`
-(and keep the matching `LATEST_COUNT` in `tests/smoke.spec.ts` in sync).
+To change how many posts appear, edit `LATEST_COUNT` in `src/config.ts` — the
+homepage and the smoke tests both import it, so there's nothing to keep in sync.
 
 (History: the homepage previously used a hand-curated `src/data/highlights.ts`
 list. That was removed in favor of recency — see git history if you need it back.)
@@ -268,38 +202,18 @@ The site includes a category browsing system with two page types:
 - Shared `slugify()` utility in `src/utils/posts.ts` ensures consistent URL generation
 
 **Categories:**
-Posts are tagged across categories such as Product Management, 3D Printing,
-Presentations, Projects, Tutorials, Startups, AI, Bikes, Cybersecurity, Student
+Posts are tagged across categories such as Projects, Tutorials, Product,
+3D Printing, Presentations, Startups, Agents, Bikes, Cybersecurity, Student
 Loans, and Life. Run `node scripts/count-categories.js` for the current breakdown
 and per-category post counts (counts drift as posts are added, so they're not
 hardcoded here).
 
 ## WordPress Migration
 
-The site was migrated from WordPress using `scripts/migrate-wordpress.js`. To migrate content:
-
-```bash
-node scripts/migrate-wordpress.js /path/to/wordpress-export.xml
-```
-
-The script:
-- Parses WordPress XML exports
-- Converts HTML to Markdown using Turndown
-- Downloads images to `public/images/` with slug-based naming
-- Creates frontmatter with title, description, pubDate, categories
-- Preserves URL slugs for SEO continuity
-
-Post-migration: Review generated markdown in `src/content/blog/`, verify images in `public/images/`, and test URL mappings.
-
-### Updating Yoast SEO Descriptions
-
-To update blog post descriptions with Yoast SEO meta descriptions from WordPress XML:
-
-```bash
-node scripts/update-yoast-descriptions.js /path/to/wordpress-export.xml
-```
-
-This script extracts `_yoast_wpseo_metadesc` values from WordPress postmeta and updates the `description` field in blog post frontmatter. Hand-crafted Yoast descriptions are more SEO-optimized than auto-generated excerpts.
+The site was migrated from WordPress in 2025. The migration is complete; the
+one-off tooling (`migrate-wordpress.js`, `update-yoast-descriptions.js` and
+their deps: axios, jsdom, turndown, xml2js) was removed on 2026-07-02 and lives
+in git history if ever needed again.
 
 ## Content Analysis
 
@@ -365,7 +279,7 @@ The site includes comprehensive SEO features:
 
 ### SEO Notes
 
-- **Favicon**: Custom branded favicon installed in `public/favicon.svg`
+- **Favicon**: `public/zuko_favicon.png` (128px PNG, linked in `BaseLayout.astro`)
 - **OG Images**: Default fallback image at `public/images/og-default.png` used for all social sharing (LinkedIn, Facebook, Twitter)
   - Individual posts can override with custom images via `heroImage` frontmatter field
   - Custom images should be 1200×630px and stored in `public/og-images/` or `public/images/`
@@ -437,6 +351,7 @@ misses them). Filters are scoped per-insight, not project-wide.
 
 ## Recent Changes
 
+- **2026-07-02**: Repo cleanup — landed trailing-slash internal links (kills sitewide 301s), fixed nested anchor on /writing, security headers in vercel.json, favicon 547KB→31KB, fixed llms.txt category links, removed migration scripts + 5 unused deps, `LATEST_COUNT` moved to `src/config.ts`
 - **2026-06-30**: Built the PostHog "Blog Analytics — Traffic & Sources" dashboard (pageviews per post, referring sources, outbound clicks) with bot + `/hynews/` legacy-path filters
 - **2026-02-03**: Older/newer post navigation at bottom of blog posts with smoke tests
 - **2026-01-10**: Blog posts display clickable category links in metadata; added smoke tests for category functionality

@@ -1,11 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getPublishedPosts } from '../utils/posts';
-import { SITE, AUTHOR } from '../config';
+import { SITE, AUTHOR, LATEST_COUNT } from '../config';
 
 // Homepage leads with the most recent writing (Simon-Willison-style recency,
 // not a hand-curated best-of). Newest first, capped at the latest few.
-const LATEST_COUNT = 7;
 const latestPosts = (await getPublishedPosts())
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, LATEST_COUNT);
