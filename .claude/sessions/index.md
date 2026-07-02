@@ -4,7 +4,7 @@ Quick reference for all Claude Code working sessions on this project.
 
 | Date | Summary | Tags |
 |------|---------|------|
-| 2026-07-02 | [Repo audit + fixed top 8 findings (trailing slashes, nested anchor, llms.txt, favicon, headers, dep pruning)](2026-07-02-fix-repo-audit-findings.md) | audit, seo, a11y, security, dependencies, cleanup, testing |
+| 2026-07-02 | [Repo audit + fixed top 10 findings (trailing slashes, nested anchor, llms.txt, favicon, headers, dep pruning, crawler tests, image compression)](2026-07-02-fix-repo-audit-findings.md) | audit, seo, a11y, security, dependencies, cleanup, testing, performance |
 | 2026-06-30 | [PostHog blog-analytics dashboard (traffic, referrers, outbound clicks) with bot + legacy-path filtering](2026-06-30-add-posthog-dashboard.md) | analytics, posthog, dashboard, mcp, bot-filtering |
 | 2026-06-29 | [Add privacy-conscious PostHog + adblock-resistant reverse proxy; fix trailingSlash capture bug](2026-06-29-add-posthog-analytics.md) | analytics, posthog, vercel, reverse-proxy, privacy, debugging |
 | 2026-06-29 | [Fix broken-YAML Vercel build failure, repair tag-dependent smoke test](2026-06-29-fix-vercel-build-yaml.md) | deployment, build, testing, yaml |

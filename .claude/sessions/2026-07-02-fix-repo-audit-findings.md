@@ -1,7 +1,7 @@
 ---
 date: 2026-07-02
-summary: Full repo audit, then fixed the 8 highest-leverage findings (trailing slashes, nested anchor, llms.txt, favicon, security headers, dep pruning)
-tags: [audit, seo, a11y, security, dependencies, cleanup, testing]
+summary: Full repo audit, then fixed the 10 highest-leverage findings (trailing slashes, nested anchor, llms.txt, favicon, security headers, dep pruning, crawler-file tests, image compression)
+tags: [audit, seo, a11y, security, dependencies, cleanup, testing, performance]
 ---
 
 ## Summary
@@ -49,6 +49,20 @@ moved `LATEST_COUNT` into `src/config.ts`.
   local `protoflow/20260113-210310/approach-{a,b,c}` (stale, all pointed at
   an old commit).
 
+### Second chunk (same day, commit f013886)
+- `tests/smoke.spec.ts` — new "Crawler files" block: robots.txt must point at
+  the sitemap; sitemap index + every referenced sitemap must resolve with real
+  pages; every internal llms.txt link must return a direct 200 (`maxRedirects:
+  0`, so a stale link fails instead of silently redirecting). Verified the test
+  fails on a stale link before shipping.
+- Compressed 19 heavy images in place (~8 MB saved, `public/` 25 MB → 17 MB):
+  pngquant 65-85 on all PNGs > 250 KB, JPEG requality on the cx2025 race
+  photos, and the 3016px design screenshot downscaled to 1600px. Same
+  filenames/formats — no post references changed. Animated GIFs left alone.
+- Docs: README (structure, LATEST_COUNT pointer, og-default path, migration
+  section), docs/MIGRATION.md (restore-from-git-history note), CLAUDE.md test
+  coverage list.
+
 ## Decisions
 - **Did not touch Astro/Tailwind majors** — ADR 004 defers this deliberately.
   New fact worth an ADR update later: Astro 7 is out and `npm audit` now shows
@@ -58,9 +72,10 @@ moved `LATEST_COUNT` into `src/config.ts`.
   to the old `favicon.svg` — the zuko swap was a deliberate visual choice.
 
 ## Notes
-Audit findings NOT fixed this session (candidates for later): 29 empty image
-alts across 3 migrated posts, no skip-link, 20 MB of unoptimized images
-(worst ~1 MB files), no sitemap/robots/llms.txt smoke tests (an llms.txt
-link-validity test would have caught the category 404s), hardcoded post slugs
-in category tests, ADR 003 og-default path drift, stale post count in
-docs/PROJECT_IDEAS.md, `engines.node` pin + `astro check` script.
+Audit findings still open after this session: 29 empty image alts across 3
+migrated posts (Claude can draft, needs review), no skip-link in BaseLayout,
+ADR 004 could use a paragraph noting the Astro-7-era advisories were reviewed
+and remain non-applicable, hardcoded post slugs in category tests, stale post
+count in docs/PROJECT_IDEAS.md, `engines.node` pin + `astro check` script.
+Higher-value than any of these: the parked content decisions in
+SEO-AEO-AUDIT.md (Yahoo-2FA harvest-vs-ride, Strava MCP cluster).

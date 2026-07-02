@@ -57,15 +57,13 @@ npm run test:quick
 ├── public/
 │   ├── images/          # Blog post images
 │   ├── og-images/       # Custom Open Graph images
-│   ├── videos/          # Self-hosted MP4 videos
-│   ├── favicon.svg      # Site favicon
+│   ├── videos/          # Self-hosted MP4 videos (none in use yet)
+│   ├── zuko_favicon.png # Site favicon
 │   ├── robots.txt       # Search engine + AI crawler directives
 │   └── llms.txt         # Curated site map for AI tools (AEO)
 ├── tests/
 │   └── smoke.spec.ts   # Playwright smoke tests
 ├── scripts/
-│   ├── migrate-wordpress.js          # WordPress → Markdown migration
-│   ├── update-yoast-descriptions.js  # Extract Yoast SEO descriptions
 │   └── count-categories.js           # Content analysis utility
 ├── src/
 │   ├── config.ts        # Site metadata (title, author, social profiles)
@@ -260,7 +258,7 @@ Create custom 1200×630px images for social sharing (LinkedIn, Twitter, Facebook
 heroImage: "/og-images/your-post-name.png"
 ```
 
-If no custom image is set, the default fallback (`/images/og-default.png`) will be used.
+If no custom image is set, the default fallback (`/og-images/aaron-roy-dot-com-og.png`) will be used.
 
 ### Homepage Latest Feed
 
@@ -269,8 +267,8 @@ newest first, capped at `LATEST_COUNT` (currently 7). It's recency-driven
 rather than hand-curated, so new posts surface automatically with no manual
 upkeep.
 
-To change how many posts appear, edit `LATEST_COUNT` in `src/pages/index.astro`
-(and keep the matching `LATEST_COUNT` in `tests/smoke.spec.ts` in sync).
+To change how many posts appear, edit `LATEST_COUNT` in `src/config.ts` — the
+homepage and the smoke tests both import it.
 
 ## Configuration
 
@@ -360,6 +358,7 @@ The site uses Playwright for smoke testing. Tests automatically discover blog po
 - Homepage displays the latest N posts (capped at `LATEST_COUNT`)
 - Navigation links work
 - Essential meta tags exist (title, description, canonical, OG)
+- Crawler files: robots.txt, sitemap, and every internal llms.txt link resolves
 
 ### Running Tests
 
@@ -428,14 +427,9 @@ URLs are automatically generated from markdown filenames to preserve SEO continu
 
 ## Migrating from WordPress
 
-See **[docs/MIGRATION.md](docs/MIGRATION.md)** for complete WordPress migration guide including:
-
-- WordPress XML export process
-- Running migration scripts
-- Image handling and downloads
-- SEO description extraction (Yoast)
-- Post-migration verification steps
-- Common issues and solutions
+The migration is complete. The one-off scripts and their dependencies were
+removed on 2026-07-02 — see **[docs/MIGRATION.md](docs/MIGRATION.md)** for the
+historical guide and how to restore the tooling from git history if ever needed.
 
 ## License
 

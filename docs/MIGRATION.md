@@ -1,14 +1,19 @@
 # WordPress Migration Guide
 
-This guide covers migrating content from WordPress to this Astro-based blog. The site was originally migrated from WordPress in October 2025, and these tools remain available for future content imports.
+This guide covers migrating content from WordPress to this Astro-based blog. The site was originally migrated from WordPress in October 2025.
+
+> **Note (2026-07-02):** the migration is complete, so the one-off scripts and
+> their dependencies (`axios`, `jsdom`, `turndown`, `xml2js`) were removed from
+> the repo. To restore them for a future import:
+> `git show 979c193^:scripts/migrate-wordpress.js > scripts/migrate-wordpress.js`
+> (same for `update-yoast-descriptions.js`), then `npm install` the four deps.
+> The rest of this guide is kept as the historical reference for how they work.
 
 ## Migration Scripts
 
-Three utility scripts are available in the `scripts/` directory:
-
-- **`migrate-wordpress.js`** - Main migration tool (HTML to Markdown conversion)
-- **`update-yoast-descriptions.js`** - Extract Yoast SEO meta descriptions
-- **`count-categories.js`** - Analyze category usage across posts
+- **`migrate-wordpress.js`** - Main migration tool (HTML to Markdown conversion) — *in git history*
+- **`update-yoast-descriptions.js`** - Extract Yoast SEO meta descriptions — *in git history*
+- **`count-categories.js`** - Analyze category usage across posts — *still in `scripts/`*
 
 ## Prerequisites
 
