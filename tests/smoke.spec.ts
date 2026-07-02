@@ -327,3 +327,55 @@ test.describe("Smoke Tests", () => {
     }
   });
 });
+
+// Crawler-facing files are easy to break silently: they have no visible UI, so
+// a bad link or missing file only fails for the bots they exist to serve.
+test.describe("Crawler files", () => {
+  test("robots.txt is served and points to the sitemap", async ({ request }) => {
+    const response = await request.get("/robots.txt");
+    expect(response.status()).toBe(200);
+
+    const body = await response.text();
+    expect(body).toContain("Sitemap: https://aaronroy.com/sitemap-index.xml");
+  });
+
+  test("sitemap exists and lists real pages", async ({ request }) => {
+    const index = await request.get("/sitemap-index.xml");
+    expect(index.status()).toBe(200);
+
+    // The index references the actual sitemap file(s); fetch each one.
+    const indexBody = await index.text();
+    const sitemapPaths = [...indexBody.matchAll(/<loc>https:\/\/aaronroy\.com(\/[^<]+)<\/loc>/g)]
+      .map((m) => m[1]);
+    expect(sitemapPaths.length).toBeGreaterThan(0);
+
+    for (const path of sitemapPaths) {
+      const sitemap = await request.get(path);
+      expect(sitemap.status(), `sitemap ${path}`).toBe(200);
+      const body = await sitemap.text();
+      expect(body).toContain("https://aaronroy.com/about/");
+    }
+  });
+
+  test("every internal link in llms.txt resolves without a redirect", async ({ request }) => {
+    // llms.txt is hand-curated, so its links rot silently as categories are
+    // renamed or posts move. Check each one directly (no redirect-following:
+    // a 301 here means a stale URL that should be updated at the source).
+    const served = await request.get("/llms.txt");
+    expect(served.status()).toBe(200);
+
+    const body = await served.text();
+    const internalPaths = [...body.matchAll(/https:\/\/aaronroy\.com(\/[^\s)]*)/g)]
+      .map((m) => m[1]);
+    expect(internalPaths.length).toBeGreaterThan(0);
+
+    const failures: string[] = [];
+    for (const path of internalPaths) {
+      const response = await request.get(path, { maxRedirects: 0 });
+      if (response.status() !== 200) {
+        failures.push(`${path} → ${response.status()}`);
+      }
+    }
+    expect(failures, `stale llms.txt links:\n${failures.join("\n")}`).toEqual([]);
+  });
+});

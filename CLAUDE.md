@@ -59,6 +59,9 @@ The site uses Playwright for smoke testing. Tests validate that the site builds 
 - RSS links visible to users (footer and writing page)
 - **Category links on blog posts** (display, navigation, URL slugification, styling)
 - **Older/newer post navigation** (both columns, edge cases, valid links)
+- **Crawler files**: robots.txt (sitemap pointer), sitemap validity, and every
+  internal link in llms.txt resolving 200 with no redirect (llms.txt is
+  hand-curated, so its links rot silently otherwise)
 
 ### Running Tests
 
