@@ -89,7 +89,12 @@ npm run test:quick
 
 ### Adding New Posts
 
-Create a new `.md` or `.mdx` file in `src/content/blog/`:
+Working with Claude Code? The repo-local `blog-publish` skill
+(`.claude/skills/blog-publish/`) scaffolds drafts and runs the full
+pre-publish checklist (frontmatter, images, links, llms.txt, tests) before
+shipping the post in a single commit.
+
+Manually: create a new `.md` or `.mdx` file in `src/content/blog/`:
 
 ```markdown
 ---
