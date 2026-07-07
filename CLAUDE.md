@@ -90,6 +90,12 @@ npx playwright install chromium
 
 ### Adding New Blog Posts
 
+Use the repo-local **blog-publish skill** (`.claude/skills/blog-publish/`) to
+scaffold a new draft or publish a finished one — it enforces the frontmatter,
+image, link, and llms.txt conventions and ships the post in a single commit.
+Editorial feedback stays in the global `blog-review` skill; ideation/promotion
+in `content-plan`.
+
 No test updates needed. The test suite automatically:
 - Reads blog posts from `src/content/blog/`
 - Derives the homepage's latest-post count from the content directory
@@ -354,6 +360,7 @@ misses them). Filters are scoped per-insight, not project-wide.
 
 ## Recent Changes
 
+- **2026-07-06**: Added repo-local `blog-publish` skill (scaffold → checklist → gated one-commit publish; see `.claude/decisions/005-blog-publish-skill.md`); deleted legacy `wrap-session` skill (superseded by global `wrap-up`)
 - **2026-07-02**: Repo cleanup — landed trailing-slash internal links (kills sitewide 301s), fixed nested anchor on /writing, security headers in vercel.json, favicon 547KB→31KB, fixed llms.txt category links, removed migration scripts + 5 unused deps, `LATEST_COUNT` moved to `src/config.ts`
 - **2026-06-30**: Built the PostHog "Blog Analytics — Traffic & Sources" dashboard (pageviews per post, referring sources, outbound clicks) with bot + `/hynews/` legacy-path filters
 - **2026-02-03**: Older/newer post navigation at bottom of blog posts with smoke tests
