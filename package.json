@@ -8,8 +8,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "npm run build && npx playwright test",
-    "test:quick": "npx playwright test",
-    "wrap": "./.claude/session-end.sh"
+    "test:quick": "npx playwright test"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.6",

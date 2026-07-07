@@ -16,7 +16,7 @@ missed 4 of 10 planted issues; the same scenario *with* the skill caught all
 ## Changes
 - `.claude/skills/blog-publish/SKILL.md` — new skill (13-row checklist, gate, publish + live verification)
 - `.claude/decisions/005-blog-publish-skill.md` — design rationale (committed separately)
-- `.claude/skills/wrap-session/` — deleted; superseded by global `wrap-up` (note: `npm run wrap` / `session-end.sh` left in place)
+- `.claude/skills/wrap-session/` — deleted; superseded by global `wrap-up`. Follow-up in same session: also removed `npm run wrap` (package.json), `.claude/session-end.sh`, and the CLAUDE.md mention
 - `CLAUDE.md` — pointer under "Adding New Blog Posts" + Recent Changes entry
 - `~/.claude/skills/blog-review/SKILL.md` (global, not in this repo) — scope note handing publish requests to blog-publish
 

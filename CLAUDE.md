@@ -36,9 +36,6 @@ npm run test
 
 # Run smoke tests only (skip build, faster)
 npm run test:quick
-
-# Wrap up session (interactive: analyze changes, document, commit, push)
-npm run wrap
 ```
 
 ## Testing
