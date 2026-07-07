@@ -6,6 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Personal blog for Aaron Michael Roy, built with Astro and migrated from WordPress. The site is a static blog with clean design, SEO optimization, and Markdown-based content management.
 
+## Which Skill for What (content workflow)
+
+The blog pipeline is split across three skills — each ends where the next begins:
+
+| I want to… | Skill | Lives | Say |
+|---|---|---|---|
+| Decide what to write / plan promotion | `content-plan` | global (`~/.claude/skills/`) | "/content-plan", "what should I write this week?" |
+| Get editorial feedback on a draft | `blog-review` | global (`~/.claude/skills/`) | "review my draft", "does this sound like me?" |
+| Scaffold a new draft file, or take a finished draft live | `blog-publish` | this repo (`.claude/skills/`) | "new post about X", "publish this" |
+
+`blog-publish` owns the mechanics (frontmatter, images, links, llms.txt, tests,
+single publish commit + live verification) — design rationale in
+`.claude/decisions/005-blog-publish-skill.md`. General git skills (`/ship` for
+mid-session commits, `/wrap-up` for session closeout) apply here like any repo,
+but don't use `/ship` for a post — `blog-publish` makes its own publish commit.
+
 ## Tech Stack
 
 - **Astro 5.x** - Static site generator with TypeScript support
@@ -87,11 +103,8 @@ npx playwright install chromium
 
 ### Adding New Blog Posts
 
-Use the repo-local **blog-publish skill** (`.claude/skills/blog-publish/`) to
-scaffold a new draft or publish a finished one — it enforces the frontmatter,
-image, link, and llms.txt conventions and ships the post in a single commit.
-Editorial feedback stays in the global `blog-review` skill; ideation/promotion
-in `content-plan`.
+Use the `blog-publish` skill to scaffold or publish posts — see "Which Skill
+for What" at the top of this file.
 
 No test updates needed. The test suite automatically:
 - Reads blog posts from `src/content/blog/`
