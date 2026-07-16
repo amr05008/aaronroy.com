@@ -1,5 +1,17 @@
 {
   "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/feed",
+      "destination": "/rss.xml",
+      "permanent": true
+    },
+    {
+      "source": "/feed/",
+      "destination": "/rss.xml",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/zuko/static/:path*",

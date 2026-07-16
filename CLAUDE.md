@@ -288,6 +288,14 @@ The site includes comprehensive SEO features:
 - **Sitemap**: Auto-generated via @astrojs/sitemap integration
 - **robots.txt**: Located in `public/robots.txt`. Allows all crawlers and explicitly welcomes AI crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, etc., including training) with a sitemap + `/llms.txt` reference
 - **llms.txt** (AEO): `public/llms.txt` is a hand-curated Markdown map for AI tools — identity statement + featured posts + topic links + projects. It is **static and manually maintained**, so update it when adding a notable evergreen post (this is the one place curation still lives, now that the homepage is recency-driven)
+- **IndexNow (Bing-family indexing)**: `public/<32-hex-key>.txt` is the IndexNow key file (public by
+  design — fine that it's committed). `node scripts/indexnow-submit.js [/slug/ ...]` submits URLs to
+  api.indexnow.org (Bing, Yandex, Seznam, Naver; DuckDuckGo rides Bing); with no args it submits the
+  whole live sitemap. The `blog-publish` skill pings it after live-verification — no CI job, on purpose.
+  Getting *into* Bing's index in the first place was done via Bing Webmaster Tools "Import from GSC"
+  (Aaron's dashboard, 2026-07-16); IndexNow only accelerates discovery of new/changed URLs
+- **Legacy WordPress paths**: `/feed` and `/feed/` 301 to `/rss.xml` (vercel.json `redirects`). Other
+  WP-era paths (`/tag/*`, `?p=<id>`) were left alone pending real 404 evidence from GSC/Bing WMT
 - **Homepage meta**: Custom description set in index.astro (not using generic fallback)
 - **RSS feed**: Full-content RSS feed at `/rss.xml`
   - Markdown converted to HTML using `marked` library
@@ -370,6 +378,7 @@ misses them). Filters are scoped per-insight, not project-wide.
 
 ## Recent Changes
 
+- **2026-07-16**: Bing/IndexNow indexing fix — IndexNow key file + `scripts/indexnow-submit.js`, publish-time ping in `blog-publish` skill, `/feed/`→`/rss.xml` 301
 - **2026-07-06**: Added repo-local `blog-publish` skill (scaffold → checklist → gated one-commit publish; see `.claude/decisions/005-blog-publish-skill.md`); deleted legacy `wrap-session` skill (superseded by global `wrap-up`)
 - **2026-07-02**: Repo cleanup — landed trailing-slash internal links (kills sitewide 301s), fixed nested anchor on /writing, security headers in vercel.json, favicon 547KB→31KB, fixed llms.txt category links, removed migration scripts + 5 unused deps, `LATEST_COUNT` moved to `src/config.ts`
 - **2026-06-30**: Built the PostHog "Blog Analytics — Traffic & Sources" dashboard (pageviews per post, referring sources, outbound clicks) with bot + `/hynews/` legacy-path filters

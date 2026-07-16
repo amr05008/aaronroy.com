@@ -81,8 +81,17 @@ git add <post + images> && git commit -m "Publish: <title>" && git push
 
 Single commit; don't also run /ship for the post. Then verify live:
 `curl -sI https://aaronroy.com/<slug>/` returns 200 (Vercel takes ~1 min) and
-the post appears in `https://aaronroy.com/rss.xml`. Report the live URL,
-follow-ups, and point at content-plan for promotion.
+the post appears in `https://aaronroy.com/rss.xml`.
+
+Once live-verified, ping IndexNow so Bing-family engines pick it up fast:
+
+```bash
+node scripts/indexnow-submit.js /<slug>/
+```
+
+(It fails loud if the key file or URL isn't live — rerun after the deploy
+settles rather than skipping.) Report the live URL, follow-ups, and point at
+content-plan for promotion.
 
 ## Common mistakes
 
