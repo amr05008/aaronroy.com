@@ -34,7 +34,24 @@ Tools "Import from GSC" — is Aaron's, login-gated.
 ## Notes
 - Verified on Vercel preview (deployment-protection bypass via Vercel MCP) before
   fast-forward merge to main; prod verified live; bulk submit returned 202.
-- Aaron's remaining tasks: Bing WMT "Import from GSC" (the actual fix), confirm
-  sitemap listed there, check GSC Pages/Coverage for excluded URLs → candidate
-  redirects.
+- Aaron completed his half same-session: added the site to Bing WMT and
+  submitted `sitemap-index.xml` (crawled with Status Success within the hour).
 - Success check: `site:aaronroy.com` on DuckDuckGo in ~3–7 days.
+
+## Follow-up monitoring (same session, lives outside the repo)
+
+Aaron asked for a one-week check reporting to Discord #content-studio, headless
+(no Chrome dependency):
+- Bing WMT **API key** generated (headless dashboard access, verified working)
+  and a #content-studio **webhook** created; both in
+  `~/.config/aaronroy-indexing/env` on the M3 (never in this public repo).
+- `~/.config/aaronroy-indexing/check-indexing.mjs` — the check (Bing API
+  sitemap/crawl/issues/traffic + DDG `site:` proxy + IndexNow key health);
+  posted the day-0 baseline to #content-studio.
+- **Cloud routine** `trig_019yQLgzHaZoo7eu3u2VLc42` fires once
+  2026-07-23T13:57Z and posts the Day-7 report to the webhook (chosen over a
+  launchd job — fires even with the Mac off; a launchd version was built then
+  replaced same day). Credentials are duplicated in the routine prompt — if
+  rotated, update both places.
+- If the Day-7 report lists crawl-issue URLs, those become the deferred
+  WP-redirect list (§A.2 of the handoff plan).

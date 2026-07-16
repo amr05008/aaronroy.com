@@ -64,7 +64,8 @@ npm run test:quick
 ├── tests/
 │   └── smoke.spec.ts   # Playwright smoke tests
 ├── scripts/
-│   └── count-categories.js           # Content analysis utility
+│   ├── count-categories.js           # Content analysis utility
+│   └── indexnow-submit.js            # Submit URLs to IndexNow (Bing-family engines)
 ├── src/
 │   ├── config.ts        # Site metadata (title, author, social profiles)
 │   ├── content/
@@ -405,6 +406,7 @@ URLs are automatically generated from markdown filenames to preserve SEO continu
 - **OG Images** - Hybrid system with default fallback + custom per-post images
 - **Structured data** - Unified JSON-LD entity graph: `Person`/`ProfilePage` on `/about`, `WebSite` on the homepage, and enriched `BlogPosting` on posts, all referencing one author `@id` (`#person`)
 - **Sitemap** - Auto-generated at `/sitemap-index.xml`
+- **IndexNow** - Key file in `public/` + `scripts/indexnow-submit.js` for instant URL submission to Bing/Yandex/etc; pinged automatically on publish
 - **robots.txt** - Allows all crawlers and explicitly welcomes AI crawlers (GPTBot, ClaudeBot, PerplexityBot, etc.)
 - **llms.txt** - Curated Markdown map of the site for AI tools (Answer Engine Optimization)
 - **Analytics** - Vercel Analytics (privacy-friendly, no cookie consent needed)
