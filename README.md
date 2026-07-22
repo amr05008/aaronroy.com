@@ -134,7 +134,14 @@ Place images in `public/images/` (organized by post slug recommended):
 ![Descriptive caption text](/images/your-post/image-name.jpg)
 ```
 
-The alt text serves as the image caption and is important for accessibility and SEO.
+Alt text is for accessibility and SEO. For a visible caption, add an italic line
+directly under the image (no blank line between) — `.prose img + em` in
+`src/styles/global.css` styles it as a caption (small, gray, centered):
+
+```markdown
+![Descriptive alt text](/images/your-post/image-name.jpg)
+*Visible caption shown under the image*
+```
 
 **Best Practices:**
 

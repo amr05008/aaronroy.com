@@ -57,6 +57,7 @@ Run every row. Each row's procedure is the check — "looks fine" is not a resul
 | 5 | Image location + naming | Every post image lives in `public/images/<kebab-slug>/` with kebab-case filenames. No spaces anywhere in the path. Older folders with spaces (e.g. `Experiments with Strava MCP/`) are legacy warts, not precedent — move/rename and update references |
 | 6 | Image weight | Each image ≤ 300 KB. Over → downscale to ≤ 1600px wide (`sips --resampleWidth 1600`) and/or `pngquant --quality=65-85` |
 | 7 | Image references resolve | Every `![...]` path maps to a real file |
+| 7b | Image captions | A visible caption is an italic line directly under the image (no blank line between): `![alt](...)` then `*caption*` — `.prose img + em` in `src/styles/global.css` styles it. Don't hand-write `<figure>/<figcaption>` HTML in new posts |
 | 8 | OG image | If Aaron supplied one: resize/crop to 1200×630 → `public/og-images/<slug>-og.png`, set `heroImage`. If not: publish with the site default, and the gate report's Follow-ups section MUST contain "custom OG image". Never block on this row |
 | 9 | External links | Fetch each once; non-200 → flag (fix or ask, don't silently delete Aaron's sentences — content edits get listed in the gate report) |
 | 10 | Internal links | Trailing slashes on all of them |
