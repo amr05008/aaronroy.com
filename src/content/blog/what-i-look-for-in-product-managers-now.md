@@ -45,7 +45,10 @@ We keep a [repository](https://docs.github.com/en/repositories/creating-and-mana
 
 We use [Notion](https://www.notion.com/) for cross-functional collaboration but sources of truth get reconciled back into GitHub. 
 
-I check the GitHub profiles for all product people we add to the team. If you say you are a builder and have no commits in the past 12 months on GitHub, that's a yellow flag. 
+I check the [GitHub profiles](https://github.com/amr05008) for all product people we add to the team. If you say you are a builder and have no commits in the past 12 months on GitHub, that's a yellow flag. 
+
+![My personal GitHub profile](/images/what-i-look-for-in-product-managers-now/github-profile-example.png)
+*My personal GitHub profile*
 
 You can pick up experience by moving things you already do into GitHub. Here is a quick tutorial [how to set up a note taking project in GitHub](https://youtu.be/vLEWvkEnTd4) using a private repository.
 
