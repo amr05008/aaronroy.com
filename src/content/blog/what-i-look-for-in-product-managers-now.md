@@ -1,7 +1,7 @@
 ---
 title: "What I look for in product managers now"
 description: "I hire and mentor product managers. The job has changed in the past 6-12 months. Here are some starter projects to learn the new skills I look for."
-pubDate: 2026-07-21
+pubDate: 2026-07-22
 categories: ["Product","Tutorials", "Agents"]
 heroImage: "/og-images/interactive-prototypes-og.png"
 draft: false
