@@ -1,8 +1,8 @@
 ---
-title: "What I expect from product managers now"
-description: "What I now expect from product managers: prototypes, GitHub fluency, MCPs, and skills. An open letter to PMs looking for their next role."
+title: "What I look for in product managers now"
+description: "My opinion on what new skills and ways of working are expected from product managers"
 pubDate: 2026-07-21
-categories: ["Product", "Agents"]
+categories: ["Product","Tutorials", "Agents"]
 draft: true
 ---
 
@@ -22,7 +22,7 @@ I believe good PMs remain responsible for figuring out what to build, who to bui
 
 You should know how to design, build, host and deploy interactive prototypes. 
 
-![Using Claude Design to create a prototype's appearance](/images/what-i-expect-from-product-managers-now/claude-design-prototype.png)
+![Using Claude Design to create a prototype's appearance](/images/what-i-look-for-in-product-managers-now/claude-design-prototype.png)
 *Using Claude Design to create a prototype's appearance*
 
 You can build prototypes with mock data and also use "real data" to seed prototypes and make them more realistic. You might seed the data from a Google Sheet, a database, hardcoded JSON, etc. 
@@ -59,7 +59,7 @@ I start my workdays with a morning briefing delivered to me in Slack that brings
 
 For [GlutenOrNot](https://aaronroy.com/glutenornot-free-ingredient-scanner-celiac-disease/), I use [PostHog](https://posthog.com/) for in-product analytics and [Sentry](https://sentry.io/) for error monitoring. Instead of spending time learning their UIs, I used their MCPs to set up dashboards, create routine reminders (i.e. creating a Claude Routine to trigger a report every Monday morning on in-product usage from PostHog for the last 7 days, delivered to me via a Discord webhook) and enrich other actions I'm taking in LLMs with the info from these MCPs.
 
-![GlutenOrNot's weekly health snapshot combining PostHog and Sentry data](/images/what-i-expect-from-product-managers-now/glutenornot-artifact.png)
+![GlutenOrNot's weekly health snapshot combining PostHog and Sentry data](/images/what-i-look-for-in-product-managers-now/glutenornot-artifact.png)
 *GlutenOrNot's weekly health snapshot combining PostHog and Sentry data*
 
 To gain experience here, think of a product you enjoy using and find out if they have an MCP or API you can experiment with. As I was gaining experience working with MCPs, I experimented with a Strava MCP and [wrote up my experience](https://aaronroy.com/experiments-with-strava-mcp/) to help clarify what I learned. 
