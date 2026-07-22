@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  /* Markdown image captions: an italic line directly under an image
+     (![...](...) then *caption*) is a caption, not body copy */
+  .prose img + em {
+    display: block;
+    text-align: center;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #6b7280; /* gray-500, matches prose figcaption default */
+    margin-top: -1.25rem; /* img carries my-8; pull caption back toward it */
+  }
+}
