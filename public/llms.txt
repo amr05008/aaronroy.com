@@ -10,6 +10,7 @@ I'm a product person by trade — not an engineer, but increasingly technical th
 
 ## Featured writing
 
+- [What I look for in product managers now](https://aaronroy.com/what-i-look-for-in-product-managers-now/): How the PM job has changed — prototypes, GitHub fluency, MCPs, and skills — with starter projects for each, from someone who hires and mentors PMs.
 - [How to build a personal morning briefing](https://aaronroy.com/how-to-build-a-personal-morning-briefing/): A hands-on workshop recap, with the prompts and examples to build your own scheduled AI briefing.
 - [Giving agents personal context](https://aaronroy.com/giving-agents-personal-context/): Bringing my voice, opinions, and expertise into LLMs with a simple markdown-over-MCP system.
 - [GlutenOrNot: a free ingredient scanner for celiac disease](https://aaronroy.com/glutenornot-free-ingredient-scanner-celiac-disease/): A free app that reads ingredient labels and tells you if something contains gluten — photo to verdict, no accounts.
