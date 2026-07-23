@@ -371,10 +371,16 @@ first, or every query silently targets the wrong site. Pageviews carry `$pathnam
 `$virt_traffic_type` (UA-based, so only catches JS-executing crawlers).
 
 **Dashboard:** [Blog Analytics — Traffic & Sources](https://us.posthog.com/project/491375/dashboard/1782625)
-(pinned) — total pageviews, pageviews over time, pageviews by post/page, referring sources, and
-outbound link clicks, all last-30-days. The pageview tiles exclude UA-detected bots **and** legacy
-`/hynews/*` WordPress paths (old-URL scanners that present as a real browser, so the bot filter alone
-misses them). Filters are scoped per-insight, not project-wide.
+(pinned) — traffic tiles (total pageviews, pageviews over time, pageviews by post/page, referring
+sources, outbound link clicks — all last-30-days) plus engagement tiles added 2026-07-23: read-through
+by post (scroll depth + median read time from `$pageleave`), weekly bounce rate & pages/session (from
+the `sessions` table), sessions by channel with a dedicated "AI assistant" referrer bucket, and weekly
+new-vs-returning visitors (SQL on `person_id` — PostHog's lifecycle insight can't be used because
+`person_profiles: 'identified_only'` means anonymous readers have no person profiles). The pageview
+tiles exclude UA-detected bots **and** legacy `/hynews/*` WordPress paths (old-URL scanners that
+present as a real browser, so the bot filter alone misses them). Filters are scoped per-insight, not
+project-wide. Note: AI *crawlers* (GPTBot etc.) never execute JS, so PostHog structurally can't see
+them — use GSC/Bing WMT for that question.
 
 ## Recent Changes
 
