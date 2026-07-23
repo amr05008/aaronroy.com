@@ -9,7 +9,7 @@ draft: false
 
 What it means to be a product manager has changed in the past 6-12 months. 
 
-Some folks I know in product are having the most fun they've had in years, others are looking for their next role and uncertain what the job of product management even means anymore. 
+Some folks I know are having the most fun they've had in years, others are looking for their next role and uncertain what the job of product management even means anymore. 
 
 Consider this post an open letter to product managers looking for their next role on what to expect for ways of working and core skills they should be ready to bring to a new role. 
 
