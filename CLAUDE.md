@@ -349,7 +349,7 @@ only ever talks to `aaronroy.com` — adblockers that filter by third-party doma
 SDK's `api_host` is `/zuko`; `ui_host` stays `https://us.posthog.com` so the toolbar/links resolve.
 The non-obvious path name is deliberate (PostHog docs: blockers catch `/ingest`, `/analytics`, etc.).
 
-⚠️ **`trailingSlash: true` (needed for blog SEO) conflicts with a wildcard proxy.** A
+⚠️ **`trailingSlash: 'always'` (needed for blog SEO) conflicts with a wildcard proxy.** A
 `/zuko/:path*` catch-all does NOT match trailing-slash paths — and posthog-js, when given a custom
 `api_host`, POSTs captures to `/zuko/e/` (legacy endpoint, with trailing slash). That 404'd silently
 and pageviews stopped landing. **Fix:** explicit *literal* rewrites for each trailing-slash endpoint
