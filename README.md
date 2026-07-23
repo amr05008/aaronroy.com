@@ -57,7 +57,6 @@ npm run test:quick
 ├── public/
 │   ├── images/          # Blog post images
 │   ├── og-images/       # Custom Open Graph images
-│   ├── videos/          # Self-hosted MP4 videos (none in use yet)
 │   ├── zuko_favicon.png # Site favicon
 │   ├── robots.txt       # Search engine + AI crawler directives
 │   └── llms.txt         # Curated site map for AI tools (AEO)
@@ -67,7 +66,10 @@ npm run test:quick
 │   ├── count-categories.js           # Content analysis utility
 │   └── indexnow-submit.js            # Submit URLs to IndexNow (Bing-family engines)
 ├── src/
-│   ├── config.ts        # Site metadata (title, author, social profiles)
+│   ├── config.ts        # Site metadata (title, author, social profiles, LATEST_COUNT)
+│   ├── components/
+│   │   ├── PostHogAnalytics.astro  # PostHog analytics (emits nothing without PUBLIC_POSTHOG_KEY)
+│   │   └── PostNavigation.astro    # Older/newer post navigation on blog posts
 │   ├── content/
 │   │   ├── blog/        # Blog posts (Markdown/MDX)
 │   │   └── config.ts    # Content collections schema
@@ -78,10 +80,15 @@ npm run test:quick
 │   │   ├── index.astro        # Homepage
 │   │   ├── about.astro        # About page
 │   │   ├── writing.astro      # Blog archive
+│   │   ├── categories.astro   # Category listing
+│   │   ├── category/[slug].astro  # Category archive pages
 │   │   ├── 404.astro          # Custom 404 page
+│   │   ├── rss.xml.ts         # Full-content RSS feed
 │   │   └── [...slug].astro    # Dynamic blog post routes
-│   └── styles/
-│       └── global.css   # Tailwind imports
+│   ├── styles/
+│   │   └── global.css   # Tailwind imports + image caption styling
+│   └── utils/
+│       └── posts.ts     # Post queries (draft filtering) + slugify()
 └── docs/
     └── MIGRATION.md     # WordPress migration guide
 ```
@@ -117,6 +124,11 @@ Your content here...
 - **`categories`** (optional) - Array of category strings
 - **`heroImage`** (optional) - Path to custom Open Graph image (1200×630px recommended)
 - **`updatedDate`** (optional) - Date of last update (YYYY-MM-DD format)
+- **`draft`** (optional, default `false`) - Draft posts are visible in `npm run dev` but excluded from production builds, preview, and the RSS feed
+
+### Drafts
+
+Add `draft: true` to frontmatter to work on a post privately. Drafts render at their normal URL in dev mode but return 404 in production/preview builds and never appear in the RSS feed or smoke tests. To publish, remove the field or set it to `false`.
 
 ### Editing Existing Posts
 
@@ -159,69 +171,7 @@ directly under the image (no blank line between) — `.prose img + em` in
 
 ### Adding Videos
 
-Videos are stored in `public/videos/` and embedded using HTML5 `<video>` tags in Markdown.
-
-**When to use self-hosted videos:**
-- Short Kap screen recordings (< 2 minutes)
-- Quick product demos and feature walkthroughs
-- Small file sizes (< 10MB)
-- Content you want to keep private or unlisted
-
-**When to use YouTube embeds:**
-- Long-form content (> 2 minutes)
-- Large file sizes (> 20MB)
-- Videos needing quality options (360p, 720p, 1080p)
-- Content where you want engagement and analytics
-
-**Naming Convention:**
-
-Use descriptive, human-readable names:
-- Pattern: `{descriptive-name}.mp4` or `{post-slug}-{description}.mp4`
-- Examples: `strava-mcp-tutorial.mp4`, `reflecting-cx-2025-cunningham-park.mp4`
-- Use lowercase with hyphens
-
-**Embedding a horizontal video:**
-
-```html
-<video
-  controls
-  width="100%"
-  style="max-width: 800px; margin: 2rem auto; display: block; border-radius: 0.5rem;"
-  preload="metadata"
->
-  <source src="/videos/strava-mcp-tutorial.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-```
-
-**Embedding a vertical/portrait video:**
-
-```html
-<div class="aspect-[9/16] max-w-xs mx-auto my-8">
-  <video
-    class="w-full h-full rounded-lg"
-    controls
-    preload="metadata"
-  >
-    <source src="/videos/cunningham-park-practice.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</div>
-```
-
-**Video Guidelines:**
-- **Format:** MP4 with H.264 codec (maximum compatibility)
-- **File size:** Keep under 10MB for reasonable page load times
-- **Dimensions:** Max 1920×1080 for horizontal, 1080×1920 for vertical
-- **Accessibility:** Use captions/transcripts for complex information
-
-**Compressing videos:**
-
-Use [HandBrake](https://handbrake.fr/) (GUI) or FFmpeg (command-line):
-
-```bash
-ffmpeg -i input.mp4 -vcodec h264 -acodec aac -crf 28 -preset slow output.mp4
-```
+Videos are embedded via YouTube iframes (see any existing post with a video for the pattern — e.g. `reflecting-on-cx-2025.md`). No self-hosted video.
 
 ### Adding Code Blocks
 
@@ -287,13 +237,16 @@ homepage and the smoke tests both import it.
 
 ### Site Metadata (src/config.ts)
 
-Centralized configuration for site-wide metadata:
+Centralized configuration for site-wide metadata (see `src/config.ts` for the full file, including comments):
 
 ```typescript
+export const LATEST_COUNT = 7; // Homepage "Latest" section cap
+
 export const SITE = {
   title: 'Aaron Roy',
-  description: 'Product manager, writer, and tech enthusiast',
+  description: '...',
   url: 'https://aaronroy.com',
+  id: 'https://aaronroy.com/#website', // Stable schema.org @id (WebSite entity)
 };
 
 export const AUTHOR = {
@@ -302,6 +255,13 @@ export const AUTHOR = {
   email: 'aaron@aaronroy.com',
   url: 'https://aaronroy.com',
   location: 'Brooklyn, NY',
+  id: 'https://aaronroy.com/#person', // Stable schema.org @id (Person entity)
+  image: '/images/aaron-roy.jpg',     // 1000x1000 headshot for Person schema
+  jobTitle: 'Product Director',
+  bio: '...',
+  affiliations: [{ name: 'Manychat', url: '...' }, { name: 'Wami' }],
+  alumniOf: 'University of Connecticut School of Law',
+  knowsAbout: ['Product Management', '...'],
   social: {
     twitter: 'https://twitter.com/aaronmroy',
     linkedin: 'https://linkedin.com/in/aaronmichaelroy',
@@ -314,22 +274,25 @@ Updating `src/config.ts` automatically applies changes to:
 
 - Page titles and meta descriptions
 - Footer copyright notice
-- JSON-LD structured data (author and publisher)
+- JSON-LD structured data — the `Person` entity on `/about`, the `WebSite` node on the homepage, and author/publisher fields on every blog post all resolve to the single `#person` `@id`
 - Social profile links in structured data
+- Homepage "Latest" post count (via `LATEST_COUNT`)
 
 ### Content Schema (src/content/config.ts)
 
 Content collections are defined with Zod schema validation:
 
 ```typescript
-const blogCollection = defineCollection({
+const blog = defineCollection({
+  type: 'content',
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    pubDate: z.date(),
-    updatedDate: z.date().optional(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
     categories: z.array(z.string()).optional(),
     heroImage: z.string().optional(),
+    draft: z.boolean().optional().default(false),
   }),
 });
 ```
@@ -366,11 +329,14 @@ The site uses Playwright for smoke testing. Tests automatically discover blog po
 
 ### What's Tested
 
-- All pages load (homepage, writing, about, 404)
+- All pages load (homepage, writing, about, 404) — category archives verified via link click-through
 - All blog posts return 200 status
 - Homepage displays the latest N posts (capped at `LATEST_COUNT`)
 - Navigation links work
 - Essential meta tags exist (title, description, canonical, OG)
+- Category links on blog posts (display, navigation, URL slugification)
+- Older/newer post navigation on blog posts
+- RSS feed validity, auto-discovery link, and user-facing RSS links
 - Crawler files: robots.txt, sitemap, and every internal llms.txt link resolves
 
 ### Running Tests
@@ -401,9 +367,14 @@ No test updates needed. Tests automatically read from `src/content/blog/`.
 - **Writing archive:** `/writing`
 - **Individual posts:** `/{slug}` (matches WordPress structure)
 - **About page:** `/about`
+- **Categories:** `/categories` and `/category/{slug}`
 - **404 page:** `/404`
 
 URLs are automatically generated from markdown filenames to preserve SEO continuity with WordPress.
+
+### Trailing Slashes
+
+The site uses `trailingSlash: 'always'` (in `astro.config.mjs`) for blog SEO. **All internal links must include a trailing slash** (`/writing/`, `/about/`, `/category/product/`) — without one, every click costs a sitewide 301 redirect. Note this also affects the PostHog reverse proxy: wildcard `/zuko/:path*` rewrites do NOT match trailing-slash paths, which is why `vercel.json` uses literal rewrites for each PostHog endpoint.
 
 ## SEO Features
 
@@ -416,7 +387,18 @@ URLs are automatically generated from markdown filenames to preserve SEO continu
 - **IndexNow** - Key file in `public/` + `scripts/indexnow-submit.js` for instant URL submission to Bing/Yandex/etc; pinged automatically on publish
 - **robots.txt** - Allows all crawlers and explicitly welcomes AI crawlers (GPTBot, ClaudeBot, PerplexityBot, etc.)
 - **llms.txt** - Curated Markdown map of the site for AI tools (Answer Engine Optimization)
-- **Analytics** - Vercel Analytics (privacy-friendly, no cookie consent needed)
+- **Analytics** - Vercel Analytics (privacy-friendly, no cookie consent needed) + PostHog for queryable product analytics
+
+### PostHog Analytics
+
+PostHog (`src/components/PostHogAnalytics.astro`) is the queryable analytics layer — referral sources, per-post traffic, time-on-page, link clicks. It's privacy-conscious: anonymous (`identified_only`), no session recording, honors Do Not Track.
+
+Wired via build-time env vars — the component emits nothing when `PUBLIC_POSTHOG_KEY` is unset, so it's safe to deploy without them:
+
+- `PUBLIC_POSTHOG_KEY` — project public key (`phc_…`), set in Vercel (Production + Preview) and local `.env`
+- `PUBLIC_POSTHOG_HOST` — optional; defaults to the same-origin reverse-proxy path `/zuko`
+
+**Reverse proxy:** `vercel.json` rewrites `/zuko/*` → PostHog so the browser only talks to `aaronroy.com` (adblock resistance). ⚠️ Because of `trailingSlash: 'always'`, each trailing-slash PostHog endpoint needs a *literal* rewrite (`/zuko/e/`, `/zuko/i/v0/e/`, `/zuko/flags/`, `/zuko/decide/`) — a wildcard `:path*` won't match them and events silently 404. See `.env.example` and CLAUDE.md for details.
 
 ## Deployment
 
@@ -447,7 +429,7 @@ historical guide and how to restore the tooling from git history if ever needed.
 
 ## License
 
-© 2025 Aaron Roy. All rights reserved.
+© 2026 Aaron Roy. All rights reserved.
 
 ## Built With
 
