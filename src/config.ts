@@ -55,5 +55,6 @@ export const AUTHOR = {
     twitter: 'https://twitter.com/aaronmroy',
     linkedin: 'https://linkedin.com/in/aaronmichaelroy',
     github: 'https://github.com/amr05008',
+    youtube: 'https://www.youtube.com/@aaron_wa',
   },
 } as const;
