@@ -132,10 +132,10 @@ Posts are rendered via the catch-all route `[...slug].astro` which uses the `Blo
 
 ### Video Storage
 
-No videos are in use yet. If a post needs one: short self-hosted MP4s (< 2 min,
-< 10 MB, H.264) go in `public/videos/` with kebab-case names; anything longer
-gets a YouTube embed. Full conventions and embed snippets are in git history
-(CLAUDE.md before 2026-07-02).
+All videos are YouTube embeds (Aaron's channel: `@aaron_wa`) — no self-hosted
+MP4s. See any existing post with a video for the iframe pattern (e.g.
+`reflecting-on-cx-2025.md`). Self-hosted conventions from before 2026-07-23
+are in git history if ever needed.
 
 ### Draft System
 
