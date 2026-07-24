@@ -11,6 +11,11 @@ plus two redirect landing pages (`/subscribed/`, `/confirmed/`) so readers
 return to the site instead of stranding on Buttondown after submitting.
 TDD throughout; suite grew 21 → 26 tests.
 
+Commits: `ceeb6ff` (feature), `5ec064a` (tighter gap above the form — Aaron
+picked variant B from a three-way visual comparison; `-mt-7` pulls the block
+into the article's bottom padding), `d35015d` (manual Buttondown send step
+added to the `blog-publish` skill's post-publish checklist).
+
 ## Changes
 - `src/components/EmailNotify.astro` (new) — copy + email input + "Notify me"
   button; native POST (no widget JS); PostHog `email_notify_submitted` fired via

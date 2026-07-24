@@ -68,6 +68,7 @@ npm run test:quick
 ├── src/
 │   ├── config.ts        # Site metadata (title, author, social profiles, LATEST_COUNT)
 │   ├── components/
+│   │   ├── EmailNotify.astro       # Email-notify form at the bottom of posts (Buttondown)
 │   │   ├── PostHogAnalytics.astro  # PostHog analytics (emits nothing without PUBLIC_POSTHOG_KEY)
 │   │   └── PostNavigation.astro    # Older/newer post navigation on blog posts
 │   ├── content/
@@ -84,6 +85,8 @@ npm run test:quick
 │   │   ├── category/[slug].astro  # Category archive pages
 │   │   ├── 404.astro          # Custom 404 page
 │   │   ├── rss.xml.ts         # Full-content RSS feed
+│   │   ├── subscribed.astro   # Buttondown post-subscribe redirect landing (noindex)
+│   │   ├── confirmed.astro    # Buttondown post-confirm redirect landing (noindex)
 │   │   └── [...slug].astro    # Dynamic blog post routes
 │   ├── styles/
 │   │   └── global.css   # Tailwind imports + image caption styling
@@ -337,6 +340,8 @@ The site uses Playwright for smoke testing. Tests automatically discover blog po
 - Category links on blog posts (display, navigation, URL slugification)
 - Older/newer post navigation on blog posts
 - RSS feed validity, auto-discovery link, and user-facing RSS links
+- Email notify form on posts (correct Buttondown action; absent off-post), and the
+  subscribe-flow landing pages (render, noindex, excluded from sitemap)
 - Crawler files: robots.txt, sitemap, and every internal llms.txt link resolves
 
 ### Running Tests

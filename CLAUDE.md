@@ -75,6 +75,9 @@ The site uses Playwright for smoke testing. Tests validate that the site builds 
 - **Crawler files**: robots.txt (sitemap pointer), sitemap validity, and every
   internal link in llms.txt resolving 200 with no redirect (llms.txt is
   hand-curated, so its links rot silently otherwise)
+- **Email notify form** (posts only, correct Buttondown action URL from config;
+  absent on homepage/about/writing) and the subscribe-flow landing pages
+  (`/subscribed/`, `/confirmed/`: render, noindex, excluded from sitemap)
 
 ### Running Tests
 
@@ -326,6 +329,35 @@ Blog content (new posts, edits) is committed directly to `main` — Vercel
 auto-deploys on every push, so no branch or PR is needed to publish. "Going live"
 means pushing to `main`.
 
+## Email Notifications (Buttondown)
+
+A quiet email-capture form (`src/components/EmailNotify.astro`) renders at the
+bottom of every blog post (in `BlogPost.astro`, after the article, before
+`PostNavigation`) — **posts only**, nowhere else, no popups. It is a
+*notification layer, not a newsletter*: copy promises "an email when I post
+something new," button says "Notify me" (never "Subscribe").
+
+- **Provider:** Buttondown, username `aaronroy` (in `src/config.ts` as
+  `BUTTONDOWN_USERNAME` — the component and smoke tests both build the form
+  action from it). Native form POST to
+  `https://buttondown.com/api/emails/embed-subscribe/aaronroy` — use the
+  `.com` endpoint (legacy `.email` 301s, which downgrades the POST). No widget
+  JS. A brief Cloudflare bot-check flash on submit is Buttondown-side and
+  expected.
+- **Flow:** submit → Buttondown → redirect back to `/subscribed/` ("check your
+  email"); after the double-opt-in confirmation link → `/confirmed/`. Both
+  landing pages are noindex, sitemap-excluded (filter in `astro.config.mjs`),
+  and unlinked. The redirect URLs are configured in Buttondown → Settings →
+  Subscribing → Redirects. Double opt-in is Buttondown's default (no toggle).
+- **Plan/sending:** Free plan — **no RSS-to-email; sends are manual** (short
+  title+link email in Buttondown per post; the `blog-publish` skill's
+  post-publish checklist carries the reminder). Revisit paid automation at
+  ~100 subscribers, which is also the Free plan's sending cap.
+- **Measurement:** submit fires PostHog `email_notify_submitted` via
+  `sendBeacon` (survives the navigation; default batching would lose it). The
+  form never depends on PostHog being present. Buttondown's dashboard is the
+  source of truth for confirmed subscribers — submit counts include bots.
+
 ## Analytics
 
 Two layers, both privacy-conscious:
@@ -384,6 +416,7 @@ them — use GSC/Bing WMT for that question.
 
 ## Recent Changes
 
+- **2026-07-23**: Email notification layer — Buttondown capture form at the bottom of posts (`EmailNotify.astro`), `/subscribed/` + `/confirmed/` redirect landing pages (noindex), PostHog submit event via sendBeacon, 5 new smoke tests; manual-send step added to `blog-publish`
 - **2026-07-22**: Mobile typography — blog H1 steps down on small screens (`text-3xl sm:text-4xl md:text-5xl`); markdown image captions (`![...]` then `*caption*`) auto-styled via `.prose img + em` in `src/styles/global.css`
 - **2026-07-16**: Bing/IndexNow indexing fix — IndexNow key file + `scripts/indexnow-submit.js`, publish-time ping in `blog-publish` skill, `/feed/`→`/rss.xml` 301
 - **2026-07-06**: Added repo-local `blog-publish` skill (scaffold → checklist → gated one-commit publish; see `.claude/decisions/005-blog-publish-skill.md`); deleted legacy `wrap-session` skill (superseded by global `wrap-up`)
