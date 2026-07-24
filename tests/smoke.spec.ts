@@ -393,9 +393,18 @@ test.describe("Email notify form", () => {
     await expect(form.getByRole("button", { name: "Notify me" })).toBeVisible();
   });
 
-  test("does not render outside blog posts", async ({ page }) => {
-    // Placement is posts-only by spec: no homepage, about, or archive presence.
-    for (const path of ["/", "/about/", "/writing/"]) {
+  test("renders on the about page", async ({ page }) => {
+    // Spec amendment 2026-07-24: about-page visitors are high-intent, so the
+    // form renders there too (originally posts-only).
+    await page.goto("/about/");
+
+    const form = page.locator(`form[action="${buttondownAction}"]`);
+    await expect(form).toBeVisible();
+  });
+
+  test("does not render on the homepage or archive pages", async ({ page }) => {
+    // No sitewide footer, no homepage presence — posts and about only.
+    for (const path of ["/", "/writing/", "/categories/"]) {
       await page.goto(path);
       await expect(page.locator(`form[action="${buttondownAction}"]`)).toHaveCount(0);
     }
