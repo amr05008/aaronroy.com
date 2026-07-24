@@ -44,6 +44,29 @@ added to the `blog-publish` skill's post-publish checklist).
 - Full decision record: `docs/PLAN-email-notification-layer.md` (local-only,
   git-excluded — this repo is public).
 
+## 2026-07-24 (continuation)
+
+- **PostHog dashboard tiles** (no repo commit): "Email signups (30d)" (insight
+  `7Sy8bxry` — submits → /subscribed/ → /confirmed/ flow in one trend) and
+  "Email submits by post (30d)" (`Sd40TJ2X` — breakdown by `$pathname`), both
+  on dashboard 1782625 following its bot-filter conventions. During
+  verification: zero submit events had landed — shipped bundle confirmed
+  correct; Aaron's own test invisible because his browser blocks capture
+  (DNT/adblock; posthog-js also drops headless/webdriver clients, which is why
+  synthetic tests can't light up the tiles).
+- **`ca2acf2`** — form added to `/about/` "Get in touch" section (Aaron amended
+  his own posts-only constraint; ~26 high-intent uniques/30d). Also closed the
+  about page's previously unclosed prose div. Tests: about moved to
+  must-render; homepage//writing//categories/ assert absence (27 total).
+- **`c3a17ce`** — dependency vulnerability cleanup: npm audit fix (js-yaml,
+  postcss, svgo, dompurify) + @astrojs/rss 4.0.14→4.0.19. Remaining 4
+  Dependabot alerts (astro-core XSS ×3, sharp/libvips) are fixed only by the
+  deferred Astro 7 major; practical risk low for a prerendered no-user-input
+  site.
+- Decisions: stay on Buttondown Free until ~100 subscribers (no paid RSS-to-email,
+  no transactional-email customization — that needs the pricier Standard tier);
+  default double-opt-in email stands. Recorded in the local-only plan doc.
+
 ## Notes
 - The manual send is now part of publishing a post — candidate addition to the
   `blog-publish` skill checklist so the reader promise can't be silently missed.

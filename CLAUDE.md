@@ -75,9 +75,10 @@ The site uses Playwright for smoke testing. Tests validate that the site builds 
 - **Crawler files**: robots.txt (sitemap pointer), sitemap validity, and every
   internal link in llms.txt resolving 200 with no redirect (llms.txt is
   hand-curated, so its links rot silently otherwise)
-- **Email notify form** (posts only, correct Buttondown action URL from config;
-  absent on homepage/about/writing) and the subscribe-flow landing pages
-  (`/subscribed/`, `/confirmed/`: render, noindex, excluded from sitemap)
+- **Email notify form** (renders on posts and `/about/` with the Buttondown
+  action URL from config; absent on homepage/writing/categories) and the
+  subscribe-flow landing pages (`/subscribed/`, `/confirmed/`: render, noindex,
+  excluded from sitemap)
 
 ### Running Tests
 
@@ -333,7 +334,8 @@ means pushing to `main`.
 
 A quiet email-capture form (`src/components/EmailNotify.astro`) renders at the
 bottom of every blog post (in `BlogPost.astro`, after the article, before
-`PostNavigation`) — **posts only**, nowhere else, no popups. It is a
+`PostNavigation`) and on `/about/` inside the "Get in touch" section — **those
+two placements only** (no homepage, archives, footer, or popups). It is a
 *notification layer, not a newsletter*: copy promises "an email when I post
 something new," button says "Notify me" (never "Subscribe").
 
@@ -404,7 +406,9 @@ first, or every query silently targets the wrong site. Pageviews carry `$pathnam
 
 **Dashboard:** [Blog Analytics — Traffic & Sources](https://us.posthog.com/project/491375/dashboard/1782625)
 (pinned) — traffic tiles (total pageviews, pageviews over time, pageviews by post/page, referring
-sources, outbound link clicks — all last-30-days) plus engagement tiles added 2026-07-23: read-through
+sources, outbound link clicks — all last-30-days) plus email-capture tiles added 2026-07-24 ("Email
+signups": submits → /subscribed/ → /confirmed/ flow; "Email submits by post": `email_notify_submitted`
+by `$pathname`) and engagement tiles added 2026-07-23: read-through
 by post (scroll depth + median read time from `$pageleave`), weekly bounce rate & pages/session (from
 the `sessions` table), sessions by channel with a dedicated "AI assistant" referrer bucket, and weekly
 new-vs-returning visitors (SQL on `person_id` — PostHog's lifecycle insight can't be used because
@@ -416,6 +420,7 @@ them — use GSC/Bing WMT for that question.
 
 ## Recent Changes
 
+- **2026-07-24**: Email form added to `/about/` "Get in touch" (spec amended by Aaron — high-intent visitors); PostHog dashboard gains email signup-flow + submits-by-post tiles; dependency vulnerability cleanup (all non-Astro-7 fixes; 4 alerts remain, gated on the deferred Astro 7 major)
 - **2026-07-23**: Email notification layer — Buttondown capture form at the bottom of posts (`EmailNotify.astro`), `/subscribed/` + `/confirmed/` redirect landing pages (noindex), PostHog submit event via sendBeacon, 5 new smoke tests; manual-send step added to `blog-publish`
 - **2026-07-22**: Mobile typography — blog H1 steps down on small screens (`text-3xl sm:text-4xl md:text-5xl`); markdown image captions (`![...]` then `*caption*`) auto-styled via `.prose img + em` in `src/styles/global.css`
 - **2026-07-16**: Bing/IndexNow indexing fix — IndexNow key file + `scripts/indexnow-submit.js`, publish-time ping in `blog-publish` skill, `/feed/`→`/rss.xml` 301

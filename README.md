@@ -340,7 +340,7 @@ The site uses Playwright for smoke testing. Tests automatically discover blog po
 - Category links on blog posts (display, navigation, URL slugification)
 - Older/newer post navigation on blog posts
 - RSS feed validity, auto-discovery link, and user-facing RSS links
-- Email notify form on posts (correct Buttondown action; absent off-post), and the
+- Email notify form on posts and the about page (correct Buttondown action; absent on homepage/archives), and the
   subscribe-flow landing pages (render, noindex, excluded from sitemap)
 - Crawler files: robots.txt, sitemap, and every internal llms.txt link resolves
 
