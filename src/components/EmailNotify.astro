@@ -8,7 +8,9 @@ import { BUTTONDOWN_USERNAME } from '../config';
 const action = `https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`;
 ---
 
-<aside aria-label="Email notifications" class="max-w-3xl mx-auto px-6">
+{/* -mt-7 pulls the block into the article's bottom padding so it sits close
+    enough to the last paragraph to read as the post's closing line. */}
+<aside aria-label="Email notifications" class="max-w-3xl mx-auto px-6 -mt-7">
   <p class="text-lg text-gray-700 leading-relaxed mb-4">
     Get an email when I post something new. 1-2 posts per month.
   </p>
