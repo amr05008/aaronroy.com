@@ -12,9 +12,10 @@ interface Props {
   ogType?: 'website' | 'article';
   publishedTime?: string; // ISO 8601, only for ogType="article"
   modifiedTime?: string;  // ISO 8601, only for ogType="article"
+  noindex?: boolean;      // utility pages (subscribe-flow landings) crawlers shouldn't index
 }
 
-const { title, description, ogImage, canonicalURL, ogType = 'website', publishedTime, modifiedTime } = Astro.props;
+const { title, description, ogImage, canonicalURL, ogType = 'website', publishedTime, modifiedTime, noindex = false } = Astro.props;
 const fullTitle = title === SITE.title ? title : `${title} | ${SITE.title}`;
 const metaDescription = description || SITE.description;
 const currentURL = canonicalURL || new URL(Astro.url.pathname, Astro.site).toString();
@@ -37,6 +38,7 @@ const defaultOGImage = ogImage
     <meta name="description" content={metaDescription} />
     <meta name="author" content={AUTHOR.name} />
     <meta name="generator" content={Astro.generator} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={currentURL} />
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for Aaron Roy's Blog" href="/rss.xml" />
 

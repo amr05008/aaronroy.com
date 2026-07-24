@@ -9,6 +9,10 @@
 // tests so the cap can't silently drift between the page and its test.
 export const LATEST_COUNT = 7;
 
+// Buttondown username for the email-notify form on blog posts. The component
+// and the smoke tests both build the form action from this, so they can't drift.
+export const BUTTONDOWN_USERNAME = 'aaronroy';
+
 export const SITE = {
   title: 'Aaron Roy',
   description: 'Experiences and learnings on product, growth, bikes and whatever else I wander into.',

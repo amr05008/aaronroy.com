@@ -21,7 +21,12 @@ export default defineConfig({
       },
     }),
     mdx(),
-    sitemap(),
+    sitemap({
+      // Subscribe-flow landing pages are noindex; listing them in the sitemap
+      // would send crawlers mixed signals.
+      filter: (page) =>
+        !['https://aaronroy.com/subscribed/', 'https://aaronroy.com/confirmed/'].includes(page),
+    }),
     tailwind(),
   ],
 });

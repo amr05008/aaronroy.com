@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { readdirSync, readFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
-import { LATEST_COUNT } from "../src/config";
+import { BUTTONDOWN_USERNAME, LATEST_COUNT } from "../src/config";
 
 // Dynamically read blog posts from content directory
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -377,5 +377,63 @@ test.describe("Crawler files", () => {
       }
     }
     expect(failures, `stale llms.txt links:\n${failures.join("\n")}`).toEqual([]);
+  });
+});
+
+test.describe("Email notify form", () => {
+  // Form action is built from the shared config value — see src/config.ts.
+  const buttondownAction = `https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`;
+
+  test("renders on blog posts with the Buttondown action", async ({ page }) => {
+    await page.goto(`/${publishedPosts[0]}/`);
+
+    const form = page.locator(`form[action="${buttondownAction}"]`);
+    await expect(form).toBeVisible();
+    await expect(form.locator('input[type="email"]')).toBeVisible();
+    await expect(form.getByRole("button", { name: "Notify me" })).toBeVisible();
+  });
+
+  test("does not render outside blog posts", async ({ page }) => {
+    // Placement is posts-only by spec: no homepage, about, or archive presence.
+    for (const path of ["/", "/about/", "/writing/"]) {
+      await page.goto(path);
+      await expect(page.locator(`form[action="${buttondownAction}"]`)).toHaveCount(0);
+    }
+  });
+});
+
+test.describe("Subscribe flow pages", () => {
+  // Landing pages for Buttondown's post-subscribe redirects (Settings →
+  // Subscribing → Redirects), so readers return to the site instead of
+  // stranding on Buttondown's page after submitting the email form.
+
+  test("subscribed page tells the reader to confirm by email", async ({ page }) => {
+    const response = await page.goto("/subscribed/");
+    expect(response?.status()).toBe(200);
+
+    await expect(page.locator("main")).toContainText(/check your email/i);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  });
+
+  test("confirmed page confirms the subscription", async ({ page }) => {
+    const response = await page.goto("/confirmed/");
+    expect(response?.status()).toBe(200);
+
+    await expect(page.locator("main")).toContainText(/on the list/i);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  });
+
+  test("subscribe flow pages stay out of the sitemap", async ({ request }) => {
+    // noindex pages listed in the sitemap send crawlers mixed signals.
+    const index = await request.get("/sitemap-index.xml");
+    const indexBody = await index.text();
+    const sitemapPaths = [...indexBody.matchAll(/<loc>https:\/\/aaronroy\.com(\/[^<]+)<\/loc>/g)]
+      .map((m) => m[1]);
+
+    for (const path of sitemapPaths) {
+      const body = await (await request.get(path)).text();
+      expect(body).not.toContain("https://aaronroy.com/subscribed/");
+      expect(body).not.toContain("https://aaronroy.com/confirmed/");
+    }
   });
 });

@@ -1,0 +1,22 @@
+---
+// Landing page for Buttondown's "after confirming" redirect: the reader
+// clicked the confirmation link and is now subscribed.
+// Not linked from anywhere on the site — reached only via the redirect.
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="You're on the list"
+  description="Email notifications from aaronroy.com are confirmed."
+  noindex
+>
+  <div class="max-w-3xl mx-auto px-6 py-24">
+    <h1 class="text-3xl font-bold tracking-tight mb-6">You're on the list</h1>
+    <p class="text-lg text-gray-700 leading-relaxed mb-4">
+      That's it, I'll email you when something new is up, about once a month.
+    </p>
+    <p class="text-lg text-gray-700 leading-relaxed">
+      Until then, there's plenty to <a href="/writing/" class="text-blue-600 hover:underline">read</a>.
+    </p>
+  </div>
+</BaseLayout>

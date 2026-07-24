@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import EmailNotify from '../components/EmailNotify.astro';
 import PostNavigation from '../components/PostNavigation.astro';
 import { AUTHOR } from '../config';
 import { slugify } from '../utils/posts';
@@ -102,6 +103,8 @@ const schemaImage = new URL(heroImage ?? '/og-images/aaron-roy-dot-com-og.png', 
       <slot />
     </div>
   </article>
+
+  <EmailNotify />
 
   <PostNavigation olderPost={olderPost ?? null} newerPost={newerPost ?? null} />
 

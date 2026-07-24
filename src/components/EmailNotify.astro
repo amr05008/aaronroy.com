@@ -1,0 +1,47 @@
+---
+// Quiet email-capture block at the end of blog posts — a notification layer,
+// not a newsletter. Native form POST to Buttondown's embed endpoint (no widget
+// JS); the reader lands on Buttondown's page, which carries the
+// check-your-email confirmation instruction.
+import { BUTTONDOWN_USERNAME } from '../config';
+
+const action = `https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`;
+---
+
+<aside aria-label="Email notifications" class="max-w-3xl mx-auto px-6">
+  <p class="text-lg text-gray-700 leading-relaxed mb-4">
+    Get an email when I post something new. 1-2 posts per month.
+  </p>
+  <form action={action} method="post" data-email-notify class="flex flex-wrap gap-3">
+    <input type="hidden" name="embed" value="1" />
+    <input
+      type="email"
+      name="email"
+      required
+      placeholder="you@example.com"
+      autocomplete="email"
+      aria-label="Email address"
+      class="flex-1 min-w-[220px] rounded-md border border-gray-300 px-3 py-2 text-base focus:border-blue-600 focus:outline-none"
+    />
+    <button
+      type="submit"
+      class="rounded-md bg-blue-600 px-5 py-2 text-base font-medium text-white hover:bg-blue-700 transition-colors"
+    >
+      Notify me
+    </button>
+  </form>
+</aside>
+
+<script>
+  import posthog from 'posthog-js';
+
+  // Measurement only — the native POST must never depend on PostHog (which is
+  // absent entirely when the key is unset, and inert under DNT/adblock).
+  // sendBeacon survives the page unload that immediately follows submission;
+  // the default batched transport would usually lose the event.
+  if (import.meta.env.PUBLIC_POSTHOG_KEY) {
+    document.querySelector('form[data-email-notify]')?.addEventListener('submit', () => {
+      posthog.capture('email_notify_submitted', undefined, { transport: 'sendBeacon' });
+    });
+  }
+</script>

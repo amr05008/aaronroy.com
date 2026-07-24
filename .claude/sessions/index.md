@@ -4,6 +4,7 @@ Quick reference for all Claude Code working sessions on this project.
 
 | Date | Summary | Tags |
 |------|---------|------|
+| 2026-07-23 | [Email notification layer: Buttondown capture form at bottom of posts + subscribe-flow landing pages](2026-07-23-add-email-notify.md) | email, buttondown, posthog, seo |
 | 2026-07-16 | [IndexNow submission (key file + script + blog-publish ping) and /feed/ redirect to fix zero Bing-family indexing](2026-07-16-add-bing-indexing.md) | seo, bing, indexnow, redirects |
 | 2026-07-06 | [Add blog-publish skill (gated one-commit publish pipeline, TDD-tested); delete legacy wrap-session](2026-07-06-add-blog-publish-skill.md) | skills, publishing, workflow |
 | 2026-07-02 | [Repo audit + fixed top 10 findings (trailing slashes, nested anchor, llms.txt, favicon, headers, dep pruning, crawler tests, image compression)](2026-07-02-fix-repo-audit-findings.md) | audit, seo, a11y, security, dependencies, cleanup, testing, performance |
