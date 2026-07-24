@@ -91,8 +91,17 @@ node scripts/indexnow-submit.js /<slug>/
 ```
 
 (It fails loud if the key file or URL isn't live — rerun after the deploy
-settles rather than skipping.) Report the live URL, follow-ups, and point at
-content-plan for promotion.
+settles rather than skipping.)
+
+Then remind Aaron to **send the Buttondown email notification** — the bottom-of-post
+form promises subscribers "an email when I post something new", and on the Free plan
+the send is manual (no RSS-to-email). A 2-line email in Buttondown (title, one
+sentence, link to the live URL) keeps the promise; skipping it silently breaks it.
+Claude can't send it — Aaron does this at buttondown.com/emails. Skip only if the
+subscriber count is zero (check the Buttondown dashboard).
+
+Report the live URL, follow-ups (including whether the Buttondown send happened
+or is on Aaron), and point at content-plan for promotion.
 
 ## Common mistakes
 
