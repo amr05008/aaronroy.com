@@ -91,3 +91,5 @@ Claude Code routines run on Anthropic's cloud infrastructure and will fire even 
 </figure>
 
 If you are interested in creating a similar daily briefing for yourself, here is [my repo](https://github.com/amr05008/daily-briefing/) which you can use as a starting point.
+
+For another fun project to challenge yourself, check out [giving your agents personal context](https://aaronroy.com/giving-agents-personal-context/).
