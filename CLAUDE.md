@@ -72,6 +72,9 @@ The site uses Playwright for smoke testing. Tests validate that the site builds 
 - RSS links visible to users (footer and writing page)
 - **Category links on blog posts** (display, navigation, URL slugification, styling)
 - **Older/newer post navigation** (both columns, edge cases, valid links)
+- **Sitemap `<lastmod>`**: every published post's `<lastmod>` matches its
+  frontmatter, none is future-dated, and robots.txt's crawl-trap rules cover
+  **every** user-agent group (not just `*`)
 - **Crawler files**: robots.txt (sitemap pointer), sitemap validity, and every
   internal link in llms.txt resolving 200 with no redirect (llms.txt is
   hand-curated, so its links rot silently otherwise)
@@ -289,8 +292,31 @@ The site includes comprehensive SEO features:
   - Helps search engines understand author identity across platforms for rich results
   - The `/about` page emits `ProfilePage` → `Person` structured data (built from `AUTHOR` in `src/config.ts`) with a stable `@id`, making Aaron a machine-readable entity for the Knowledge Graph and AI answer engines
   - The homepage emits a `WebSite` node; the homepage publisher and every `BlogPosting` author/publisher reference the same Person `@id` (`#person`), so the whole site resolves to one author entity
-- **Sitemap**: Auto-generated via @astrojs/sitemap integration
-- **robots.txt**: Located in `public/robots.txt`. Allows all crawlers and explicitly welcomes AI crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, etc., including training) with a sitemap + `/llms.txt` reference
+- **Sitemap**: Auto-generated via @astrojs/sitemap. `astro.config.mjs` also emits **`<lastmod>`**,
+  built from frontmatter (`updatedDate ?? pubDate`); listing and category pages take the newest date
+  they contain; `/about/` is the one URL deliberately left without one. Dates are **never** `new
+  Date()` — Google discounts `<lastmod>` site-wide when it's inaccurate, so an edited post only gets
+  a fresh date by setting `updatedDate` (see the `blog-publish` checklist).
+  The build **hard-fails** (exit 1) on a future date, a `categories:` key that parses to nothing, or
+  any sitemap URL missing a `<lastmod>`. That last check lives in an `astro:build:done` hook, not in
+  sitemap's `serialize()` — **@astrojs/sitemap swallows whatever `serialize` throws, writes no
+  sitemap, and still exits 0**, so a guard placed there looks loud and isn't.
+- **robots.txt**: Located in `public/robots.txt`. Allows all crawlers and explicitly welcomes AI crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, etc., including training) with a sitemap + `/llms.txt` reference.
+  It also blocks a **legacy Elementor crawl trap** (`?lid=`, `*_page=`, `elementor_`): the WordPress-era
+  widgets emitted pagination links that appended to the query string instead of replacing it, and Astro
+  serves the homepage 200 for any query string, so those URLs still resolve. They were 139 of the 172
+  "Crawled - currently not indexed" URLs and most of the ~2,225 "Alternate page with proper canonical"
+  bucket in the 2026-08-08 GSC audit.
+  Two non-obvious things, both load-bearing:
+  1. **This can't be a redirect.** Vercel forwards query strings to redirect destinations, so a
+     `source: "/"` + `has: lid` rule emits `Location: /?lid=...` for a request to `/?lid=...` — an
+     infinite loop on the homepage. Legacy `routes` could express it but is mutually exclusive with
+     `redirects`/`rewrites`/`headers`/`trailingSlash`.
+  2. **The rules are duplicated into the AI-crawler group on purpose.** robots.txt is
+     most-specific-user-agent-wins: a named `User-agent` group overrides the `*` group *entirely*
+     rather than merging with it. The per-vendor blocks silently exempted Bingbot and every AI crawler
+     until they were collapsed into one stanza. Splitting a vendor back out reopens the trap — a smoke
+     test asserts per-group coverage, so don't "tidy" the duplication away.
 - **llms.txt** (AEO): `public/llms.txt` is a hand-curated Markdown map for AI tools — identity statement + featured posts + topic links + projects. It is **static and manually maintained**, so update it when adding a notable evergreen post (this is the one place curation still lives, now that the homepage is recency-driven)
 - **IndexNow (Bing-family indexing)**: `public/<32-hex-key>.txt` is the IndexNow key file (public by
   design — fine that it's committed). `node scripts/indexnow-submit.js [/slug/ ...]` submits URLs to
@@ -420,6 +446,11 @@ them — use GSC/Bing WMT for that question.
 
 ## Recent Changes
 
+- **2026-08-08**: GSC Coverage audit — blocked the legacy Elementor crawl trap in robots.txt (and
+  collapsed the per-vendor AI-crawler blocks into one stanza, which had been silently exempting
+  Bingbot); added sitemap `<lastmod>` with build-time invariants that hard-fail on future dates,
+  unparsed categories, or missing dates; 3 new smoke tests; fixed `blog-review`'s stale category list
+  ("AI"/"Product Management" never existed, which is where the dead `/category/ai/` came from)
 - **2026-07-24**: Email form added to `/about/` "Get in touch" (spec amended by Aaron — high-intent visitors); PostHog dashboard gains email signup-flow + submits-by-post tiles; dependency vulnerability cleanup (all non-Astro-7 fixes; 4 alerts remain, gated on the deferred Astro 7 major)
 - **2026-07-23**: Email notification layer — Buttondown capture form at the bottom of posts (`EmailNotify.astro`), `/subscribed/` + `/confirmed/` redirect landing pages (noindex), PostHog submit event via sendBeacon, 5 new smoke tests; manual-send step added to `blog-publish`
 - **2026-07-22**: Mobile typography — blog H1 steps down on small screens (`text-3xl sm:text-4xl md:text-5xl`); markdown image captions (`![...]` then `*caption*`) auto-styled via `.prose img + em` in `src/styles/global.css`

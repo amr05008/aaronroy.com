@@ -52,7 +52,8 @@ Run every row. Each row's procedure is the check — "looks fine" is not a resul
 |---|-------|-----------|
 | 1 | Frontmatter schema | Parses as YAML; has title, description, pubDate; matches `src/content/config.ts` |
 | 2 | Description quality | 120–160 chars, specific and handcrafted. "Present" is not the bar — a placeholder or generic sentence fails this row |
-| 3 | pubDate | Equals today's date |
+| 3 | pubDate | Equals today's date. **Never a future date** — the build hard-fails on one (it would poison the sitemap's `<lastmod>`, including the homepage's) |
+| 3b | updatedDate (edits only) | Republishing a post that's already live after a **material** content change? Add `updatedDate: <today>`. It drives the sitemap's `<lastmod>`, which is Google's signal to re-crawl — without it an edited post looks unchanged and may not be re-indexed for months. Typo fixes don't count; don't touch it for those, an inaccurate `<lastmod>` gets the whole site's discounted |
 | 4 | Categories pre-exist | A category is valid only if **another published post already uses it**. Check with `grep -l '<category>' src/content/blog/*.md*` excluding this post (`node scripts/count-categories.js` counts this post too, so its output self-confirms — don't trust a count of 1). Any new category → stop and ask Aaron |
 | 5 | Image location + naming | Every post image lives in `public/images/<kebab-slug>/` with kebab-case filenames. No spaces anywhere in the path. Older folders with spaces (e.g. `Experiments with Strava MCP/`) are legacy warts, not precedent — move/rename and update references |
 | 6 | Image weight | Each image ≤ 300 KB. Over → downscale to ≤ 1600px wide (`sips --resampleWidth 1600`) and/or `pngquant --quality=65-85` |
@@ -63,7 +64,7 @@ Run every row. Each row's procedure is the check — "looks fine" is not a resul
 | 10 | Internal links | Trailing slashes on all of them |
 | 11 | llms.txt | Explicit decision: is this post evergreen/notable? Yes → add an entry to `public/llms.txt`. No → record "skipped: <reason>" in the gate report. Silence fails this row |
 | 12 | Publish flip | Remove `draft: true` |
-| 13 | Tests | `npm run test` passes |
+| 13 | Tests | `npm run test` passes. This is also the crawler-file guard: it verifies every post's `<lastmod>` matches its frontmatter, that none is future-dated, and that robots.txt's crawl-trap rules cover every user-agent group. A red run here is usually frontmatter, not the site |
 
 ### 3. Gate
 
@@ -115,3 +116,12 @@ or is on Aaron), and point at content-plan for promotion.
   not an existence check.
 - **Silent OG fallback** — publishing with the default image is fine;
   publishing without *saying so* is not.
+- **Inventing a category** — `blog-review` used to recommend "AI" and "Product
+  Management", neither of which exists (they're **Agents** and **Product**). A
+  suggested category is not a verified one; row 4 is the check, and the dead
+  `/category/ai/` URL in Search Console is what skipping it costs.
+- **Editing robots.txt casually** — the crawl-trap `Disallow` rules are
+  duplicated across user-agent groups deliberately (robots.txt is
+  most-specific-wins, so a named group ignores the `*` group entirely). Adding a
+  new crawler as its own block silently exempts it. A smoke test catches this;
+  don't "tidy" the duplication away.

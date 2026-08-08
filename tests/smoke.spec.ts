@@ -357,6 +357,111 @@ test.describe("Crawler files", () => {
     }
   });
 
+  // <lastmod> is the only signal telling Google a URL is worth re-crawling. It's
+  // generated from frontmatter in astro.config.mjs, and every way that generation
+  // has broken so far was silent: the sitemap still validated, it just carried
+  // wrong or missing dates. These assertions are what make that loud.
+  test("every published post in the sitemap has a lastmod matching its frontmatter", async ({
+    request,
+  }) => {
+    const sitemap = await request.get("/sitemap-0.xml");
+    expect(sitemap.status()).toBe(200);
+    const body = await sitemap.text();
+
+    const lastmodByUrl = new Map<string, string>();
+    for (const block of body.match(/<url>[\s\S]*?<\/url>/g) ?? []) {
+      const url = block.match(/<loc>(.*?)<\/loc>/)?.[1];
+      const lastmod = block.match(/<lastmod>(.*?)<\/lastmod>/)?.[1];
+      if (url) lastmodByUrl.set(url, lastmod ?? "");
+    }
+    expect(lastmodByUrl.size).toBeGreaterThan(0);
+
+    const failures: string[] = [];
+    for (const file of blogPostFiles.filter((f) => !isDraft(f))) {
+      const slug = file.replace(/\.(md|mdx)$/, "").toLowerCase();
+      const url = `https://aaronroy.com/${slug}/`;
+      const actual = lastmodByUrl.get(url);
+
+      if (actual === undefined) {
+        failures.push(`${url} — absent from sitemap`);
+        continue;
+      }
+      if (!actual) {
+        failures.push(`${url} — no <lastmod>`);
+        continue;
+      }
+      // Expected date is updatedDate when present, else pubDate.
+      const frontmatter = readFileSync(join(contentDir, file), "utf-8").match(
+        /^---\n([\s\S]*?)\n---/,
+      )?.[1] ?? "";
+      const expected = (
+        frontmatter.match(/updatedDate:\s*['"]?(\d{4}-\d{2}-\d{2})/) ??
+        frontmatter.match(/pubDate:\s*['"]?(\d{4}-\d{2}-\d{2})/)
+      )?.[1];
+      if (expected && !actual.startsWith(expected)) {
+        failures.push(`${url} — lastmod ${actual.slice(0, 10)}, frontmatter says ${expected}`);
+      }
+    }
+    expect(failures, `sitemap lastmod problems:\n${failures.join("\n")}`).toEqual([]);
+  });
+
+  test("no sitemap lastmod is in the future", async ({ request }) => {
+    // A future lastmod is worse than none — Google discounts it, and because the
+    // listing pages take the newest post date, one typo'd year poisons the
+    // homepage too. This caught a real bug when pubDate was mistyped as 2036.
+    const body = await (await request.get("/sitemap-0.xml")).text();
+    const tomorrow = Date.now() + 24 * 60 * 60 * 1000;
+
+    const future = [...body.matchAll(/<url>[\s\S]*?<\/url>/g)]
+      .map((m) => ({
+        url: m[0].match(/<loc>(.*?)<\/loc>/)?.[1] ?? "",
+        lastmod: m[0].match(/<lastmod>(.*?)<\/lastmod>/)?.[1],
+      }))
+      .filter((e) => e.lastmod && new Date(e.lastmod).valueOf() > tomorrow)
+      .map((e) => `${e.url} → ${e.lastmod}`);
+
+    expect(future, `future lastmod values:\n${future.join("\n")}`).toEqual([]);
+  });
+
+  test("robots.txt blocks the legacy crawl trap for every user-agent group", async ({
+    request,
+  }) => {
+    // robots.txt is most-specific-user-agent-wins: a named User-agent group
+    // overrides the `*` group entirely instead of merging with it. The AI-crawler
+    // block silently exempted Bingbot and every AI crawler from these rules until
+    // 2026-08-08. Splitting a vendor back out into its own group would reopen the
+    // trap with nothing else failing, so assert per-group rather than file-wide.
+    const response = await request.get("/robots.txt");
+    expect(response.status()).toBe(200);
+    const body = await response.text();
+
+    const REQUIRED = ["/*?lid=", "/*&lid=", "/*_page=", "/*elementor_"];
+
+    // Split into groups: consecutive User-agent lines, then that group's rules.
+    const groups: { agents: string[]; rules: string[] }[] = [];
+    for (const raw of body.split("\n")) {
+      const line = raw.replace(/#.*$/, "").trim();
+      if (!line) continue;
+      const [key, ...rest] = line.split(":");
+      const value = rest.join(":").trim();
+      if (/^user-agent$/i.test(key)) {
+        const last = groups[groups.length - 1];
+        if (last && last.rules.length === 0) last.agents.push(value);
+        else groups.push({ agents: [value], rules: [] });
+      } else if (/^disallow$/i.test(key) && groups.length > 0) {
+        groups[groups.length - 1].rules.push(value);
+      }
+    }
+    expect(groups.length).toBeGreaterThan(0);
+
+    const failures = groups
+      .filter((g) => REQUIRED.some((rule) => !g.rules.includes(rule)))
+      .map((g) => `[${g.agents.join(", ")}] missing: ${REQUIRED.filter((r) => !g.rules.includes(r)).join(", ")}`);
+
+    expect(failures, `user-agent groups not covered by the crawl-trap rules:\n${failures.join("\n")}`)
+      .toEqual([]);
+  });
+
   test("every internal link in llms.txt resolves without a redirect", async ({ request }) => {
     // llms.txt is hand-curated, so its links rot silently as categories are
     // renamed or posts move. Check each one directly (no redirect-following:

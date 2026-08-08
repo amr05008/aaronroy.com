@@ -24,36 +24,90 @@ const BLOG_DIR = fileURLToPath(new URL('./src/content/blog', import.meta.url));
  * discounts <lastmod> wholesale on sites that do it.
  *
  * This parses frontmatter by hand rather than using the content collection API,
- * which isn't available inside astro.config.mjs. Only the three fields below are
- * read, so the parsing stays trivial.
+ * which isn't available inside astro.config.mjs. Only the four fields below are
+ * read, so the parsing stays small — but every one of them throws rather than
+ * degrading. A partial lastmod map is worse than no build: it ships a sitemap
+ * that looks complete and silently misinforms Google. All three failure modes
+ * guarded here were live bugs found by grilling the first version of this file.
  */
+
+/** Fail the build loudly — a silent SEO regression is invisible for months. */
+function fail(file, message) {
+  throw new Error(`[sitemap lastmod] ${file}: ${message}`);
+}
+
+const unquote = (s) => s.trim().replace(/^["']|["']$/g, '').trim();
+
+/**
+ * Approximates Astro's content-collection slug (github-slugger): lowercase,
+ * whitespace/underscores to hyphens, drop the rest. This is deliberately an
+ * approximation — the coverage assertion in serialize() is the real guarantee.
+ * If Astro's slugging ever diverges from this, the build fails with the exact
+ * URL rather than quietly omitting a <lastmod>.
+ */
+const slugifyFilename = (name) =>
+  name
+    .toLowerCase()
+    .trim()
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-{2,}/g, '-');
+
+/**
+ * Categories accept both YAML forms, because both are valid and both pass the
+ * Zod schema: inline (`categories: ["A", "B"]`) and block list (`- A` lines).
+ * Returns null when the key is absent, so the caller can tell "no categories"
+ * apart from "categories present but unparsed" — the latter is a bug, not data.
+ */
+function parseCategories(body) {
+  if (!/^categories:/m.test(body)) return null;
+
+  const inline = body.match(/^categories:[ \t]*\[([^\]]*)\][ \t]*$/m);
+  if (inline) return inline[1].split(',').map(unquote).filter(Boolean);
+
+  const block = body.match(/^categories:[ \t]*\r?\n((?:[ \t]*-[ \t]*\S.*\r?\n?)+)/m);
+  if (block) {
+    return block[1]
+      .split(/\r?\n/)
+      .map((line) => unquote(line.replace(/^[ \t]*-[ \t]*/, '')))
+      .filter(Boolean);
+  }
+  return [];
+}
+
 function readBlogDates() {
   const posts = [];
+  const now = Date.now();
+
   for (const file of fs.readdirSync(BLOG_DIR)) {
     if (!/\.mdx?$/.test(file)) continue;
     const raw = fs.readFileSync(path.join(BLOG_DIR, file), 'utf8');
     const fm = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-    if (!fm) continue;
+    if (!fm) fail(file, 'no frontmatter block found');
     const body = fm[1];
-    const field = (name) => body.match(new RegExp(`^${name}:\\s*(.+)$`, 'm'))?.[1].trim();
+    const field = (name) => body.match(new RegExp(`^${name}:[ \\t]*(.+)$`, 'm'))?.[1].trim();
 
-    if (/^draft:\s*true\s*$/m.test(body)) continue; // drafts aren't in the sitemap
+    if (/^draft:[ \t]*true[ \t]*$/m.test(body)) continue; // drafts aren't in the sitemap
 
     const pubDate = field('pubDate');
-    if (!pubDate) continue;
-    const stamp = field('updatedDate') || pubDate;
-    const date = new Date(stamp.replace(/^["']|["']$/g, ''));
-    if (Number.isNaN(date.valueOf())) continue;
+    if (!pubDate) fail(file, 'published post has no pubDate');
 
-    // Astro derives a post's slug from its filename, lowercased.
-    const slug = file.replace(/\.mdx?$/, '').toLowerCase();
-    const categories = (field('categories') || '')
-      .replace(/^\[|\]$/g, '')
-      .split(',')
-      .map((c) => c.trim().replace(/^["']|["']$/g, ''))
-      .filter(Boolean);
+    const stamp = unquote(field('updatedDate') || pubDate);
+    const date = new Date(stamp);
+    if (Number.isNaN(date.valueOf())) fail(file, `unparseable date "${stamp}"`);
 
-    posts.push({ slug, date, categories });
+    // A future lastmod is worse than none: Google discounts it, and via the
+    // listing pages one typo'd year poisons the homepage too.
+    if (date.valueOf() > now) {
+      fail(file, `date "${stamp}" is in the future — a future <lastmod> is discounted by Google`);
+    }
+
+    const categories = parseCategories(body);
+    if (categories !== null && categories.length === 0) {
+      fail(file, 'has a `categories:` key that parsed to nothing — check the YAML form');
+    }
+
+    posts.push({ slug: slugifyFilename(file.replace(/\.mdx?$/, '')), date, categories: categories ?? [] });
   }
   return posts;
 }
@@ -81,7 +135,9 @@ function buildLastmodMap() {
   map[`${SITE}/writing/`] = newestOverall;
   map[`${SITE}/categories/`] = newestOverall;
 
-  // Mirrors slugify() in src/utils/posts.ts — keep the two in step.
+  // Mirrors slugify() in src/utils/posts.ts. Nothing can import that TS module
+  // here, so drift is caught instead of prevented: if these disagree, a
+  // /category/<slug>/ page comes out with no lastmod and serialize() throws.
   const slugify = (str) => str.toLowerCase().replace(/\s+/g, '-');
   /** @type {Record<string, typeof posts>} */
   const byCategory = {};
@@ -98,6 +154,55 @@ function buildLastmodMap() {
 }
 
 const LASTMOD = buildLastmodMap();
+
+/**
+ * The only URLs allowed into the sitemap without a <lastmod>. Everything else
+ * must resolve to a real date, so a slug-derivation drift fails the build
+ * instead of silently shipping a post with no freshness signal.
+ */
+const LASTMOD_EXEMPT = new Set([`${SITE}/about/`]);
+
+/**
+ * Verify the emitted sitemap after the build, and fail if it's wrong.
+ *
+ * This lives in `astro:build:done` rather than in sitemap's `serialize()` for a
+ * measured reason: @astrojs/sitemap catches whatever serialize throws, logs it,
+ * writes NO sitemap, and still exits 0 — so the guard that looks like it fails
+ * loud actually ships a site with no sitemap at all. Throwing from this hook
+ * exits non-zero and stops the deploy.
+ */
+function assertSitemapLastmod() {
+  return {
+    name: 'assert-sitemap-lastmod',
+    hooks: {
+      'astro:build:done': ({ dir, logger }) => {
+        const dirPath = fileURLToPath(dir);
+        const files = fs.readdirSync(dirPath).filter((f) => /^sitemap-\d+\.xml$/.test(f));
+        if (files.length === 0) throw new Error('[sitemap lastmod] no sitemap-N.xml was emitted');
+
+        const missing = [];
+        let checked = 0;
+        for (const file of files) {
+          const xml = fs.readFileSync(path.join(dirPath, file), 'utf8');
+          for (const block of xml.match(/<url>[\s\S]*?<\/url>/g) ?? []) {
+            const url = block.match(/<loc>(.*?)<\/loc>/)?.[1];
+            if (!url) continue;
+            checked++;
+            if (!/<lastmod>/.test(block) && !LASTMOD_EXEMPT.has(url)) missing.push(url);
+          }
+        }
+        if (missing.length > 0) {
+          throw new Error(
+            `[sitemap lastmod] ${missing.length} URL(s) emitted with no <lastmod>:\n` +
+              missing.map((u) => `  - ${u}`).join('\n') +
+              `\nThe slug or category slugify in astro.config.mjs has drifted from Astro's.`
+          );
+        }
+        logger.info(`lastmod verified on ${checked - LASTMOD_EXEMPT.size} of ${checked} sitemap URLs`);
+      },
+    },
+  };
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -120,6 +225,8 @@ export default defineConfig({
       // would send crawlers mixed signals.
       filter: (page) => ![`${SITE}/subscribed/`, `${SITE}/confirmed/`].includes(page),
       // Attach <lastmod> where we have an honest date for it (see buildLastmodMap).
+      // Coverage is enforced afterwards by assertSitemapLastmod() — throwing from
+      // here would be swallowed by the integration and exit 0.
       serialize: (item) => {
         const lastmod = LASTMOD[item.url];
         if (lastmod) item.lastmod = lastmod;
@@ -127,5 +234,6 @@ export default defineConfig({
       },
     }),
     tailwind(),
+    assertSitemapLastmod(),
   ],
 });
