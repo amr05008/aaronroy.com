@@ -157,8 +157,8 @@ If you run into any issues along the way, screenshot or copy and paste your erro
 
 ## What's Next
 
-For me? Getting more laps in at Prospect Park so that 2026 chart looks better.
+Getting more laps in at Prospect Park so that 2026 chart looks better!
 
-While I love the community-driven MCP servers, I'm also hoping for official MCP servers from Strava and Zwift.
+While I love the community-driven MCP servers, I'm also hoping for official MCP servers from Strava and Zwift (*Update!* [Strava launched an official MCP server](https://support.strava.com/en-us/articles/15401531-strava-mcp-connector) in June 2026).
 
-I'm just at the beginning of exploring what this MCP server could do against my data but one idea I plan to explore ASAP is creating training plans to fit my goals and available time to train in the spring.
+I'm just at the beginning of exploring what this MCP server could do against my data but one idea I plan to explore ASAP is creating training plans to improve my fitness for [cyclocross season](https://aaronroy.com/reflecting-on-cx-2025/) next year.

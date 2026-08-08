@@ -16,7 +16,7 @@ Next season, I hope to race the same amount or more with a focus on improving my
 
 Here are my learnings from my first season and resources others in NYC exploring CX might find helpful.
 
-## Getting started in CX in NYC
+## Cyclocross resources in NY
 
 I had no idea what I was doing to start with. After some deep internet research I stumbled into the [“To Be Determined” Journal](https://www.tobedetermined.cc/cyclocross) which was a wealth of resources about CX racing and their experiences racing around New England. 
 
@@ -55,9 +55,9 @@ I had one of my best (worst?) falls of the year while practicing at Cunningham P
     </figcaption>
   </figure>
 
-## Race report:
+## Getting started with racing 
 
-Take the following with a grain of salt. I am brand new to CX racing overall, so my impressions are naive and based on very little experience thus far. 
+Take the following race reports with a grain of salt. I am brand new to CX racing overall, so my impressions are naive and based on very little experience thus far. 
 
 ### [Hidden Valley CX](https://projectmayhemcx.com/hidden-valley-cx/)
 
