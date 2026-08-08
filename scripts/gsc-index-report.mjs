@@ -155,6 +155,19 @@ async function fetchSitemapUrls() {
   return urls;
 }
 
+/**
+ * Google's raw wording for a sitemap-known-but-never-crawled URL is "URL is
+ * unknown to Google", which reads like a discovery failure and isn't one. On
+ * 2026-08-08 the Sitemaps report showed sitemap-index.xml read successfully with
+ * all 58 pages discovered, while 14 of those same URLs reported "unknown" — they
+ * are queued, just never crawled. That wording sent this session chasing a
+ * non-existent sitemap bug, so relabel it at the source.
+ */
+function explainCoverage(state) {
+  if (/unknown to google/i.test(state)) return 'Queued from sitemap, never crawled';
+  return state;
+}
+
 async function inspect(token, siteUrl, inspectionUrl) {
   const response = await fetch(
     'https://searchconsole.googleapis.com/v1/urlInspection/index:inspect',
@@ -173,7 +186,7 @@ async function inspect(token, siteUrl, inspectionUrl) {
   return {
     url: inspectionUrl,
     verdict: result.verdict ?? 'UNKNOWN',
-    coverageState: result.coverageState ?? 'unknown',
+    coverageState: explainCoverage(result.coverageState ?? 'unknown'),
     lastCrawlTime: result.lastCrawlTime ?? null,
     indexingState: result.indexingState ?? null,
   };
@@ -181,7 +194,10 @@ async function inspect(token, siteUrl, inspectionUrl) {
 
 const readState = () => {
   try {
-    return JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'));
+    const saved = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'));
+    // Normalize the baseline through the same relabelling as fresh results, so
+    // changing a label can't masquerade as 14 URLs changing state overnight.
+    return Object.fromEntries(Object.entries(saved).map(([url, state]) => [url, explainCoverage(state)]));
   } catch {
     return null;
   }
