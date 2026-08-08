@@ -1,52 +1,67 @@
+# ---------------------------------------------------------------------------
+# Legacy Elementor crawl trap (WordPress era)
+#
+# The old site's paginated Elementor widgets emitted links that appended to the
+# existing query string instead of replacing it, generating unbounded URLs:
+#   /?lid=a5brl0cd3xn4&e9bc163a_page=2&7504590f_page=2&e9bc163a_page=3...
+# Astro serves the homepage (200) for any query string, so these all still
+# resolve and Google kept crawling them. As of the 2026-08-08 GSC export: 139
+# URLs in "Crawled - currently not indexed", plus most of the ~2,225 in
+# "Alternate page with proper canonical tag".
+#
+# Rule notes:
+#   - `?lid=` AND `&lid=` are both needed: a leading-`?` pattern only matches
+#     when lid is the first param. `_page=` and `elementor_` need no such pair,
+#     they match in any position.
+#   - `/*lid=` (unanchored) was rejected: it would also block `?valid=`.
+#   - These four lines are repeated in the AI-crawler group below ON PURPOSE.
+#     robots.txt uses most-specific-user-agent-wins: a named `User-agent` group
+#     overrides the `*` group ENTIRELY rather than merging with it, so a bot
+#     with its own block ignores every rule up here.
+#
+# No current page uses any of these params. Verified against all 58 sitemap
+# URLs and all 172 GSC drilldown URLs.
+# ---------------------------------------------------------------------------
+
 # Default: allow all crawlers full access
 User-agent: *
 Allow: /
+Disallow: /*?lid=
+Disallow: /*&lid=
+Disallow: /*_page=
+Disallow: /*elementor_
 
 # AI assistants & answer engines are explicitly welcomed. This content may be
 # read, cited, and used by AI tools — including for both live retrieval and
 # model training. See /llms.txt for a curated guide to the best content.
+#
+# Grouped into a single stanza (multiple User-agent lines sharing one ruleset)
+# so the crawl-trap rules above apply to them too. Listing each vendor
+# separately, as this file used to, silently exempted all of them.
 
 # OpenAI
 User-agent: GPTBot
-Allow: /
-
 User-agent: OAI-SearchBot
-Allow: /
-
 User-agent: ChatGPT-User
-Allow: /
-
 # Anthropic
 User-agent: ClaudeBot
-Allow: /
-
 User-agent: Claude-Web
-Allow: /
-
 User-agent: anthropic-ai
-Allow: /
-
 # Perplexity
 User-agent: PerplexityBot
-Allow: /
-
 User-agent: Perplexity-User
-Allow: /
-
 # Google (Gemini training & grounding; normal Search uses Googlebot)
 User-agent: Google-Extended
-Allow: /
-
 # Apple (Apple Intelligence)
 User-agent: Applebot-Extended
-Allow: /
-
 # Common Crawl (dataset used by many model trainers)
 User-agent: CCBot
-Allow: /
-
 # Microsoft / Bing
 User-agent: Bingbot
 Allow: /
+Disallow: /*?lid=
+Disallow: /*&lid=
+Disallow: /*_page=
+Disallow: /*elementor_
 
 Sitemap: https://aaronroy.com/sitemap-index.xml
