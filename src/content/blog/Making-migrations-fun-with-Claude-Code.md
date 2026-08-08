@@ -2,6 +2,7 @@
 title: "Making migrations fun with Claude Code"
 description: "Claude Code made completing a boring migration fun. Here is how I used Claude Code to migrate my WordPress blog to Astro in just 6 hours."
 pubDate: 2025-10-10
+updatedDate: 2026-08-08
 categories: ["Projects", "Tutorials"]
 heroImage: "/og-images/making-migrations-fun-with-claude-code.png"
 ---
