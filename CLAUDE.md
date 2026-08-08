@@ -324,6 +324,21 @@ The site includes comprehensive SEO features:
   whole live sitemap. The `blog-publish` skill pings it after live-verification — no CI job, on purpose.
   Getting *into* Bing's index in the first place was done via Bing Webmaster Tools "Import from GSC"
   (Aaron's dashboard, 2026-07-16); IndexNow only accelerates discovery of new/changed URLs
+- **GSC indexing report**: `node scripts/gsc-index-report.mjs [--post] [--dry-run]` sweeps every URL
+  in the live sitemap through the Search Console **URL Inspection API** and reports what isn't
+  indexed, what hasn't been crawled in 60+ days, and what changed since the last run (state in
+  `~/.config/aaronroy-indexing/gsc-state.json`). `--post` sends it to #content-studio.
+  ⚠️ **There is no API for the Index Coverage report** — that one is export-only, which is why the
+  2026-08-08 audit needed a hand-exported CSV. URL Inspection is the closest equivalent and is
+  actually better here: it covers *our* 58 URLs rather than the thousands of legacy junk URLs
+  Coverage lumps in. Quota is 2,000/day, 600/min per property, so a full sweep is cheap.
+  Auth is a GCP **service account** (no `googleapis` dep — the RS256 JWT is signed with
+  `node:crypto`), configured via `GSC_SERVICE_ACCOUNT_JSON` in `~/.config/aaronroy-indexing/env`
+  (either the JSON itself or a path to the key file). Setup: create a Cloud project → enable the
+  Search Console API → create a service account + JSON key → in Search Console, add the
+  service-account email as a user on the property. The property string is auto-detected, since
+  domain (`sc-domain:`) and URL-prefix properties need different values and guessing returns a 403
+  that reads like a permissions error.
 - **Legacy WordPress paths**: `/feed` and `/feed/` 301 to `/rss.xml` (vercel.json `redirects`). Other
   WP-era paths (`/tag/*`, `?p=<id>`) were left alone pending real 404 evidence from GSC/Bing WMT
 - **Homepage meta**: Custom description set in index.astro (not using generic fallback)
