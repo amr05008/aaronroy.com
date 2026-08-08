@@ -4,6 +4,7 @@ Quick reference for all Claude Code working sessions on this project.
 
 | Date | Summary | Tags |
 |------|---------|------|
+| 2026-08-08 | [GSC Coverage audit: blocked legacy Elementor crawl trap, sitemap lastmod with fail-loud build invariants, Search Console indexing report, fixed stale blog-review category list](2026-08-08-fix-gsc-coverage-findings.md) | seo, gsc, robots, sitemap, lastmod, crawl-budget, testing, skills, monitoring |
 | 2026-07-23 | [Email notification layer: Buttondown form (posts + about), subscribe-flow pages, PostHog tiles, dep-vuln cleanup (spans 07-23/24)](2026-07-23-add-email-notify.md) | email, buttondown, posthog, seo, dependencies |
 | 2026-07-16 | [IndexNow submission (key file + script + blog-publish ping) and /feed/ redirect to fix zero Bing-family indexing](2026-07-16-add-bing-indexing.md) | seo, bing, indexnow, redirects |
 | 2026-07-06 | [Add blog-publish skill (gated one-commit publish pipeline, TDD-tested); delete legacy wrap-session](2026-07-06-add-blog-publish-skill.md) | skills, publishing, workflow |

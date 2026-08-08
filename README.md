@@ -64,7 +64,8 @@ npm run test:quick
 │   └── smoke.spec.ts   # Playwright smoke tests
 ├── scripts/
 │   ├── count-categories.js           # Content analysis utility
-│   └── indexnow-submit.js            # Submit URLs to IndexNow (Bing-family engines)
+│   ├── indexnow-submit.js            # Submit URLs to IndexNow (Bing-family engines)
+│   └── gsc-index-report.mjs          # Search Console indexing report (monthly, via launchd)
 ├── src/
 │   ├── config.ts        # Site metadata (title, author, social profiles, LATEST_COUNT)
 │   ├── components/
