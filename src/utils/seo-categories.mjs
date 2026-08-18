@@ -23,26 +23,42 @@
  * NOTE: noindexing an archive does NOT hide its posts. Every post keeps its own
  * indexable URL; only the list page drops out.
  *
- * Selection rule — a category stays indexable when BOTH hold:
- *   - it has enough posts to be a real hub (>= 4 of the 39 published), and
- *   - it matches what Aaron writes now, so it could plausibly answer a search.
+ * Selection rule — THIS LIST MIRRORS THE "Browse by topic" SECTION OF
+ * `public/llms.txt`, and that file is the source of truth for which topics are
+ * worth surfacing. It's a hand-curated answer to exactly this question, so it
+ * wins over any heuristic (an earlier draft of this file derived a shorter list
+ * from post counts, which contradicted llms.txt on three categories and would
+ * have had the site telling AI crawlers to browse topics it told search
+ * crawlers not to index).
  *
- * Post counts at time of writing (2026-08-17):
- *   kept:    projects 10 · tutorials 10 · product 10 · agents 4
- *   dropped: 3d-printing 7 · presentations 6 · wami 5 · startups 4 · bikes 3 ·
- *            3dprinteros 3 · teachable 2 · bond 2 · glutenornot 2 ·
- *            cybersecurity 2 · student-loans 2 · life 1
+ * **If you change one, change the other.** Nothing enforces it automatically:
+ * the llms.txt smoke test only checks those links resolve, and they still do
+ * when a page is noindex.
  *
- * 3d-printing (7) and presentations (6) clear the size bar but fail the second
- * test — two careers back, and not topics being invested in. wami / bond /
- * 3dprinteros / teachable are company names with no search demand.
+ * Post counts at time of writing (2026-08-17), of 39 published:
+ *   kept:    projects 10 · tutorials 10 · product 10 · 3d-printing 7 ·
+ *            agents 4 · startups 4 · bikes 3
+ *   dropped: presentations 6 · wami 5 · 3dprinteros 3 · teachable 2 · bond 2 ·
+ *            glutenornot 2 · cybersecurity 2 · student-loans 2 · life 1
  *
- * Changing this list is a one-line edit; both behaviours follow automatically.
- * If a dropped category later becomes a real topic hub (curated intro + internal
- * links, not just a post list — see plans/seo-aeo-learnings-from-vhpc-2026-06.md),
- * add it back here and it re-enters the sitemap on the next build.
+ * The dropped set is company names with no search demand (wami, bond,
+ * 3dprinteros, teachable) plus archives too thin to be a hub (<= 6 posts and
+ * not curated in llms.txt).
+ *
+ * Adding a category back re-enters it in the sitemap on the next build. If a
+ * dropped one later becomes a real topic hub (curated intro + internal links,
+ * not just a post list — see plans/seo-aeo-learnings-from-vhpc-2026-06.md),
+ * add it here and to llms.txt together.
  */
-export const INDEXABLE_CATEGORIES = ['agents', 'product', 'projects', 'tutorials'];
+export const INDEXABLE_CATEGORIES = [
+  'agents',
+  'bikes',
+  '3d-printing',
+  'product',
+  'projects',
+  'startups',
+  'tutorials',
+];
 
 /** True when this category slug should carry `noindex` / stay out of the sitemap. */
 export const isThinCategory = (slug) => !INDEXABLE_CATEGORIES.includes(slug);
