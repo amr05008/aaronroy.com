@@ -227,8 +227,12 @@ export default defineConfig({
       // archives Google already declines to index (see src/utils/seo-categories.mjs).
       filter: (page) => {
         if ([`${SITE}/subscribed/`, `${SITE}/confirmed/`].includes(page)) return false;
-        const category = page.match(/^https:\/\/aaronroy\.com\/category\/([^/]+)\/$/);
-        return !category || !isThinCategory(category[1]);
+        // Built from SITE, not a literal domain: a hardcoded host silently stops
+        // matching if SITE ever changes, which would quietly return every thin
+        // archive to the sitemap while it's still noindex.
+        if (!page.startsWith(`${SITE}/category/`)) return true;
+        const slug = page.slice(`${SITE}/category/`.length).replace(/\/$/, '');
+        return !isThinCategory(slug);
       },
       // Attach <lastmod> where we have an honest date for it (see buildLastmodMap).
       // Coverage is enforced afterwards by assertSitemapLastmod() — throwing from

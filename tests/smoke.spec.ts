@@ -590,17 +590,50 @@ test.describe("category archive indexability", () => {
       }
     }
 
-    expect(listed.length).toBeGreaterThan(0); // guard: a broken regex must not pass vacuously
+    // Guard against passing vacuously: a filter that dropped everything, or a
+    // regex that matched nothing, would otherwise look like a pass.
+    expect(listed.sort()).toEqual([
+      "3d-printing",
+      "agents",
+      "bikes",
+      "product",
+      "projects",
+      "startups",
+      "tutorials",
+    ]);
+
     for (const slug of listed) {
       const body = await (await request.get(`/category/${slug}/`)).text();
       expect(body, `/category/${slug}/ is in the sitemap but noindex`).not.toContain("noindex");
     }
   });
 
+  test("llms.txt only recommends categories we let Google index", async ({ request }) => {
+    // llms.txt's "Browse by topic" list is the curated source of truth for which
+    // topics are worth surfacing, and INDEXABLE_CATEGORIES mirrors it by hand.
+    // Nothing else enforces that: the llms.txt link test only checks the URLs
+    // resolve, which they still do when a page is noindex. Without this test the
+    // two drift silently, and the site ends up telling AI crawlers to browse
+    // topics it tells search crawlers not to index.
+    const llms = await (await request.get("/llms.txt")).text();
+    const recommended = [
+      ...llms.matchAll(/https:\/\/aaronroy\.com\/category\/([^/]+)\//g),
+    ].map((m) => m[1]);
+
+    expect(recommended.length).toBeGreaterThan(0);
+    for (const slug of recommended) {
+      const body = await (await request.get(`/category/${slug}/`)).text();
+      expect(body, `llms.txt recommends /category/${slug}/ but it is noindex`).not.toContain(
+        "noindex"
+      );
+    }
+  });
+
   test("posts in a noindex category are still indexable", async ({ page }) => {
     // Noindexing an archive must never leak onto the posts it lists — that is
-    // the one way this change could do real damage.
-    const response = await page.goto("/3d-printing-and-guns/");
+    // the one way this change could do real damage. This post's only category
+    // (student-loans) is noindex, so it exercises the leak path directly.
+    const response = await page.goto("/lessons-learned-refinancing-student-loan-debt/");
     expect(response?.status()).toBe(200);
 
     await expect(page.locator('meta[name="robots"]')).toHaveCount(0);

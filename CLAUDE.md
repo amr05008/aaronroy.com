@@ -82,6 +82,31 @@ The site uses Playwright for smoke testing. Tests validate that the site builds 
   action URL from config; absent on homepage/writing/categories) and the
   subscribe-flow landing pages (`/subscribed/`, `/confirmed/`: render, noindex,
   excluded from sitemap)
+- **Category archive indexability** — thin archives are noindex and excluded
+  from the sitemap; the kept set matches llms.txt; noindex never leaks onto the
+  posts an archive lists (see *Category indexability* below)
+
+### Category indexability
+
+Only the categories in `INDEXABLE_CATEGORIES` (`src/utils/seo-categories.mjs`)
+are indexable. The rest render normally and stay linked from `/categories/`, but
+carry `noindex` and are excluded from the sitemap — the same both-places rule as
+the subscribe-flow pages, since a noindex page listed in the sitemap sends
+crawlers mixed signals.
+
+**Why:** GSC reported "Crawled – currently not indexed" on thin archives
+(2026-08-16). That status is Google's judgment, not a fault — an archive is a
+list of titles whose content lives on the posts it links to. All 16 categories
+sat in the sitemap, so the site kept requesting indexing that was never coming.
+
+**The list mirrors the "Browse by topic" section of `public/llms.txt`**, which is
+the curated source of truth for which topics are worth surfacing. **Change one,
+change the other** — the `llms.txt only recommends categories we let Google
+index` smoke test enforces it, because the older llms.txt link test only checks
+those URLs resolve, and they still do when a page is noindex.
+
+`noindex` alone, never `noindex, nofollow`: `follow` is the default, and links
+to the real posts must still pass through.
 
 ### Running Tests
 
