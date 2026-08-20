@@ -1,7 +1,7 @@
 ---
 title: "What it costs to get LLMs to produce usable work"
 description: "Testing various LLM models to understand cost per usable result."
-pubDate: 2026-08-18
+pubDate: 2026-08-19
 categories: ["Agents", "Projects"]
 heroImage: "/og-images/what-it-costs-to-get-llms-to-produce-usable-work.png"
 ---
