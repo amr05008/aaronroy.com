@@ -61,7 +61,8 @@ npm run test:quick
 │   ├── robots.txt       # Search engine + AI crawler directives
 │   └── llms.txt         # Curated site map for AI tools (AEO)
 ├── tests/
-│   └── smoke.spec.ts   # Playwright smoke tests
+│   ├── smoke.spec.ts   # Playwright smoke tests
+│   └── related.spec.ts # Related-reading ranking unit tests
 ├── scripts/
 │   ├── count-categories.js           # Content analysis utility
 │   ├── indexnow-submit.js            # Submit URLs to IndexNow (Bing-family engines)
@@ -71,7 +72,8 @@ npm run test:quick
 │   ├── components/
 │   │   ├── EmailNotify.astro       # Email-notify form at the bottom of posts (Buttondown)
 │   │   ├── PostHogAnalytics.astro  # PostHog analytics (emits nothing without PUBLIC_POSTHOG_KEY)
-│   │   └── PostNavigation.astro    # Older/newer post navigation on blog posts
+│   │   ├── PostNavigation.astro    # Older/newer post navigation on blog posts
+│   │   └── RelatedPosts.astro      # "Related reading" block on blog posts
 │   ├── content/
 │   │   ├── blog/        # Blog posts (Markdown/MDX)
 │   │   └── config.ts    # Content collections schema
@@ -92,7 +94,8 @@ npm run test:quick
 │   ├── styles/
 │   │   └── global.css   # Tailwind imports + image caption styling
 │   └── utils/
-│       └── posts.ts     # Post queries (draft filtering) + slugify()
+│       ├── posts.ts     # Post queries (draft filtering) + slugify()
+│       └── related.ts   # Related-reading ranking (relevance first, one coverage slot)
 └── docs/
     └── MIGRATION.md     # WordPress migration guide
 ```
@@ -111,7 +114,7 @@ Manually: create a new `.md` or `.mdx` file in `src/content/blog/`:
 ```markdown
 ---
 title: "Your Post Title"
-description: "Brief SEO description (155 characters max recommended)"
+description: "Brief description (120-160 chars): the meta description, also shown as the dek under the title"
 pubDate: 2025-01-15
 categories: ["Product Management", "Startups"]
 heroImage: "/og-images/your-post.png"  # Optional: Custom OG image for social sharing
@@ -123,7 +126,7 @@ Your content here...
 **Frontmatter Fields:**
 
 - **`title`** (required) - Post title, used in page title and meta tags
-- **`description`** (required) - SEO meta description, shown in search results
+- **`description`** (required, non-empty) - Meta description for search results, also rendered as the dek under the title on the post page
 - **`pubDate`** (required) - Publication date (YYYY-MM-DD format)
 - **`categories`** (optional) - Array of category strings
 - **`heroImage`** (optional) - Path to custom Open Graph image (1200×630px recommended)
@@ -291,7 +294,7 @@ const blog = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    description: z.string(),
+    description: z.string().min(1), // also rendered as the visible dek
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     categories: z.array(z.string()).optional(),
@@ -340,6 +343,8 @@ The site uses Playwright for smoke testing. Tests automatically discover blog po
 - Essential meta tags exist (title, description, canonical, OG)
 - Category links on blog posts (display, navigation, URL slugification)
 - Older/newer post navigation on blog posts
+- Post header dek (matches frontmatter, precedes the date line)
+- Related reading (never the current post or a draft, at most three, every post with a topical peer gets an inbound link); `tests/related.spec.ts` unit-tests the ranking rule on synthetic posts
 - RSS feed validity, auto-discovery link, and user-facing RSS links
 - Email notify form on posts and the about page (correct Buttondown action; absent on homepage/archives), and the
   subscribe-flow landing pages (render, noindex, excluded from sitemap)

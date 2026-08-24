@@ -126,6 +126,15 @@ npm run test
 npm run test:quick
 ```
 
+### Local gotchas
+
+- **Dates render a day early in local builds and previews.** `toLocaleDateString` renders
+  UTC-midnight `pubDate`s in the machine's timezone. Vercel builds in UTC, so production is
+  unaffected; use `TZ=UTC npm run build` (or `TZ=UTC npm run dev`) when checking dates locally.
+- **`npm run test` needs port 4321 free.** The Playwright config starts its own preview server
+  there and refuses to reuse a running one (on purpose: a running `npm run dev` would test drafts
+  and skip the fresh build). Stop the dev server first or the run fails before any test starts.
+
 ### First-Time Setup
 
 Playwright requires browser binaries. Install them once:
@@ -138,6 +147,7 @@ npx playwright install chromium
 
 - `playwright.config.ts` - Playwright configuration
 - `tests/smoke.spec.ts` - All smoke tests
+- `tests/related.spec.ts` - Related-reading ranking unit tests (synthetic posts, no browser)
 
 ### Adding New Blog Posts
 
@@ -423,8 +433,9 @@ means pushing to `main`.
 ## Email Notifications (Buttondown)
 
 A quiet email-capture form (`src/components/EmailNotify.astro`) renders at the
-bottom of every blog post (in `BlogPost.astro`, after the article, before
-`PostNavigation`) and on `/about/` inside the "Get in touch" section — **those
+bottom of every blog post (in `BlogPost.astro`, directly after the article and before
+`RelatedPosts` and `PostNavigation`; its `-mt-7` tucks it into the article's bottom padding, so
+anything inserted between the two overlaps it) and on `/about/` inside the "Get in touch" section — **those
 two placements only** (no homepage, archives, footer, or popups). It is a
 *notification layer, not a newsletter*: copy promises "an email when I post
 something new," button says "Notify me" (never "Subscribe").
