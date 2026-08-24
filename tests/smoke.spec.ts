@@ -639,3 +639,118 @@ test.describe("category archive indexability", () => {
     await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
   });
 });
+
+test.describe("post header and related reading", () => {
+  // Two changes to the post page, both aimed at the same span of markup.
+  //
+  // The `description` frontmatter was written on every post but never rendered
+  // in the visible body — it reached a meta tag and the JSON-LD only. Retrieval
+  // systems snapshot a short span anchored to the H1 and reuse it as the page's
+  // snippet regardless of query, and that span used to open on
+  // "August 19, 2026 - 14 min read - Agents, Projects".
+  //
+  // Related reading exists because the only post-to-post links were the
+  // chronological prev/next pair, leaving the archive a chain. These lock in
+  // both, including the ordering that makes the dek worth having at all.
+
+  // Read a post's description straight from frontmatter so the assertion can't
+  // drift with the page: a test that scraped the dek and compared it to itself
+  // would pass on an empty string.
+  function getDescription(filename: string): string {
+    const frontmatter =
+      readFileSync(join(contentDir, filename), "utf-8").match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
+    const raw = frontmatter.match(/description:\s*(.*)/)?.[1]?.trim() ?? "";
+    // Strip the YAML quotes first, then unescape and trim: several descriptions
+    // carry escaped inner quotes (\"Intro to 3D Printing\") and one has a
+    // trailing space inside its quotes, both of which a naive strip gets wrong.
+    return raw
+      .replace(/^["']|["']$/g, "")
+      .replace(/\\"/g, '"')
+      .trim();
+  }
+
+  test("post header renders the frontmatter description as a dek", async ({ page }) => {
+    const file = "what-it-costs-to-get-llms-to-produce-usable-work.md";
+    const expected = getDescription(file);
+    expect(expected.length).toBeGreaterThan(0);
+
+    await page.goto(`/${file.replace(/\.md$/, "")}/`);
+    await expect(page.locator("article header p").first()).toHaveText(expected);
+  });
+
+  test("every published post renders a non-empty dek", async ({ page }) => {
+    // Spot-checking one post would miss a layout regression that only fires on
+    // posts missing an optional field, so walk the whole set.
+    const failures: string[] = [];
+    for (const file of blogPostFiles.filter((f) => !isDraft(f))) {
+      const slug = file.replace(/\.(md|mdx)$/, "").toLowerCase();
+      await page.goto(`/${slug}/`);
+      const dek = (await page.locator("article header p").first().textContent())?.trim() ?? "";
+      if (dek !== getDescription(file)) failures.push(`${slug} — dek "${dek}"`);
+    }
+    expect(failures, `posts whose dek does not match frontmatter:\n${failures.join("\n")}`).toEqual(
+      [],
+    );
+  });
+
+  test("the dek comes before the date line, not after it", async ({ page }) => {
+    // This ordering is the entire point. If the meta line moves back above the
+    // dek, the snippet regresses to date-and-category chrome and every other
+    // assertion here still passes.
+    await page.goto("/what-it-costs-to-get-llms-to-produce-usable-work/");
+    const header = await page.locator("article header").innerHTML();
+    const dekIndex = header.indexOf("<p");
+    const timeIndex = header.indexOf("<time");
+    expect(dekIndex).toBeGreaterThan(-1);
+    expect(timeIndex).toBeGreaterThan(-1);
+    expect(dekIndex).toBeLessThan(timeIndex);
+  });
+
+  test("related reading lists other posts, never the current one", async ({ page }) => {
+    await page.goto("/what-it-costs-to-get-llms-to-produce-usable-work/");
+    const related = page.locator('aside[aria-labelledby="related-heading"]');
+    await expect(related).toBeVisible();
+
+    const links = await related.locator("a").evaluateAll((as) =>
+      as.map((a) => a.getAttribute("href")),
+    );
+    expect(links.length).toBeGreaterThan(0);
+    expect(links.length).toBeLessThanOrEqual(3);
+    expect(links).not.toContain("/what-it-costs-to-get-llms-to-produce-usable-work/");
+  });
+
+  test("related reading only links published posts", async ({ page }) => {
+    // A draft leaking in here would publish its URL sitewide.
+    await page.goto("/giving-agents-personal-context/");
+    const links = await page
+      .locator('aside[aria-labelledby="related-heading"] a')
+      .evaluateAll((as) => as.map((a) => a.getAttribute("href") ?? ""));
+
+    for (const href of links) {
+      const slug = href.replace(/^\/|\/$/g, "");
+      expect(publishedPosts, `related link ${href}`).toContain(slug);
+    }
+  });
+
+  test("no published post is orphaned from every other post", async ({ page, request }) => {
+    // The reason this work happened: 30 of 40 posts had no inbound link from any
+    // other post. Asserting the property directly means the guarantee survives
+    // changes to how related posts are chosen.
+    const inbound = new Map<string, number>(publishedPosts.map((s) => [s, 0]));
+
+    for (const slug of publishedPosts) {
+      const html = await (await request.get(`/${slug}/`)).text();
+      const body = html.replace(/<(header|footer|nav)[\s\S]*?<\/\1>/gi, " ");
+      for (const [, target] of body.matchAll(/href="\/([a-z0-9-]{4,})\/"/g)) {
+        if (inbound.has(target) && target !== slug) {
+          inbound.set(target, (inbound.get(target) ?? 0) + 1);
+        }
+      }
+    }
+
+    const orphans = [...inbound.entries()].filter(([, n]) => n === 0).map(([s]) => s);
+    expect(orphans, `posts with no inbound link from another post:\n${orphans.join("\n")}`).toEqual(
+      [],
+    );
+  });
+});

@@ -2,6 +2,7 @@
 import { type CollectionEntry } from 'astro:content';
 import BlogPost from '../layouts/BlogPost.astro';
 import { getPublishedPosts } from '../utils/posts';
+import { buildRelatedMap, type RelatedPost } from '../utils/related';
 
 type AdjacentPost = { slug: string; title: string } | null;
 
@@ -11,24 +12,33 @@ export async function getStaticPaths() {
   const sorted = posts.sort((a, b) =>
     a.data.pubDate.valueOf() - b.data.pubDate.valueOf() || a.slug.localeCompare(b.slug)
   );
+  // Built once for the whole set: selection balances inbound links across posts,
+  // which it can only do if it sees every post's choices together.
+  const related = buildRelatedMap(sorted);
+
   return sorted.map((post, i) => ({
     params: { slug: post.slug },
     props: {
       post,
       olderPost: sorted[i - 1] ? { slug: sorted[i - 1].slug, title: sorted[i - 1].data.title } : null,
       newerPost: sorted[i + 1] ? { slug: sorted[i + 1].slug, title: sorted[i + 1].data.title } : null,
+      // Resolved here rather than inside the component, matching how the
+      // adjacent posts above are passed: getStaticPaths already holds the full
+      // published set, so the component stays presentational.
+      relatedPosts: related.get(post.slug) ?? [],
     },
   }));
 }
 
-const { post, olderPost, newerPost } = Astro.props as {
+const { post, olderPost, newerPost, relatedPosts } = Astro.props as {
   post: CollectionEntry<'blog'>;
   olderPost: AdjacentPost;
   newerPost: AdjacentPost;
+  relatedPosts: RelatedPost[];
 };
 const { Content } = await post.render();
 ---
 
-<BlogPost {...post.data} olderPost={olderPost} newerPost={newerPost}>
+<BlogPost {...post.data} olderPost={olderPost} newerPost={newerPost} relatedPosts={relatedPosts}>
   <Content />
 </BlogPost>
