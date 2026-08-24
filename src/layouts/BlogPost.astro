@@ -2,8 +2,10 @@
 import BaseLayout from './BaseLayout.astro';
 import EmailNotify from '../components/EmailNotify.astro';
 import PostNavigation from '../components/PostNavigation.astro';
+import RelatedPosts from '../components/RelatedPosts.astro';
 import { AUTHOR } from '../config';
 import { slugify } from '../utils/posts';
+import type { RelatedPost } from '../utils/related';
 
 interface Props {
   title: string;
@@ -14,9 +16,10 @@ interface Props {
   categories?: string[];
   olderPost?: { slug: string; title: string } | null;
   newerPost?: { slug: string; title: string } | null;
+  relatedPosts?: RelatedPost[];
 }
 
-const { title, description, pubDate, updatedDate, heroImage, categories, olderPost, newerPost } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, categories, olderPost, newerPost, relatedPosts } = Astro.props;
 
 // Calculate reading time (rough estimate: 200 words per minute)
 const content = await Astro.slots.render('default');
@@ -51,7 +54,25 @@ const schemaImage = new URL(heroImage ?? '/og-images/aaron-roy-dot-com-og.png', 
 
     <!-- Article Header -->
     <header class="mb-12">
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-6 leading-tight">{title}</h1>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4 leading-tight">{title}</h1>
+
+      {/*
+        The frontmatter description, rendered as a standfirst.
+
+        It was previously written on every post but only ever reached a meta tag
+        and the JSON-LD — never the visible body. That mattered because retrieval
+        systems snapshot a short span anchored to the H1 and reuse it as the
+        page's snippet regardless of the query, and on this site that span opened
+        with "August 19, 2026 - 14 min read - Agents, Projects" followed by
+        whatever the first sentence happened to be. The flagship cost post never
+        mentioned its 309 model runs anywhere a machine would look.
+
+        Headline -> standfirst -> byline is also just the conventional editorial
+        order, and it earns its place for readers too: 47% of this site's traffic
+        arrives from LinkedIn on a single deep link, and the dek is what tells
+        someone what they've clicked into before committing to a 14-minute read.
+      */}
+      <p class="text-lg sm:text-xl text-gray-600 leading-relaxed mb-6">{description}</p>
 
       <div class="flex items-center gap-3 text-sm text-gray-600">
         <time datetime={pubDate.toISOString()}>
@@ -105,6 +126,8 @@ const schemaImage = new URL(heroImage ?? '/og-images/aaron-roy-dot-com-og.png', 
   </article>
 
   <EmailNotify />
+
+  <RelatedPosts posts={relatedPosts ?? []} />
 
   <PostNavigation olderPost={olderPost ?? null} newerPost={newerPost ?? null} />
 

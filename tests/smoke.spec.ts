@@ -3,6 +3,7 @@ import { readdirSync, readFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { BUTTONDOWN_USERNAME, LATEST_COUNT } from "../src/config";
+import { RELATED_POST_LIMIT } from "../src/utils/related";
 
 // Dynamically read blog posts from content directory
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -637,5 +638,146 @@ test.describe("category archive indexability", () => {
     expect(response?.status()).toBe(200);
 
     await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
+  });
+});
+
+test.describe("post header and related reading", () => {
+  // Two changes to the post page, both aimed at the same span of markup.
+  //
+  // The `description` frontmatter was written on every post but never rendered
+  // in the visible body — it reached a meta tag and the JSON-LD only. Retrieval
+  // systems snapshot a short span anchored to the H1 and reuse it as the page's
+  // snippet regardless of query, and that span used to open on
+  // "August 19, 2026 - 14 min read - Agents, Projects".
+  //
+  // Related reading exists because the only post-to-post links were the
+  // chronological prev/next pair, leaving the archive a chain. These lock in
+  // both, including the ordering that makes the dek worth having at all.
+
+  // Read a post's description straight from frontmatter so the assertion can't
+  // drift with the page: a test that scraped the dek and compared it to itself
+  // would pass on an empty string.
+  function getDescription(filename: string): string {
+    const frontmatter =
+      readFileSync(join(contentDir, filename), "utf-8").match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
+    const raw = frontmatter.match(/description:\s*(.*)/)?.[1]?.trim() ?? "";
+    // Strip the YAML quotes first, then unescape and trim: several descriptions
+    // carry escaped inner quotes (\"Intro to 3D Printing\") and one has a
+    // trailing space inside its quotes, both of which a naive strip gets wrong.
+    return raw
+      .replace(/^["']|["']$/g, "")
+      .replace(/\\"/g, '"')
+      .trim();
+  }
+
+  test("post header renders the frontmatter description as a dek", async ({ page }) => {
+    const file = "what-it-costs-to-get-llms-to-produce-usable-work.md";
+    const expected = getDescription(file);
+    expect(expected.length).toBeGreaterThan(0);
+
+    await page.goto(`/${file.replace(/\.md$/, "")}/`);
+    await expect(page.locator("article header p").first()).toHaveText(expected);
+  });
+
+  test("every published post renders a non-empty dek", async ({ page }) => {
+    // Spot-checking one post would miss a layout regression that only fires on
+    // posts missing an optional field, so walk the whole set.
+    const failures: string[] = [];
+    for (const file of blogPostFiles.filter((f) => !isDraft(f))) {
+      const slug = file.replace(/\.(md|mdx)$/, "").toLowerCase();
+      await page.goto(`/${slug}/`);
+      const dek = (await page.locator("article header p").first().textContent())?.trim() ?? "";
+      if (dek !== getDescription(file)) failures.push(`${slug} — dek "${dek}"`);
+    }
+    expect(failures, `posts whose dek does not match frontmatter:\n${failures.join("\n")}`).toEqual(
+      [],
+    );
+  });
+
+  test("the dek comes before the date line, not after it", async ({ page }) => {
+    // This ordering is the entire point. If the meta line moves back above the
+    // dek, the snippet regresses to date-and-category chrome and every other
+    // assertion here still passes.
+    await page.goto("/what-it-costs-to-get-llms-to-produce-usable-work/");
+    const header = await page.locator("article header").innerHTML();
+    const dekIndex = header.indexOf("<p ");
+    const timeIndex = header.indexOf("<time");
+    expect(dekIndex).toBeGreaterThan(-1);
+    expect(timeIndex).toBeGreaterThan(-1);
+    expect(dekIndex).toBeLessThan(timeIndex);
+  });
+
+  test("related reading lists other posts, never the current one", async ({ page }) => {
+    await page.goto("/what-it-costs-to-get-llms-to-produce-usable-work/");
+    const related = page.locator('aside[aria-labelledby="related-heading"]');
+    await expect(related).toBeVisible();
+
+    const links = await related.locator("a").evaluateAll((as) =>
+      as.map((a) => a.getAttribute("href")),
+    );
+    expect(links.length).toBeGreaterThan(0);
+    expect(links.length).toBeLessThanOrEqual(RELATED_POST_LIMIT);
+    expect(links).not.toContain("/what-it-costs-to-get-llms-to-produce-usable-work/");
+  });
+
+  test("related reading only links published posts", async ({ page }) => {
+    // A draft leaking in here would publish its URL sitewide.
+    await page.goto("/giving-agents-personal-context/");
+    const links = await page
+      .locator('aside[aria-labelledby="related-heading"] a')
+      .evaluateAll((as) => as.map((a) => a.getAttribute("href") ?? ""));
+
+    for (const href of links) {
+      const slug = href.replace(/^\/|\/$/g, "");
+      expect(publishedPosts, `related link ${href}`).toContain(slug);
+    }
+  });
+
+  test("every post with a topical peer is linked from at least one other post", async ({ request }) => {
+    // Related reading promises relevance first and coverage second: the third
+    // slot on every page goes to a topical match that few pages link to. A post
+    // with no category in common with any other (today: the lone `Life` post)
+    // is expected to be unlinked. Any other unlinked post means the ranking is
+    // starving a post it could have surfaced (in theory: four or more posts
+    // whose only peer is the same hub, competing for its one coverage slot).
+    //
+    // Inline `categories: [...]` only, which is every post today. A block-list
+    // form would parse to nothing and quietly exempt the post from the
+    // invariant, so refuse it here the way astro.config.mjs refuses an empty
+    // parse at build time.
+    const categoriesOf = (file: string): string[] => {
+      const frontmatter = readFileSync(join(contentDir, file), "utf-8").match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
+      const parsed =
+        frontmatter
+          .match(/categories:\s*\[(.*)\]/)?.[1]
+          ?.split(",")
+          .map((c) => c.trim().replace(/^["']|["']$/g, ""))
+          .filter(Boolean) ?? [];
+      if (/^categories:/m.test(frontmatter) && parsed.length === 0) {
+        throw new Error(`${file}: categories present but not parsed (inline [...] form expected)`);
+      }
+      return parsed;
+    };
+    const published = blogPostFiles
+      .filter((f) => !isDraft(f))
+      .map((f) => ({ slug: f.replace(/\.(md|mdx)$/, "").toLowerCase(), categories: categoriesOf(f) }));
+    const hasPeer = (p: { slug: string; categories: string[] }) =>
+      published.some((o) => o.slug !== p.slug && o.categories.some((c) => p.categories.includes(c)));
+
+    // Count only links inside Related reading sections, so this binds to the
+    // ranking rather than to whatever prose links happen to exist.
+    const inbound = new Map<string, number>(published.map((p) => [p.slug, 0]));
+    for (const { slug } of published) {
+      const html = await (await request.get(`/${slug}/`)).text();
+      const related = html.match(/<aside aria-labelledby="related-heading"[\s\S]*?<\/aside>/)?.[0] ?? "";
+      for (const [, target] of related.matchAll(/href="\/([a-z0-9-]{4,})\/"/g)) {
+        if (inbound.has(target) && target !== slug) {
+          inbound.set(target, (inbound.get(target) ?? 0) + 1);
+        }
+      }
+    }
+
+    const starved = published.filter((p) => inbound.get(p.slug) === 0 && hasPeer(p)).map((p) => p.slug);
+    expect(starved, `posts with a topical peer but no inbound link:\n${starved.join("\n")}`).toEqual([]);
   });
 });
