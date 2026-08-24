@@ -7,6 +7,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import expressiveCode from 'astro-expressive-code';
+import { isThinCategory } from './src/utils/seo-categories.mjs';
 
 const SITE = 'https://aaronroy.com';
 const BLOG_DIR = fileURLToPath(new URL('./src/content/blog', import.meta.url));
@@ -221,9 +222,18 @@ export default defineConfig({
     }),
     mdx(),
     sitemap({
-      // Subscribe-flow landing pages are noindex; listing them in the sitemap
-      // would send crawlers mixed signals.
-      filter: (page) => ![`${SITE}/subscribed/`, `${SITE}/confirmed/`].includes(page),
+      // Anything noindex must also stay out of the sitemap, or crawlers get
+      // mixed signals: subscribe-flow landing pages, and the thin category
+      // archives Google already declines to index (see src/utils/seo-categories.mjs).
+      filter: (page) => {
+        if ([`${SITE}/subscribed/`, `${SITE}/confirmed/`].includes(page)) return false;
+        // Built from SITE, not a literal domain: a hardcoded host silently stops
+        // matching if SITE ever changes, which would quietly return every thin
+        // archive to the sitemap while it's still noindex.
+        if (!page.startsWith(`${SITE}/category/`)) return true;
+        const slug = page.slice(`${SITE}/category/`.length).replace(/\/$/, '');
+        return !isThinCategory(slug);
+      },
       // Attach <lastmod> where we have an honest date for it (see buildLastmodMap).
       // Coverage is enforced afterwards by assertSitemapLastmod() — throwing from
       // here would be swallowed by the integration and exit 0.
