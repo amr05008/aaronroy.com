@@ -3,6 +3,7 @@ import { readdirSync, readFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { BUTTONDOWN_USERNAME, LATEST_COUNT } from "../src/config";
+import { RELATED_POST_LIMIT } from "../src/utils/related";
 
 // Dynamically read blog posts from content directory
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -699,7 +700,7 @@ test.describe("post header and related reading", () => {
     // assertion here still passes.
     await page.goto("/what-it-costs-to-get-llms-to-produce-usable-work/");
     const header = await page.locator("article header").innerHTML();
-    const dekIndex = header.indexOf("<p");
+    const dekIndex = header.indexOf("<p ");
     const timeIndex = header.indexOf("<time");
     expect(dekIndex).toBeGreaterThan(-1);
     expect(timeIndex).toBeGreaterThan(-1);
@@ -715,7 +716,7 @@ test.describe("post header and related reading", () => {
       as.map((a) => a.getAttribute("href")),
     );
     expect(links.length).toBeGreaterThan(0);
-    expect(links.length).toBeLessThanOrEqual(3);
+    expect(links.length).toBeLessThanOrEqual(RELATED_POST_LIMIT);
     expect(links).not.toContain("/what-it-costs-to-get-llms-to-produce-usable-work/");
   });
 
@@ -732,25 +733,51 @@ test.describe("post header and related reading", () => {
     }
   });
 
-  test("no published post is orphaned from every other post", async ({ page, request }) => {
-    // The reason this work happened: 30 of 40 posts had no inbound link from any
-    // other post. Asserting the property directly means the guarantee survives
-    // changes to how related posts are chosen.
-    const inbound = new Map<string, number>(publishedPosts.map((s) => [s, 0]));
+  test("every post with a topical peer is linked from at least one other post", async ({ request }) => {
+    // Related reading promises relevance first and coverage second: the third
+    // slot on every page goes to a topical match that few pages link to. A post
+    // with no category in common with any other (today: the lone `Life` post)
+    // is expected to be unlinked. Any other unlinked post means the ranking is
+    // starving a post it could have surfaced (in theory: four or more posts
+    // whose only peer is the same hub, competing for its one coverage slot).
+    //
+    // Inline `categories: [...]` only, which is every post today. A block-list
+    // form would parse to nothing and quietly exempt the post from the
+    // invariant, so refuse it here the way astro.config.mjs refuses an empty
+    // parse at build time.
+    const categoriesOf = (file: string): string[] => {
+      const frontmatter = readFileSync(join(contentDir, file), "utf-8").match(/^---\n([\s\S]*?)\n---/)?.[1] ?? "";
+      const parsed =
+        frontmatter
+          .match(/categories:\s*\[(.*)\]/)?.[1]
+          ?.split(",")
+          .map((c) => c.trim().replace(/^["']|["']$/g, ""))
+          .filter(Boolean) ?? [];
+      if (/^categories:/m.test(frontmatter) && parsed.length === 0) {
+        throw new Error(`${file}: categories present but not parsed (inline [...] form expected)`);
+      }
+      return parsed;
+    };
+    const published = blogPostFiles
+      .filter((f) => !isDraft(f))
+      .map((f) => ({ slug: f.replace(/\.(md|mdx)$/, "").toLowerCase(), categories: categoriesOf(f) }));
+    const hasPeer = (p: { slug: string; categories: string[] }) =>
+      published.some((o) => o.slug !== p.slug && o.categories.some((c) => p.categories.includes(c)));
 
-    for (const slug of publishedPosts) {
+    // Count only links inside Related reading sections, so this binds to the
+    // ranking rather than to whatever prose links happen to exist.
+    const inbound = new Map<string, number>(published.map((p) => [p.slug, 0]));
+    for (const { slug } of published) {
       const html = await (await request.get(`/${slug}/`)).text();
-      const body = html.replace(/<(header|footer|nav)[\s\S]*?<\/\1>/gi, " ");
-      for (const [, target] of body.matchAll(/href="\/([a-z0-9-]{4,})\/"/g)) {
+      const related = html.match(/<aside aria-labelledby="related-heading"[\s\S]*?<\/aside>/)?.[0] ?? "";
+      for (const [, target] of related.matchAll(/href="\/([a-z0-9-]{4,})\/"/g)) {
         if (inbound.has(target) && target !== slug) {
           inbound.set(target, (inbound.get(target) ?? 0) + 1);
         }
       }
     }
 
-    const orphans = [...inbound.entries()].filter(([, n]) => n === 0).map(([s]) => s);
-    expect(orphans, `posts with no inbound link from another post:\n${orphans.join("\n")}`).toEqual(
-      [],
-    );
+    const starved = published.filter((p) => inbound.get(p.slug) === 0 && hasPeer(p)).map((p) => p.slug);
+    expect(starved, `posts with a topical peer but no inbound link:\n${starved.join("\n")}`).toEqual([]);
   });
 });

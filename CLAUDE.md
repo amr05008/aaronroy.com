@@ -85,6 +85,12 @@ The site uses Playwright for smoke testing. Tests validate that the site builds 
 - **Category archive indexability** — thin archives are noindex and excluded
   from the sitemap; the kept set matches llms.txt; noindex never leaks onto the
   posts an archive lists (see *Category indexability* below)
+- **Post header dek**: every published post renders its frontmatter `description` as a visible
+  dek under the H1, and the dek precedes the date line
+- **Related reading**: never the current post, never a draft, at most three; and every post that
+  shares a category with another post has an inbound link from some other post.
+  `tests/related.spec.ts` unit-tests the ranking rule itself on synthetic posts. It runs inside the
+  normal Playwright suite, whose preview server needs a build to exist: `npm run test` on a fresh clone
 
 ### Category indexability
 
@@ -157,7 +163,7 @@ Just add your post and run `npm run test` to verify everything works.
 
 ### Content Collections
 Blog posts live in `src/content/blog/` as `.md` or `.mdx` files. Schema defined in `src/content/config.ts`:
-- Required: `title`, `description`, `pubDate`
+- Required: `title`, `description` (non-empty: it renders as the visible dek under the H1), `pubDate`
 - Optional: `updatedDate`, `categories`, `heroImage`, `draft`
 
 Posts are rendered via the catch-all route `[...slug].astro` which uses the `BlogPost` layout.
@@ -210,6 +216,24 @@ Change `draft: true` to `draft: false` or remove the `draft` field entirely (def
 
 ### Components
 - `PostNavigation.astro` - Older/newer post navigation rendered after each blog post article. Shows chronologically adjacent posts with title links and a "View Archive" link to `/writing`. Posts sorted ascending by date with secondary slug sort for deterministic ordering.
+- `RelatedPosts.astro` - "Related reading" block after the email form: up to three other posts
+  chosen at build time by `src/utils/related.ts` (see *Related reading* below).
+
+### Related reading
+
+`src/utils/related.ts` picks up to three posts for every post page, all at once at build
+time. Slots 1 and 2 are pure relevance: shared categories, weighted so a rare category counts
+more than a common one, newest first among equals. Slot 3 is the coverage slot: the topical
+match that the fewest other pages link to. Nothing is padded in, so a post with one peer shows
+one link and a post with no peers shows no section at all.
+
+**Relevance beats coverage, deliberately** (Aaron, 2026-08-23). An earlier rule let coverage
+win every tie and reached zero orphans, at the cost of a 2016 onboarding video outranking the
+June 2026 agents post on the PM-hiring post. A post ends up unlinked only if nothing shares a
+category with it (fix: a tag on the post, not a weaker rule) or, in theory, if four or more posts
+all have the same hub as their only peer and lose the race for its one coverage slot (never seen
+here; the smoke-test peer invariant fails loud if it happens).
+Peerless today: `in-appreciation-of-the-internet` (the lone `Life` post).
 
 ### Homepage Features
 
@@ -486,6 +510,9 @@ them — use GSC/Bing WMT for that question.
 
 ## Recent Changes
 
+- **2026-08-23**: Post page: frontmatter `description` rendered as a dek under the H1; "Related
+  reading" block (`RelatedPosts.astro` + `src/utils/related.ts`, relevance-first with one coverage
+  slot); 4 ranking unit tests + 6 new smoke tests
 - **2026-08-08**: GSC Coverage audit — blocked the legacy Elementor crawl trap in robots.txt (and
   collapsed the per-vendor AI-crawler blocks into one stanza, which had been silently exempting
   Bingbot); added sitemap `<lastmod>` with build-time invariants that hard-fail on future dates,
