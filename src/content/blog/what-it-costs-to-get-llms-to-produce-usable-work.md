@@ -1,7 +1,7 @@
 ---
 title: "What it costs to get LLMs to produce usable work"
 description: "Testing various LLM models to understand cost per usable result."
-pubDate: 2026-08-19
+pubDate: 2026-08-24
 categories: ["Agents", "Projects"]
 heroImage: "/og-images/what-it-costs-to-get-llms-to-produce-usable-work.png"
 ---
@@ -12,9 +12,15 @@ I went down the rabbit hole of wanting to understand the costs of accomplishing 
 
 What follows are my observations after 309 model runs across four experiments and $45.71 in cold hard cash.
 
-I ran these experiments on some of my personal projects and synthetic tasks. The entire repo including the prompts, results and findings you can check out here: [amr05008/cost-per-turn](https://github.com/amr05008/cost-per-turn).
-
 For some of the tasks, the "usable" standard is in the eye of the beholder. So you will see that even though the task may have been a success by the agent's standards, I still rejected the output because it was not up to the standards of which I would want to use it.
+
+The four experiments:
+1. Analyzing PostHog data 
+2. Creating a slide deck 
+3. Drafting release notes 
+4. Extracting action items from call notes (the most interesting one IMO)
+
+I ran these experiments on some of my personal projects and synthetic tasks. You can check out the full prompts, results and findings for each experiment here: [amr05008/cost-per-turn](https://github.com/amr05008/cost-per-turn).
 
 ## Start with tracking your per session costs
 
@@ -115,7 +121,7 @@ Opus produces higher fidelity slides than Kimi but also cost 9x more per accepta
 
 Unless it's a deck I need to make by hand to follow a certain format, I plan to continue using LLMs to produce presentations. Way better than spending an hour of my own time.
 
-## Experiment 3 - Creating release notes
+## Experiment 3 - Drafting release notes
 
 The task for this experiment was creating release notes from recent commits in a repo. I'm really tough on LLM writing so I went into this experiment not expecting a lot of usable results.
 
@@ -165,7 +171,7 @@ I thought this experiment had the most interesting results.
 
 I ran this experiment in two parts. The first runs of 20 were against Kimi K3, Opus 5 and Sonnet 5, all on high effort. I figured if a model added an additional action item, that was a flawed but passing grade but if the model missed an action item that was a fail (as a dropped action item would be a problem from a meeting).
 
-For the first run, Sonnet 5 was the only model to have all 20 out of 20 runs be usable, at a cost of $0.03 per usable result. Opus was close to the same outcome but at double the cost per result. Kimi K3 produced only 9 out of 20 runs as usable, it just kept missing action items. Thus even though K3 is a 'cheaper' model than Opus 5, it was more expensive to produce a usable result ($0.06 for Opus vs. $0.10 for Kimi K3).
+For the first run, Sonnet 5 was the only model to have all 20 out of 20 runs be usable, at a cost of $0.03 per usable result. Opus was close to the same outcome but at double the cost per result. Kimi K3 produced only 9 out of 20 runs as usable, it just kept missing action items. Thus even though K3 is a 'cheaper' model than Opus 5, it was more expensive to produce a usable result ($0.06 for Opus vs. $0.10 for Kimi K3). 
 
 What was even more wild for Kimi K3 is that on 6 out of 20 runs it surfaced 5 action items, but the issue was that they were not the right action items. **Had I not reviewed these outputs myself and just relied on the quantity of action items surfaced, I would've missed these failing results.**
 
@@ -173,7 +179,7 @@ Thus this experiment also hammered home the importance of an actual person revie
 
 I decided to rerun this experiment with more models and mixing in different levels of effort.
 
-I figured the lower cost models such as Haiku and GPT 5.4 mini would be good enough for the task. I was wrong. Haiku produced 1 usable result out of 20 runs on high effort and 0 out of 20 on low effort, thus costing almost 8x what Sonnet 5 cost ($0.22 for Haiku vs. $0.03 for Sonnet 5) to get to a usable result.
+I figured the lower cost models such as Haiku and GPT 5.4 mini would be good enough for the task. I was wrong. Haiku produced 1 usable result out of 20 runs on high effort and 0 out of 20 on low effort, thus costing almost 8x what Sonnet 5 cost ($0.22 for Haiku vs. $0.03 for Sonnet 5) to get to a usable result. GPT 5.4 nano was also $0.03 per usable result but the number alone is misleading, as only 1/20 runs (on low effort) produced a usable result thus rendering that model a terrible fit for the task. 
 
 **Example of usable output**
 ![Sonnet 5's correctly extracted action items, one per line with owner and date](/images/what-it-costs-to-get-llms-to-produce-usable-work/passing-result-task4.png)
@@ -190,7 +196,7 @@ Yes. Without an LLM it might take 20 minutes to parse a mix of handwritten and r
 
 Task 4 seemed like a perfect test to throw a local model at and see how it held up vs the cloud models.
 
-Meta recently released, [Muse Glimmer ](https://developer.meta.com/ai/models/muse-glimmer/) (30B open model meant to run on a single GPU) which I was able to barely squeeze onto my 32 GB M1 Macbook Pro. I ran the exact same task 4 experiment set up as I did with the cloud models above and the results were 0 out of 20 runs producing a usable output.
+Meta recently released [Muse Glimmer](https://developer.meta.com/ai/models/muse-glimmer/) (30B open model meant to run on a single GPU) which I was able to barely squeeze onto my 32 GB M1 Macbook Pro. I ran the exact same task 4 experiment set up as I did with the cloud models above and the results were 0 out of 20 runs producing a usable output.
 
 Yeah, that's not good. I guessed before I ran the experiment on the local model it would score something like 9 out of 20 runs producing a usable result.
 
@@ -205,10 +211,14 @@ Compare with the other models' failures from task 4:
 | GPT-5.4-mini/nano (3/80) | over and under listed action items                     |
 | Glimmer 30B (0/20)       | same 3 items every time, all correct, 2 always missing  |
 
-Although a local model is "free" comparatively (yes, I know electricity is a cost), the time tradeoff was also substantial. Each local run took about ~7 minutes so the 20 runs on the local model for the experiment took me 2 hours and 51 minutes. Compare this to the average run on Sonnet 5 taking ~17 seconds at $0.03 per usable outcome, I think the time tradeoff + 100% accuracy is worth the few pennies in cost.
+Although a local model is "free" comparatively (yes, I know electricity is a cost), the time tradeoff was also substantial. Each local run took about ~7 minutes so the 20 runs on the local model for the experiment took me 2 hours and 51 minutes. Compare this to the average run on Sonnet 5 taking ~17 seconds at $0.03 per usable outcome, I think the time tradeoff + 100% accuracy (on high effort) is worth the few pennies in cost.
 
-## Other observations
+## Other observations and takeaways
 
 - Increasing the effort/reasoning level on a model only seemed to make a difference if the model itself was already up to the task. Increasing Sonnet from low to high improved the quality of the outputs but Sonnet was able to pass the action items task (#4) 16 out of 20 runs even on low effort. It seemed to make no difference for Haiku and GPT 5.4 what level of effort I set the model at, as the model itself was not the right choice for accomplishing the task.
-- Kimi K3 is up to the task for most of these experiments but it's not cheap. It's the most expensive model I used in these tests outside of Opus 5 and Sonnet 5 outperformed it in the experiments where they were both used.
-- I think I enjoy using the Pi Agent Harness more than Claude Code at the moment. It felt faster to use but all things being equal I didn't really find a monster takeaway in terms of cost at least from these experiments. I will still keep using Pi alongside Claude Code because it's a very easy way to access a bunch of different models.
+- Kimi K3 is up to the task for most of these experiments but it's not cheap. It's the most expensive model I used in these tests outside of Opus 5, and Sonnet 5 outperformed it in the experiments where they were both used.
+- I like using the Pi Agent Harness more than Claude Code at the moment. It felt faster to use but all things being equal I didn't really find a monster takeaway in terms of cost at least from these experiments. I will still keep using Pi alongside Claude Code because it's a very easy way to access a bunch of different models.
+
+After all these experiments, my main takeaway is don't shop by price alone. Multiple times throughout the experiments, a low-cost model produced a usable result but it took a bunch of failed runs to get there. Day to day, we all want something that just works so it's more important to figure out the price floor for the model that accomplishes what you want reliably. 
+
+Test your tasks on various models until you find the one that is the "usable" balance between cost and accomplishing what you need. 
