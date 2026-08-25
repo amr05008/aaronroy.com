@@ -160,6 +160,16 @@ No test updates needed. The test suite automatically:
 
 Just add your post and run `npm run test` to verify everything works.
 
+### Editing a Published Post
+
+Edit the repo file directly. Aaron does this in Obsidian through the vault's `areas/blog/`
+symlink into `src/content/blog/` (same file, so there is no reconcile step), and the vault's
+`images/` symlink points at `public/images/`, which is why a post's `/images/...` paths render
+there — renaming `public/images/` would dangle it. Never copy a live post back to a vault draft
+(two copies = drift; the vault's `CLAUDE.md` ratified this 2026-07-22). Republish with
+`blog-publish`: `updatedDate` for material edits, or move `pubDate` to today when the post
+should read as new for wider sharing; the sitemap `<lastmod>` follows either.
+
 ## Architecture & Routing
 
 ### URL Structure
