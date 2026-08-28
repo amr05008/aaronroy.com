@@ -1,14 +1,13 @@
 ---
-title: "Fable flagged my Airbnb camera scan as a cybersecurity risk"
-description: "Fable 5 spent 12 minutes scanning an Airbnb network for hidden cameras before its safeguards stopped the defensive security scan."
+title: Fable flagged my Airbnb camera scan as a cybersecurity risk
+description: I tripped Fable's safeguards 12 minutes into a network scan. We need a better balance between allowing defensive actions and preventing malicious behavior.
 pubDate: 2026-08-28
-categories: ["Agents", "Cybersecurity"]
-draft: true
+categories: ["Cybersecurity", "Agents"]
+heroImage: "/og-images/fable-flagged-my-airbnb-camera-scan-as-a-cybersecurity-risk-og.png"
 ---
-
 I'm currently on summer vacation with my family and staying in an Airbnb.
 
-Airbnb allows hosts to use outdoor cameras when they disclose them in the listing. Airbnb now [prohibits indoor cameras](https://www.airbnb.com/help/article/3061) completely. That said, I'm a bit of a tinfoil hat wearing person when it comes to cybersecurity so I can't help myself from running a quick scan to see if what someone tells me matches what's on the network.
+Airbnb allows hosts to use outdoor cameras when they disclose them in the listing. Airbnb now [prohibits indoor cameras](https://www.airbnb.com/help/article/3061) completely. That said, I'm a bit of a [tinfoil hat wearing person when it comes to cybersecurity](https://aaronroy.com/how-to-stay-ahead-of-online-scammers/) so I can't help myself from running a quick scan to see if what someone tells me matches what's on the network.
 
 I asked Claude Code + Fable 5 to assist me in checking out what's on my rental's network (yes I know I could have used [Nmap](https://nmap.org/) but I figured this would be a piece of cake for agents).
 
@@ -27,7 +26,7 @@ As an aside, a clean network scan does not mean there aren't hidden cameras some
 
 I was so surprised that Fable's safeguards stopped my scan before finishing.
 
-As a sanity check, I ran the same prompt through the [Pi Harness](https://www.youtube.com/watch?v=HLxgO4O5QdY&t=95s) and Kimi K3 and got assistance with no issue.
+As a sanity check, I ran the same prompt through the [Pi Harness](https://www.youtube.com/watch?v=HLxgO4O5QdY&t=95s) and [Kimi K3](https://www.kimi.ai/ai-models/kimi-k3) and got assistance with no issue.
 
 ![Kimi K3 camera scan results in the Pi coding agent](/images/fable-flagged-my-airbnb-camera-scan-as-a-cybersecurity-risk/kimi-k3-camera-scan.png)
 *Kimi K3 findings after the network scan*
