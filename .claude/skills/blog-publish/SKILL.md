@@ -126,3 +126,10 @@ or is on Aaron), and point at content-plan for promotion.
   most-specific-wins, so a named group ignores the `*` group entirely). Adding a
   new crawler as its own block silently exempts it. A smoke test catches this;
   don't "tidy" the duplication away.
+- **Non-standard aspect ratio source image (row 8)** — Don't stretch or
+  hard-crop a screenshot far from 1200×630 down to a sliver. Letterbox it:
+  composite onto a 1200×630 canvas filled with the screenshot's own background
+  color, scaled to keep text legible, and crop on a full clause/word rather
+  than mid-word. `sips` can resize/crop but not paste onto a canvas, and this
+  machine has no ImageMagick — use a throwaway `python3 -m venv` +
+  `pip install pillow` for the compositing.

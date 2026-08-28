@@ -4,6 +4,7 @@ Quick reference for all Claude Code working sessions on this project.
 
 | Date | Summary | Tags |
 |------|---------|------|
+| 2026-08-28 | [Published the Fable/Airbnb camera-scan post; letterboxed a custom OG image from an oddly-shaped screenshot via Pillow; scheduled a consolidated Buttondown send](2026-08-28-add-fable-airbnb-post.md) | blog, publishing, og-images, buttondown, calendar |
 | 2026-08-23 | [Post-page dek + Related reading: grilled PR #7, replaced the coverage-first ranking with relevance-first plus one coverage slot, shipped and merged](2026-08-23-add-dek-and-related-reading.md) | blog, related-posts, dek, seo, ranking, testing, review |
 | 2026-08-08 | [GSC Coverage audit: blocked legacy Elementor crawl trap, sitemap lastmod with fail-loud build invariants, Search Console indexing report, fixed stale blog-review category list](2026-08-08-fix-gsc-coverage-findings.md) | seo, gsc, robots, sitemap, lastmod, crawl-budget, testing, skills, monitoring |
 | 2026-07-23 | [Email notification layer: Buttondown form (posts + about), subscribe-flow pages, PostHog tiles, dep-vuln cleanup (spans 07-23/24)](2026-07-23-add-email-notify.md) | email, buttondown, posthog, seo, dependencies |
