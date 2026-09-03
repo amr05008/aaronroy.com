@@ -114,18 +114,6 @@ those URLs resolve, and they still do when a page is noindex.
 `noindex` alone, never `noindex, nofollow`: `follow` is the default, and links
 to the real posts must still pass through.
 
-### Running Tests
-
-```bash
-# Full test (recommended before deploy)
-# Builds the site, starts preview server, runs all tests
-npm run test
-
-# Quick test (if you recently built)
-# Skips build, just runs tests against existing build
-npm run test:quick
-```
-
 ### Local gotchas
 
 - **Dates render a day early in local builds and previews.** `toLocaleDateString` renders
@@ -310,24 +298,6 @@ one-off tooling (`migrate-wordpress.js`, `update-yoast-descriptions.js` and
 their deps: axios, jsdom, turndown, xml2js) was removed on 2026-07-02 and lives
 in git history if ever needed again.
 
-## Content Analysis
-
-### Counting Categories
-
-To analyze category usage across all blog posts:
-
-```bash
-node scripts/count-categories.js
-```
-
-This script provides a full breakdown of:
-- All categories used in the blog
-- Number of posts per category
-- Complete list of post titles within each category
-- Total count of unique categories and analyzed posts
-
-Useful for content auditing, identifying popular topics, and planning future content strategy.
-
 ## Configuration
 
 - **Site metadata**: Centralized in `src/config.ts` (site title, description, author info, social profiles)
@@ -477,7 +447,7 @@ Two layers, both privacy-conscious:
 
 - **Vercel Analytics** (`@vercel/analytics`, in `BaseLayout.astro`) — left as-is.
 - **PostHog** (`src/components/PostHogAnalytics.astro`) — the **queryable** layer that feeds the
-  `content-studio` `/content-plan` loop: referral sources (did a thread drive reads?), per-post
+  vault `/content-plan` loop: referral sources (did a thread drive reads?), per-post
   traffic, time-on-page, and link clicks.
 
 **Privacy posture:** anonymous (`person_profiles: 'identified_only'` — no profiles for readers),
@@ -506,11 +476,12 @@ literal rewrite** or it'll silently 404.
 
 See `.env.example`. **Verify after deploy:** load the site and confirm network requests go to
 `aaronroy.com/zuko/*` (not `*.posthog.com`) and return 200; then check the PostHog project's events
-(or query via the PostHog MCP).
+(or query via the content-plan skill's `scripts/posthog-dashboard`).
 
-**Querying via the PostHog MCP:** the aaronroy.com project is **id `491375`** (token `phc_xw9…`).
-⚠️ The MCP defaults to the *GlutenOrNot* project (`457245`) — always `switch-project` to `491375`
-first, or every query silently targets the wrong site. Pageviews carry `$pathname`,
+**Querying PostHog:** the aaronroy.com project is **id `491375`** (token `phc_xw9…`). Read it
+through the content-plan skill's `scripts/posthog-dashboard` (personal API key in
+`~/.config/posthog/personal-api-key`), not the PostHog MCP — the plugin is disabled on purpose for
+token cost, and the MCP defaulted to the *GlutenOrNot* project (`457245`) anyway. Pageviews carry `$pathname`,
 `$referring_domain`, and `$referrer`; outbound clicks land on `$autocapture` under
 `$external_click_url`. Bot/automation is classified at query time via `$virt_is_bot` /
 `$virt_traffic_type` (UA-based, so only catches JS-executing crawlers).
@@ -529,33 +500,7 @@ present as a real browser, so the bot filter alone misses them). Filters are sco
 project-wide. Note: AI *crawlers* (GPTBot etc.) never execute JS, so PostHog structurally can't see
 them — use GSC/Bing WMT for that question.
 
-## Recent Changes
+## History
 
-- **2026-08-23**: Post page: frontmatter `description` rendered as a dek under the H1; "Related
-  reading" block (`RelatedPosts.astro` + `src/utils/related.ts`, relevance-first with one coverage
-  slot); 4 ranking unit tests + 6 new smoke tests
-- **2026-08-08**: GSC Coverage audit — blocked the legacy Elementor crawl trap in robots.txt (and
-  collapsed the per-vendor AI-crawler blocks into one stanza, which had been silently exempting
-  Bingbot); added sitemap `<lastmod>` with build-time invariants that hard-fail on future dates,
-  unparsed categories, or missing dates; 3 new smoke tests; fixed `blog-review`'s stale category list
-  ("AI"/"Product Management" never existed, which is where the dead `/category/ai/` came from)
-- **2026-07-24**: Email form added to `/about/` "Get in touch" (spec amended by Aaron — high-intent visitors); PostHog dashboard gains email signup-flow + submits-by-post tiles; dependency vulnerability cleanup (all non-Astro-7 fixes; 4 alerts remain, gated on the deferred Astro 7 major)
-- **2026-07-23**: Email notification layer — Buttondown capture form at the bottom of posts (`EmailNotify.astro`), `/subscribed/` + `/confirmed/` redirect landing pages (noindex), PostHog submit event via sendBeacon, 5 new smoke tests; manual-send step added to `blog-publish`
-- **2026-07-22**: Mobile typography — blog H1 steps down on small screens (`text-3xl sm:text-4xl md:text-5xl`); markdown image captions (`![...]` then `*caption*`) auto-styled via `.prose img + em` in `src/styles/global.css`
-- **2026-07-16**: Bing/IndexNow indexing fix — IndexNow key file + `scripts/indexnow-submit.js`, publish-time ping in `blog-publish` skill, `/feed/`→`/rss.xml` 301
-- **2026-07-06**: Added repo-local `blog-publish` skill (scaffold → checklist → gated one-commit publish; see `.claude/decisions/005-blog-publish-skill.md`); deleted legacy `wrap-session` skill (superseded by global `wrap-up`)
-- **2026-07-02**: Repo cleanup — landed trailing-slash internal links (kills sitewide 301s), fixed nested anchor on /writing, security headers in vercel.json, favicon 547KB→31KB, fixed llms.txt category links, removed migration scripts + 5 unused deps, `LATEST_COUNT` moved to `src/config.ts`
-- **2026-06-30**: Built the PostHog "Blog Analytics — Traffic & Sources" dashboard (pageviews per post, referring sources, outbound clicks) with bot + `/hynews/` legacy-path filters
-- **2026-02-03**: Older/newer post navigation at bottom of blog posts with smoke tests
-- **2026-01-10**: Blog posts display clickable category links in metadata; added smoke tests for category functionality
-- **2026-01-02**: RSS feed implementation with full HTML content and absolute image URLs
-- **2026-01-02**: Abstracted session management to global `~/.claude/rules/session-management.md`
-- **2026-01-02**: Restructured session history to `.claude/` directory
-- **2026-01-02**: Code block copy buttons via Expressive Code
-- **2026-01-01**: Category archive pages (`/categories`, `/category/{slug}`)
-- **2025-10-10**: Centralized config (`src/config.ts`), OG image system
-- **2025-10-06**: Production deployment, domain migration with 301 redirects
-
-## Session Management
-
-@~/.claude/rules/session-management.md
+Dated change history lives in `.claude/sessions/index.md` (one row per session, newest first).
+Skim it before non-trivial work rather than re-deriving decisions already made.
