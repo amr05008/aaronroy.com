@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type APIRequestContext } from "@playwright/test";
 import { readdirSync, readFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
@@ -558,24 +558,29 @@ test.describe("category archive indexability", () => {
   // (2026-08-16). Google is right — an archive is a list of titles whose content
   // lives on the posts it links to. These tests lock in the two behaviours that
   // must agree, both driven off INDEXABLE_CATEGORIES in src/utils/seo-categories.mjs.
+  //
+  // Every archive is enumerated from /categories/, NOT from INDEXABLE_CATEGORIES.
+  // That page is built from post frontmatter, so it lists all 16 categories
+  // whether or not they're indexable, which makes it the one enumeration that
+  // can catch a category falling out of the allowlist's reach entirely.
+  //
+  // These tests were one-directional until 2026-09-07, and an adversarial review
+  // proved it: stripping the `noindex` meta from the bikes archive, and deleting
+  // the startups line from llms.txt, each left the whole block green. Both holes
+  // are closed below — assert both directions, over every archive, always.
 
-  test("thin category archives are noindex", async ({ page }) => {
-    const response = await page.goto("/category/wami/");
-    expect(response?.status()).toBe(200);
+  /** All category archive slugs, from the page that lists them all. */
+  const allCategorySlugs = async (request: APIRequestContext) => {
+    const body = await (await request.get("/categories/")).text();
+    const slugs = [...new Set([...body.matchAll(/href="\/category\/([^/"]+)\//g)].map((m) => m[1]))];
+    // Vacuity guard: a markup change that broke this regex would silently turn
+    // every loop below into a no-op.
+    expect(slugs.length, "found no category links on /categories/").toBeGreaterThan(10);
+    return slugs.sort();
+  };
 
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-  });
-
-  test("indexable category archives are not noindex", async ({ page }) => {
-    const response = await page.goto("/category/agents/");
-    expect(response?.status()).toBe(200);
-
-    await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
-  });
-
-  test("noindex categories stay out of the sitemap", async ({ request }) => {
-    // A page that is noindex but still listed sends crawlers mixed signals —
-    // the exact contradiction this change exists to remove.
+  /** Category slugs listed in the sitemap. */
+  const sitemapCategorySlugs = async (request: APIRequestContext) => {
     const index = await request.get("/sitemap-index.xml");
     const sitemapPaths = [
       ...(await index.text()).matchAll(/<loc>https:\/\/aaronroy\.com(\/[^<]+)<\/loc>/g),
@@ -590,6 +595,51 @@ test.describe("category archive indexability", () => {
         listed.push(slug);
       }
     }
+    return listed.sort();
+  };
+
+  /** The `content` of a page's robots meta tag, or null when it has none. */
+  const robotsMeta = async (request: APIRequestContext, path: string) => {
+    const response = await request.get(path);
+    expect(response.status(), `${path} did not return 200`).toBe(200);
+    // Matched on the tag rather than searching the whole body for "noindex",
+    // so prose or a slug containing that word can never fake a pass.
+    return (await response.text()).match(/<meta\s+name="robots"\s+content="([^"]*)"/i)?.[1] ?? null;
+  };
+
+  test("every category archive agrees with the sitemap in both directions", async ({ request }) => {
+    // The contradiction this whole feature exists to remove is a page that is
+    // noindex but still listed in the sitemap. Checking only one direction lets
+    // the opposite break silently: an archive can be dropped from the sitemap and
+    // still be missing its noindex, which is a page asking to be indexed while
+    // the sitemap says it doesn't exist.
+    const all = await allCategorySlugs(request);
+    const listed = new Set(await sitemapCategorySlugs(request));
+
+    for (const slug of all) {
+      const robots = await robotsMeta(request, `/category/${slug}/`);
+
+      if (listed.has(slug)) {
+        expect(robots, `/category/${slug}/ is in the sitemap but carries robots="${robots}"`).toBe(
+          null
+        );
+      } else {
+        expect(robots, `/category/${slug}/ is out of the sitemap but is not noindex`).toContain(
+          "noindex"
+        );
+        // `follow` is the default and is load-bearing: links to the real posts
+        // must still pass through a demoted archive.
+        expect(robots, `/category/${slug}/ must not be nofollow`).not.toContain("nofollow");
+      }
+    }
+
+    // Both branches above must actually have run.
+    expect(listed.size, "no category is indexable").toBeGreaterThan(0);
+    expect(all.length, "no category is noindex").toBeGreaterThan(listed.size);
+  });
+
+  test("noindex categories stay out of the sitemap", async ({ request }) => {
+    const listed = await sitemapCategorySlugs(request);
 
     // Guard against passing vacuously: a filter that dropped everything, or a
     // regex that matched nothing, would otherwise look like a pass. Hardcoded
@@ -598,39 +648,28 @@ test.describe("category archive indexability", () => {
     // against itself and pass no matter what the build emitted.
     // tutorials and bikes dropped 2026-09-07 after GSC declined both a second
     // time; see src/utils/seo-categories.mjs for the rule.
-    expect(listed.sort()).toEqual([
-      "3d-printing",
-      "agents",
-      "product",
-      "projects",
-      "startups",
-    ]);
-
-    for (const slug of listed) {
-      const body = await (await request.get(`/category/${slug}/`)).text();
-      expect(body, `/category/${slug}/ is in the sitemap but noindex`).not.toContain("noindex");
-    }
+    expect(listed).toEqual(["3d-printing", "agents", "product", "projects", "startups"]);
   });
 
-  test("llms.txt only recommends categories we let Google index", async ({ request }) => {
+  test("llms.txt Browse by topic exactly mirrors the indexed categories", async ({ request }) => {
     // llms.txt's "Browse by topic" list is the curated source of truth for which
     // topics are worth surfacing, and INDEXABLE_CATEGORIES mirrors it by hand.
     // Nothing else enforces that: the llms.txt link test only checks the URLs
-    // resolve, which they still do when a page is noindex. Without this test the
-    // two drift silently, and the site ends up telling AI crawlers to browse
-    // topics it tells search crawlers not to index.
+    // resolve, which they still do when a page is noindex.
+    //
+    // Set equality, not a one-way scan. Checking only that recommended topics
+    // are indexable misses the other half — a topic that stays indexable and in
+    // the sitemap after being dropped from llms.txt. Both halves of the mirror
+    // have to be asserted or "change one, change the other" isn't enforced.
     const llms = await (await request.get("/llms.txt")).text();
     const recommended = [
-      ...llms.matchAll(/https:\/\/aaronroy\.com\/category\/([^/]+)\//g),
-    ].map((m) => m[1]);
+      ...new Set([...llms.matchAll(/https:\/\/aaronroy\.com\/category\/([^/]+)\//g)].map((m) => m[1])),
+    ].sort();
 
-    expect(recommended.length).toBeGreaterThan(0);
-    for (const slug of recommended) {
-      const body = await (await request.get(`/category/${slug}/`)).text();
-      expect(body, `llms.txt recommends /category/${slug}/ but it is noindex`).not.toContain(
-        "noindex"
-      );
-    }
+    expect(recommended.length, "llms.txt recommends no categories").toBeGreaterThan(0);
+    expect(recommended, "llms.txt and the sitemap disagree on which topics we surface").toEqual(
+      await sitemapCategorySlugs(request)
+    );
   });
 
   test("posts in a noindex category are still indexable", async ({ page }) => {
