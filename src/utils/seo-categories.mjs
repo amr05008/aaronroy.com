@@ -45,6 +45,18 @@
  * 3dprinteros, teachable) plus archives too thin to be a hub (<= 6 posts and
  * not curated in llms.txt).
  *
+ * 2026-09-07 follow-up — tutorials and bikes dropped too. The 2026-08-17
+ * validation run failed on 9/5 with both still in the "Crawled - currently not
+ * indexed" bucket, so Google had now declined them twice. They survived the
+ * first cut only on the llms.txt tiebreak, not on merit: the archive template
+ * renders title + date + description and nothing else, so every word on the
+ * page is duplicated from the posts it lists, and bikes (3 posts) was already
+ * under the <= 6 threshold above. Kept set is now 5.
+ *
+ * The general rule this establishes: llms.txt breaks ties on categories Google
+ * hasn't ruled on yet. Once GSC declines an archive on a completed validation,
+ * that's evidence, and evidence beats curation — demote it in both files.
+ *
  * Adding a category back re-enters it in the sitemap on the next build. If a
  * dropped one later becomes a real topic hub (curated intro + internal links,
  * not just a post list — see plans/seo-aeo-learnings-from-vhpc-2026-06.md),
@@ -52,12 +64,10 @@
  */
 export const INDEXABLE_CATEGORIES = [
   'agents',
-  'bikes',
   '3d-printing',
   'product',
   'projects',
   'startups',
-  'tutorials',
 ];
 
 /** True when this category slug should carry `noindex` / stay out of the sitemap. */

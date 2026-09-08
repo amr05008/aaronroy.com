@@ -592,15 +592,18 @@ test.describe("category archive indexability", () => {
     }
 
     // Guard against passing vacuously: a filter that dropped everything, or a
-    // regex that matched nothing, would otherwise look like a pass.
+    // regex that matched nothing, would otherwise look like a pass. Hardcoded
+    // rather than imported from INDEXABLE_CATEGORIES on purpose — the sitemap is
+    // generated from that constant, so importing it would assert the constant
+    // against itself and pass no matter what the build emitted.
+    // tutorials and bikes dropped 2026-09-07 after GSC declined both a second
+    // time; see src/utils/seo-categories.mjs for the rule.
     expect(listed.sort()).toEqual([
       "3d-printing",
       "agents",
-      "bikes",
       "product",
       "projects",
       "startups",
-      "tutorials",
     ]);
 
     for (const slug of listed) {
