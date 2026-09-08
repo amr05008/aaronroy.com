@@ -379,7 +379,7 @@ The site includes comprehensive SEO features:
   `~/.config/aaronroy-indexing/gsc-state.json`). `--post` sends it to #content-studio.
   ⚠️ **There is no API for the Index Coverage report** — that one is export-only, which is why the
   2026-08-08 audit needed a hand-exported CSV. URL Inspection is the closest equivalent and is
-  actually better here: it covers *our* 58 URLs rather than the thousands of legacy junk URLs
+  actually better here: it covers *our* ~50 URLs rather than the thousands of legacy junk URLs
   Coverage lumps in. Quota is 2,000/day, 600/min per property, so a full sweep is cheap.
   Auth is a GCP **service account** (no `googleapis` dep — the RS256 JWT is signed with
   `node:crypto`), configured via `GSC_SERVICE_ACCOUNT_JSON` in `~/.config/aaronroy-indexing/env`
@@ -388,8 +388,18 @@ The site includes comprehensive SEO features:
   service-account email as a user on the property. The property string is auto-detected, since
   domain (`sc-domain:`) and URL-prefix properties need different values and guessing returns a 403
   that reads like a permissions error.
-- **Legacy WordPress paths**: `/feed` and `/feed/` 301 to `/rss.xml` (vercel.json `redirects`). Other
+- **Legacy WordPress paths**: `/feed` and `/feed/` redirect to `/rss.xml` (vercel.json `redirects`). Other
   WP-era paths (`/tag/*`, `?p=<id>`) were left alone pending real 404 evidence from GSC/Bing WMT
+- **Renamed-category paths**: `/category/ai` and `/category/ai/` redirect to `/category/agents/`. The
+  "AI" category was renamed to "Agents" in `75d18f8` (2026-06-28) and the old archive 404'd until
+  2026-09-07. Add a pair like this whenever a category is renamed — the archive URL outlives the tag.
+- ⚠️ **`permanent: true` emits 308, not 301.** Every redirect above is a 308 (verified 2026-09-07 by
+  compiling `vercel.json` with `@vercel/routing-utils`, and against production). Google treats 308 and
+  301 the same for consolidation, so this is a naming trap, not a behavior one — but don't write "301"
+  in a commit message or PR and don't "fix" a 308 you see in `curl`. For a literal 301 you'd need
+  `statusCode: 301`, which Vercel won't accept alongside `permanent`.
+  Vercel's trailing-slash normalizer also runs **ahead** of custom redirects, so an unslashed source
+  takes two hops (`/category/ai` → `/category/ai/` → `/category/agents/`). Not a loop; just expect it.
 - **Homepage meta**: Custom description set in index.astro (not using generic fallback)
 - **RSS feed**: Full-content RSS feed at `/rss.xml`
   - Markdown converted to HTML using `marked` library

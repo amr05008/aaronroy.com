@@ -348,6 +348,10 @@ The site uses Playwright for smoke testing. Tests automatically discover blog po
 - RSS feed validity, auto-discovery link, and user-facing RSS links
 - Email notify form on posts and the about page (correct Buttondown action; absent on homepage/archives), and the
   subscribe-flow landing pages (render, noindex, excluded from sitemap)
+- Category archive indexability: every archive is checked in both directions — listed in the sitemap
+  means no `noindex`, excluded means `noindex` and never `nofollow` — plus set equality between
+  llms.txt's topic list and the sitemap's categories, and no `noindex` leaking onto the posts an
+  archive lists
 - Crawler files: robots.txt, sitemap, and every internal llms.txt link resolves
 
 ### Running Tests
@@ -385,7 +389,7 @@ URLs are automatically generated from markdown filenames to preserve SEO continu
 
 ### Trailing Slashes
 
-The site uses `trailingSlash: 'always'` (in `astro.config.mjs`) for blog SEO. **All internal links must include a trailing slash** (`/writing/`, `/about/`, `/category/product/`) — without one, every click costs a sitewide 301 redirect. Note this also affects the PostHog reverse proxy: wildcard `/zuko/:path*` rewrites do NOT match trailing-slash paths, which is why `vercel.json` uses literal rewrites for each PostHog endpoint.
+The site uses `trailingSlash: 'always'` (in `astro.config.mjs`) for blog SEO. **All internal links must include a trailing slash** (`/writing/`, `/about/`, `/category/product/`) — without one, every click costs a sitewide 308 redirect. Note this also affects the PostHog reverse proxy: wildcard `/zuko/:path*` rewrites do NOT match trailing-slash paths, which is why `vercel.json` uses literal rewrites for each PostHog endpoint.
 
 ## SEO Features
 
