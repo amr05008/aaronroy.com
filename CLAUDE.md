@@ -107,12 +107,22 @@ sat in the sitemap, so the site kept requesting indexing that was never coming.
 
 **The list mirrors the "Browse by topic" section of `public/llms.txt`**, which is
 the curated source of truth for which topics are worth surfacing. **Change one,
-change the other** — the `llms.txt only recommends categories we let Google
-index` smoke test enforces it, because the older llms.txt link test only checks
-those URLs resolve, and they still do when a page is noindex.
+change the other** — the `llms.txt Browse by topic exactly mirrors the indexed
+categories` smoke test enforces it as **set equality** against the sitemap, so
+dropping a topic from either side alone fails. (The plain llms.txt link test
+can't catch this: it only checks those URLs resolve, and they still do when a
+page is noindex.)
 
 `noindex` alone, never `noindex, nofollow`: `follow` is the default, and links
 to the real posts must still pass through.
+
+Both rules are asserted over **every** category archive, enumerated from
+`/categories/` rather than from `INDEXABLE_CATEGORIES`, and in both directions:
+in the sitemap means no robots meta, out of the sitemap means `noindex` and not
+`nofollow`. The one-directional version of these tests stayed green while an
+archive was missing its `noindex` and while llms.txt had lost a topic, which is
+why they're written this way — see `every category archive agrees with the
+sitemap in both directions`.
 
 ### Local gotchas
 

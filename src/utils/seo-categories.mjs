@@ -31,9 +31,12 @@
  * have had the site telling AI crawlers to browse topics it told search
  * crawlers not to index).
  *
- * **If you change one, change the other.** Nothing enforces it automatically:
- * the llms.txt smoke test only checks those links resolve, and they still do
- * when a page is noindex.
+ * **If you change one, change the other.** As of 2026-09-07 a smoke test does
+ * enforce this, as set equality between llms.txt's topic list and the sitemap's
+ * category set, so a one-sided edit fails the suite rather than drifting
+ * silently. (It was unenforced before that, and the first version of the test
+ * only scanned one direction — it stayed green with a topic missing from
+ * llms.txt. Don't weaken it back to a one-way scan.)
  *
  * Post counts at time of writing (2026-08-17), of 39 published:
  *   kept:    projects 10 · tutorials 10 · product 10 · 3d-printing 7 ·
