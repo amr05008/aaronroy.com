@@ -14,6 +14,19 @@ I was shocked to see most existing apps either just scan barcodes or charge subs
 
 For GlutenOrNot, I partnered with [Aaron Batchelder](https://www.aaronbatchelder.com/) as a collaborator. He also has a gluten sensitivity, and he's a much better mobile product person than me and I wanted his expertise to make sure we got both a web and mobile app in place.
 
+**Update (September 2026):** I recorded a [quick walkthrough of GlutenOrNot](https://www.youtube.com/watch?v=g6qqkZzcHJE) as it works today, scanning barcodes, ingredient labels and a restaurant menu. Barcode scanning and scan history from the "What's Next" list at the bottom of this post have both shipped since.
+
+<div class="aspect-video max-w-2xl mx-auto">
+  <iframe
+    class="w-full h-full"
+    src="https://www.youtube.com/embed/g6qqkZzcHJE"
+    title="GlutenOrNot App Overview - Scan ingredients, menus and barcodes for gluten"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
+
 ## What GlutenOrNot Does
 
 The concept is simple: take a photo of an ingredient label, get a verdict in seconds.
@@ -134,6 +147,4 @@ The app works. It's in the App Store. Here's what might come next:
 
 For now, though, the goal is to keep it simple and see if it helps people.
 
-Give it a try at [glutenornot.com](https://glutenornot.com/), check out the [source code](https://github.com/amr05008/glutenornot.com), or [download the iOS app](https://apps.apple.com/app/glutenornot/id6758594582). 
-
-If you run into any issues, [send us feedback](https://forms.gle/qrh2BSawCmJmVcx59).
+Give it a try at [glutenornot.com](https://glutenornot.com/), check out the [source code](https://github.com/amr05008/glutenornot.com), or [download the iOS app](https://apps.apple.com/app/glutenornot/id6758594582).

@@ -50,6 +50,19 @@ A redesign would not be complete without a new app icon:
   <figcaption class="text-center text-sm text-gray-600 mt-2 italic">Goodbye leaf, hello sleek traffic light</figcaption>
 </figure>
 
+**Update (September 2026):** here is a [quick walkthrough of the redesigned app](https://www.youtube.com/watch?v=g6qqkZzcHJE) scanning barcodes, ingredient labels and a restaurant menu.
+
+<div class="aspect-video max-w-2xl mx-auto">
+  <iframe
+    class="w-full h-full"
+    src="https://www.youtube.com/embed/g6qqkZzcHJE"
+    title="GlutenOrNot App Overview - Scan ingredients, menus and barcodes for gluten"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
+
 ## How the redesign came together
 
 The first version of GlutenOrNot was designed in [Figma Make](https://www.figma.com/make/). This new release was imagined in [Claude Design](https://support.claude.com/en/articles/14604416-get-started-with-claude-design).
