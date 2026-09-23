@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 @layer components {
+  /* Hairline edge on post images, so white screenshots and charts don't bleed
+     into the white page */
+  .prose img {
+    border: 1px solid #d1d5db; /* gray-300 */
+  }
+
   /* Markdown image captions: an italic line directly under an image
      (![...](...) then *caption*) is a caption, not body copy */
   .prose img + em {
