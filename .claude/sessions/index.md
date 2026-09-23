@@ -4,6 +4,7 @@ Quick reference for all Claude Code working sessions on this project.
 
 | Date | Summary | Tags |
 |------|---------|------|
+| 2026-09-22 | [Published the Jev post; HTML-rendered OG image (six variants, picked D); site-wide 1px gray border on post images after checking all 128](2026-09-22-add-jev-post.md) | blog, publishing, og-images, images, css |
 | 2026-09-07 | [GSC index triage: redirected the renamed AI category, demoted two thin archives on evidence, closed two one-directional test gaps a grill pass exposed](2026-09-07-fix-gsc-index-triage.md) | seo, gsc, redirects, categories, testing, review, indexnow |
 | 2026-08-28 | [Published the Fable/Airbnb camera-scan post; letterboxed a custom OG image from an oddly-shaped screenshot via Pillow; scheduled a consolidated Buttondown send](2026-08-28-add-fable-airbnb-post.md) | blog, publishing, og-images, buttondown, calendar |
 | 2026-08-23 | [Post-page dek + Related reading: grilled PR #7, replaced the coverage-first ranking with relevance-first plus one coverage slot, shipped and merged](2026-08-23-add-dek-and-related-reading.md) | blog, related-posts, dek, seo, ranking, testing, review |

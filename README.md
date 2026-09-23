@@ -92,7 +92,7 @@ npm run test:quick
 │   │   ├── confirmed.astro    # Buttondown post-confirm redirect landing (noindex)
 │   │   └── [...slug].astro    # Dynamic blog post routes
 │   ├── styles/
-│   │   └── global.css   # Tailwind imports + image caption styling
+│   │   └── global.css   # Tailwind imports + post-image border + caption styling
 │   └── utils/
 │       ├── posts.ts     # Post queries (draft filtering) + slugify()
 │       └── related.ts   # Related-reading ranking (relevance first, one coverage slot)
@@ -169,6 +169,7 @@ directly under the image (no blank line between) — `.prose img + em` in
 - Optimize images before uploading (compress, resize to reasonable dimensions)
 - Use web-friendly formats (JPG for photos, PNG for graphics, SVG for logos)
 - Recommended max width: 1200px for blog content images
+- Every post image gets a 1px light-gray border from `.prose img` in `global.css`, so white screenshots and charts don't bleed into the white page. Don't bake a border or frame into the image file itself — it would double up and clip at the rounded corners
 
 **Example:**
 
