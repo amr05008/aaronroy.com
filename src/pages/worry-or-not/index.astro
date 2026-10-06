@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Worry Or Not" description="A ChatGPT plugin that answers 'should we worry about this company?' with an evidence-graded teardown.">
+  <div class="max-w-3xl mx-auto px-6 pt-16 pb-16">
+    <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Worry Or Not</h1>
+    <p class="text-xl text-gray-600 mb-12">Evidence-graded teardowns, inside ChatGPT.</p>
+
+    <div class="prose prose-lg max-w-none
+      prose-p:leading-relaxed prose-p:mb-6
+      prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline">
+
+      <p>
+        Ask a model to "research this company" and you get the marketing site, paraphrased. Every claim arrives with the same confidence whether it came from a filing or a launch tweet, nothing is dated, and the gaps go unmentioned because absence doesn't look like a finding.
+      </p>
+      <p>
+        Worry Or Not is a ChatGPT plugin that runs the teardown the way I'd want a strategy analyst to run it. Ask it "should we worry about <em>company</em>?" and it comes back with a verdict first, then the handful of findings that decide it, and every material claim carrying a link, an evidence date, and one of three labels:
+      </p>
+      <ul>
+        <li><strong>VERIFIED</strong>: it read the primary source itself.</li>
+        <li><strong>COMPANY-CLAIMED</strong>: the company said it, or press repeated the company. Funding announcements live here.</li>
+        <li><strong>ESTIMATE</strong>: its own triangulation, with the method shown.</li>
+      </ul>
+      <p>Four methods are required on every run, because that's where the alpha is:</p>
+      <ul>
+        <li><strong>Positioning history</strong> from the Wayback Machine. What the homepage and pricing page used to say, and the day they changed.</li>
+        <li><strong>Job-listing mining.</strong> What a company is actually building shows up in job descriptions months before it ships.</li>
+        <li><strong>Contradictions</strong> between sources, including the company's own pages. A discrepancy is a finding, not noise.</li>
+        <li><strong>Absence as evidence.</strong> The review site with no reviews. The blog posts that now 404.</li>
+      </ul>
+      <p>
+        It ends with one of four verdicts: compelling, promising but unproven, structurally challenged, or unclear. If it couldn't reach something, it says what and why, instead of filling the hole with prose.
+      </p>
+
+      <h2 class="text-2xl font-semibold mt-12 mb-6">Bring your own research tools, or don't</h2>
+      <p>
+        The plugin holds no keys and runs no server. It's a set of instructions ChatGPT follows with its own browser. If you have the <a href="https://chatgpt.com/plugins/exa" target="_blank" rel="noopener noreferrer">Exa</a> or Firecrawl plugin connected, it will use them for search and page text. If you don't, it runs on built-in browsing and tells you where that left gaps. Reddit coverage needs a community connector; without one, the report says "Reddit not searched" rather than guessing at sentiment.
+      </p>
+
+      <h2 class="text-2xl font-semibold mt-12 mb-6">Where it came from</h2>
+      <p>
+        The method is the <a href="https://github.com/amr05008/agent-skills" target="_blank" rel="noopener noreferrer">competitive-analysis skill</a> I run in Claude Code, which does the same job with a few more moving parts (four parallel researchers, a paid Reddit gateway, a report that lands in a file). The plugin is that method, written for a model that has a browser and whatever plugins you've connected. The source for the plugin itself is at <a href="https://github.com/amr05008/worry-or-not" target="_blank" rel="noopener noreferrer">github.com/amr05008/worry-or-not</a>.
+      </p>
+      <p>
+        <a href="/worry-or-not/privacy/">Privacy</a> · <a href="/worry-or-not/terms/">Terms</a>
+      </p>
+    </div>
+  </div>
+</BaseLayout>

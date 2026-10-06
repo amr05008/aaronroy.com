@@ -161,7 +161,7 @@ const LASTMOD = buildLastmodMap();
  * must resolve to a real date, so a slug-derivation drift fails the build
  * instead of silently shipping a post with no freshness signal.
  */
-const LASTMOD_EXEMPT = new Set([`${SITE}/about/`]);
+const LASTMOD_EXEMPT = new Set([`${SITE}/about/`, `${SITE}/worry-or-not/`]);
 
 /**
  * Verify the emitted sitemap after the build, and fail if it's wrong.
@@ -226,7 +226,7 @@ export default defineConfig({
       // mixed signals: subscribe-flow landing pages, and the thin category
       // archives Google already declines to index (see src/utils/seo-categories.mjs).
       filter: (page) => {
-        if ([`${SITE}/subscribed/`, `${SITE}/confirmed/`].includes(page)) return false;
+        if ([`${SITE}/subscribed/`, `${SITE}/confirmed/`, `${SITE}/worry-or-not/privacy/`, `${SITE}/worry-or-not/terms/`].includes(page)) return false;
         // Built from SITE, not a literal domain: a hardcoded host silently stops
         // matching if SITE ever changes, which would quietly return every thin
         // archive to the sitemap while it's still noindex.
