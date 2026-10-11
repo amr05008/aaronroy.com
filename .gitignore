@@ -44,3 +44,7 @@ SEO-AEO-AUDIT.md
 
 # Claude Code agent worktrees (transient)
 .claude/worktrees/
+
+# Obsidian vault attachments (the vault's images/ symlink points into public/images,
+# so Obsidian saves its attachments here; they are not site assets and must never deploy)
+/public/images/attachments/
