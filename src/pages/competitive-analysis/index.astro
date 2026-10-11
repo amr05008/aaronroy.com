@@ -2,9 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Worry Or Not" description="A ChatGPT plugin that answers 'should we worry about this company?' with an evidence-graded teardown.">
+<BaseLayout title="Competitive Analysis" description="A ChatGPT plugin that answers 'should we worry about this company?' with an evidence-graded teardown.">
   <div class="max-w-3xl mx-auto px-6 pt-16 pb-16">
-    <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Worry Or Not</h1>
+    <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Competitive Analysis</h1>
     <p class="text-xl text-gray-600 mb-12">Evidence-graded teardowns, inside ChatGPT.</p>
 
     <div class="prose prose-lg max-w-none
@@ -15,7 +15,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         Ask a model to "research this company" and you get the marketing site, paraphrased. Every claim arrives with the same confidence whether it came from a filing or a launch tweet, nothing is dated, and the gaps go unmentioned because absence doesn't look like a finding.
       </p>
       <p>
-        Worry Or Not is a ChatGPT plugin that runs the teardown the way I'd want a strategy analyst to run it. Ask it "should we worry about <em>company</em>?" and it comes back with a verdict first, then the handful of findings that decide it, and every material claim carrying a link, an evidence date, and one of three labels:
+        Competitive Analysis is a ChatGPT plugin that runs the teardown the way I'd want a strategy analyst to run it. Ask it "should we worry about <em>company</em>?" and it comes back with a verdict first, then the handful of findings that decide it, and every material claim carrying a link, an evidence date, and one of three labels:
       </p>
       <ul>
         <li><strong>VERIFIED</strong>: it read the primary source itself.</li>
@@ -40,10 +40,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       <h2 class="text-2xl font-semibold mt-12 mb-6">Where it came from</h2>
       <p>
-        The method is the <a href="https://github.com/amr05008/agent-skills" target="_blank" rel="noopener noreferrer">competitive-analysis skill</a> I run in Claude Code, which does the same job with a few more moving parts (four parallel researchers, a paid Reddit gateway, a report that lands in a file). The plugin is that method, written for a model that has a browser and whatever plugins you've connected. The source for the plugin itself is at <a href="https://github.com/amr05008/worry-or-not" target="_blank" rel="noopener noreferrer">github.com/amr05008/worry-or-not</a>.
+        This plugin is the public version of the <a href="https://github.com/amr05008/agent-skills" target="_blank" rel="noopener noreferrer">competitive-analysis skill</a> I run in Claude Code. Mine does the same job with a few more moving parts (four parallel researchers, a paid Reddit gateway, a report that lands in a file). The plugin is the same method, written for a model that has a browser and whatever plugins you've connected. The source for the plugin itself is at <a href="https://github.com/amr05008/competitive-analysis" target="_blank" rel="noopener noreferrer">github.com/amr05008/competitive-analysis</a>.
       </p>
       <p>
-        <a href="/worry-or-not/privacy/">Privacy</a> · <a href="/worry-or-not/terms/">Terms</a>
+        <a href="/competitive-analysis/privacy/">Privacy</a> · <a href="/competitive-analysis/terms/">Terms</a>
       </p>
     </div>
   </div>
