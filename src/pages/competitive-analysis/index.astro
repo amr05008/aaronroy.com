@@ -35,7 +35,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       <h2 class="text-2xl font-semibold mt-12 mb-6">Bring your own research tools, or don't</h2>
       <p>
-        The plugin holds no keys and runs no server. It's a set of instructions ChatGPT follows with its own browser. If you have the <a href="https://chatgpt.com/plugins/exa" target="_blank" rel="noopener noreferrer">Exa</a> or Firecrawl plugin connected, it will use them for search and page text. If you have <a href="https://www.clay.com/guides/how-to-use-clay-in-chatgpt" target="_blank" rel="noopener noreferrer">Clay</a> connected, it spends a little of your Clay credit on two things: the company's headcount history and its latest funding round. It never looks up the people who work there. A team that shrank right through a pivot tells you a lot. If you don't connect anything, it runs on built-in browsing and tells you where that left gaps. Reddit coverage needs a community connector; without one, the report says "Reddit not searched" rather than guessing at sentiment.
+        The plugin holds no keys and runs no server. It's a set of instructions ChatGPT follows with its own browser. If you have <a href="https://www.clay.com/guides/how-to-use-clay-in-chatgpt" target="_blank" rel="noopener noreferrer">Clay</a> connected, it spends a little of your Clay credit on two things: the company's headcount history and its latest funding round. It never looks up the people who work there. A team that shrank right through a pivot tells you a lot. Without Clay, it runs on built-in browsing and tells you where that left gaps. Reddit coverage needs a community connector; without one, the report says "Reddit not searched" rather than guessing at sentiment.
+      </p>
+      <p>
+        One thing I learned in testing: with a search plugin like Exa installed, ChatGPT sends every page fetch through it, and those fetches couldn't open the Wayback Machine or the job boards. Exa's search turned up more competitors, but the history and hiring checks came back empty, so I run this one without it.
       </p>
 
       <h2 class="text-2xl font-semibold mt-12 mb-6">Where it came from</h2>
