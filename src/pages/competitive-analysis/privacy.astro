@@ -12,7 +12,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </p>
       <h2 class="text-2xl font-semibold mt-12 mb-6">What the server receives</h2>
       <p>
-        When a teardown calls one of the plugin's four tools, the server gets only what that tool needs: a page address on the company's website, the company's or product's name, its domain and US state, or the ids of job postings from an earlier answer, along with options such as a date range. It never receives your prompts, the rest of the conversation, the report, your name or your account.
+        When a teardown calls one of the plugin's four tools, the server gets only what that tool needs: a page address on the company's website, the company's or product's name, its domain and US state, or the ids of job postings from an earlier answer, along with options such as a date range. It never receives your prompts, the rest of the conversation, the report, your name or your account. If the app attaches its own details to a call, the server uses none of them and keeps none.
       </p>
       <p>
         The tools are built for companies and don't look people up. Their answers leave out the people named in SEC filings and the usernames on Hacker News. If someone types a person's name where a company name goes, the server treats it like any other input: it uses it for that one lookup and caches the public result as described below.
@@ -23,9 +23,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </p>
       <h2 class="text-2xl font-semibold mt-12 mb-6">What it keeps</h2>
       <ul>
-        <li>Cached public answers, stored under the page address, name or domain asked about, so the same question doesn't hit a source twice: archived page readings for up to a year (an archived capture never changes), archive indexes and SEC filings for a day, Hacker News counts for six hours, job boards for an hour.</li>
+        <li>Cached public answers, stored under the page address, name or domain asked about, so the same question doesn't hit a source twice: archived page readings for up to a year (an archived capture never changes), archive indexes and SEC filings for a day, Hacker News search results for six hours, job boards for an hour.</li>
         <li>A daily count of calls per tool, split by outcome, such as ok or busy. The counts hold no inputs, network addresses or identifiers, so they can't be tied to a company or a person. I keep them for 90 days, and a weekly total goes to a private Discord channel I use for alerts.</li>
-        <li>No request logs. Logging is off on the server, and the relay logs nothing.</li>
+        <li>No request logs of my own. Logging is off on the server, and the relay's code logs nothing. Vercel keeps its usual log of the relay's calls, but the address being looked up travels inside the request, so that log never shows it.</li>
       </ul>
       <h2 class="text-2xl font-semibold mt-12 mb-6">Who else is involved</h2>
       <ul>
