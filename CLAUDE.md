@@ -168,6 +168,12 @@ there — renaming `public/images/` would dangle it. Never copy a live post back
 `blog-publish`: `updatedDate` for material edits, or move `pubDate` to today when the post
 should read as new for wider sharing; the sitemap `<lastmod>` follows either.
 
+The Competitive Analysis plugin's project, privacy and terms pages work the same way: their
+copy is `src/content/competitive-analysis/{index,privacy,terms}.md` (the `competitive-analysis`
+collection), edited in Obsidian through the vault's `_areas/competitive-analysis/site` symlink.
+The `.astro` files in `src/pages/competitive-analysis/` only render them. Keep the `## Support`
+heading: the plugin's manifests link to `#support`.
+
 ## Architecture & Routing
 
 ### URL Structure

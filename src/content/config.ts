@@ -14,4 +14,14 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+// The plugin's project, privacy and terms pages (src/pages/competitive-analysis/).
+// Aaron edits them in Obsidian through the vault's _areas/competitive-analysis/site symlink.
+const competitiveAnalysis = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string().min(1),
+  }),
+});
+
+export const collections = { blog, 'competitive-analysis': competitiveAnalysis };

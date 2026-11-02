@@ -1,44 +1,20 @@
 ---
+import { getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Copy lives in src/content/competitive-analysis/privacy.md.
+const page = (await getEntry('competitive-analysis', 'privacy'))!;
+const { Content } = await page.render();
 ---
 
-<BaseLayout title="Competitive Analysis privacy" description="What the Competitive Analysis plugin and its server collect, keep and share." noindex={true}>
+<BaseLayout title={page.data.title} description={page.data.description} noindex={true}>
   <div class="max-w-3xl mx-auto px-6 pt-16 pb-16">
-    <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-12">Competitive Analysis: privacy</h1>
-    <div class="prose prose-lg max-w-none prose-p:leading-relaxed prose-p:mb-6 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline">
-      <p><em>Last updated October 29, 2026.</em></p>
-      <p>
-        Competitive Analysis is a plugin for ChatGPT, Codex and Claude, published by me, Aaron Roy. It has two parts: written instructions the model follows, and a small server I run that looks up public records about companies. The instructions collect nothing, so this page is mostly about the server.
-      </p>
-      <h2 class="text-2xl font-semibold mt-12 mb-6">What the server receives</h2>
-      <p>
-        When a teardown calls one of the plugin's four tools, the server gets only what that tool needs: a page address on the company's website, the company's or product's name, its domain and US state, or the ids of job postings from an earlier answer, along with options such as a date range. It never receives your prompts, the rest of the conversation, the report, your name or your account. If the app attaches its own details to a call, the server uses none of them and keeps none.
-      </p>
-      <p>
-        The tools are built for companies and don't look people up. Their answers leave out the people named in SEC filings and the usernames on Hacker News. If someone types a person's name where a company name goes, the server treats it like any other input: it uses it for that one lookup and caches the public result as described below.
-      </p>
-      <h2 class="text-2xl font-semibold mt-12 mb-6">What it does with it</h2>
-      <p>
-        It looks the company up in free public sources and sends back dated, linked evidence: the Wayback Machine (web.archive.org); the company's public job board on Greenhouse, Lever or Ashby, plus a few careers pages on the company's own domain to find that board; Hacker News search (hn.algolia.com); and SEC EDGAR. Those sites see the page address, name or domain in a request from the server, with a user agent that names the plugin and my email address (EDGAR asks for one). Wayback Machine requests go through a small relay I run on Vercel, because the archive limits requests from Cloudflare's network.
-      </p>
-      <h2 class="text-2xl font-semibold mt-12 mb-6">What it keeps</h2>
-      <ul>
-        <li>Cached public answers, stored under the page address, name or domain asked about, so the same question doesn't hit a source twice: archived page readings for up to a year (an archived capture never changes), archive indexes and SEC filings for a day, Hacker News search results for six hours, job boards for an hour.</li>
-        <li>A daily count of calls per tool, split by outcome, such as ok or busy. The counts hold no inputs, network addresses or identifiers, so they can't be tied to a company or a person. I keep them for 90 days, and a weekly total goes to a private Discord channel I use for alerts.</li>
-        <li>No request logs of my own. Logging is off on the server, and the relay's code logs nothing. Vercel keeps its usual log of the relay's calls, but the address being looked up travels inside the request, so that log never shows it.</li>
-      </ul>
-      <h2 class="text-2xl font-semibold mt-12 mb-6">Who else is involved</h2>
-      <ul>
-        <li>Cloudflare hosts the server. Like any host, it sees the network address each request comes from, to route it and to slow down floods; I don't record those addresses. In ChatGPT and claude.ai, calls come from OpenAI's and Anthropic's servers; in an app that runs on your computer, such as Claude Code, they come from your computer. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare's privacy policy</a> covers what it handles.</li>
-        <li>Vercel hosts the archive relay. It sees the server's requests, never yours, and passes each archive answer straight back without keeping it. <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Vercel's privacy policy</a> covers what it handles.</li>
-        <li>OpenAI or Anthropic, as with any conversation, under <a href="https://openai.com/policies/privacy-policy/" target="_blank" rel="noopener noreferrer">OpenAI's privacy policy</a> or <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener noreferrer">Anthropic's</a>.</li>
-        <li>The public websites the model reads with its own browsing, including the company's site, the Internet Archive and public job boards.</li>
-        <li>Any research plugin you connect yourself, such as Clay, under that vendor's terms. With Clay, that's the company's name and domain, never a person's. The plugin never asks you for a key and never stores one.</li>
-      </ul>
-      <h2 class="text-2xl font-semibold mt-12 mb-6">Your choices</h2>
-      <p>
-        There's no account and nothing tied to you, so there's nothing of yours for me to look up or delete. To stop using the server, disconnect or uninstall the plugin; the method still works from the model's own browsing. Questions: <a href="mailto:aaron@aaronroy.com?subject=Competitive%20Analysis%20plugin">aaron@aaronroy.com</a>.
-      </p>
+    <div class="prose prose-lg max-w-none
+      prose-h1:text-4xl md:prose-h1:text-5xl prose-h1:font-bold prose-h1:tracking-tight prose-h1:mb-12
+      prose-h2:text-2xl prose-h2:font-semibold prose-h2:mt-12 prose-h2:mb-6
+      prose-p:leading-relaxed prose-p:mb-6
+      prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline">
+      <Content />
     </div>
   </div>
 </BaseLayout>
