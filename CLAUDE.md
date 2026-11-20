@@ -185,8 +185,10 @@ heading: the plugin's manifests link to `#support`.
 - Category archives: `/category/{slug}` (category/[slug].astro) - dynamic routes for each category
 - RSS feed: `/rss.xml` (rss.xml.ts) - Full-content RSS feed with HTML rendering
 - Course flyovers: `/cx/<name>.html` - static files in `public/cx/`, outside Astro. Built in
-  the private `cx-flyover` repo (`~/repos/cx-flyover`, `python3 build.py`) and copied here verbatim; fix them
-  there and re-copy, never edit these copies. Shared by direct link only: `noindex`, out of the
+  the private `cx-flyover` repo (`~/repos/cx-flyover`, `python3 scripts/build.py`) and copied here
+  verbatim by its `python3 scripts/deploy.py --yes`, which also runs `npm run test` here, commits
+  `public/cx/`, pushes `main` and verifies the live URLs. That repo is the `cx-flyover` skill
+  ("make a flyover for <course>"). Fix pages there and redeploy, never edit these copies. Shared by direct link only: `noindex`, out of the
   sitemap (public files never enter it), not linked from nav or posts (Aaron, 2026-11-19).
 
 ### Content Collections
