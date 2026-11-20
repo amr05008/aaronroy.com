@@ -4,6 +4,7 @@ Quick reference for all Claude Code working sessions on this project.
 
 | Date | Summary | Tags |
 |------|---------|------|
+| 2026-11-19 | [Cyclocross course flyovers live at /cx/ by direct link after a browser check that fixed five bugs upstream; toolkit moved to its own repo](2026-11-19-add-cx-flyover-pages.md) | cx-flyover, static-pages, noindex, testing, deploy |
 | 2026-11-02 | [Competitive Analysis plugin pages for its MCP server; copy moved to markdown edited in Obsidian through a vault symlink; merged and live](2026-11-02-add-plugin-pages-from-markdown.md) | competitive-analysis, content-collections, obsidian, privacy |
 | 2026-09-22 | [Published the Jev post; HTML-rendered OG image (six variants, picked D); site-wide 1px gray border on post images after checking all 128](2026-09-22-add-jev-post.md) | blog, publishing, og-images, images, css |
 | 2026-09-07 | [GSC index triage: redirected the renamed AI category, demoted two thin archives on evidence, closed two one-directional test gaps a grill pass exposed](2026-09-07-fix-gsc-index-triage.md) | seo, gsc, redirects, categories, testing, review, indexnow |

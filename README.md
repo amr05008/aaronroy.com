@@ -55,6 +55,7 @@ npm run test:quick
 ```
 /
 ├── public/
+│   ├── cx/              # Course flyover pages, built in the cx-flyover repo (direct link only)
 │   ├── images/          # Blog post images
 │   ├── og-images/       # Custom Open Graph images
 │   ├── zuko_favicon.png # Site favicon
