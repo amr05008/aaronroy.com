@@ -183,7 +183,7 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
     [Math.round(climb) + ' m', 'climbing per lap'],
     [Math.round(maxG) + '%', 'steepest pitch'],
     [Math.round(maxC) + '%', 'steepest side slope'],
-    HAS_SPD ? [Math.floor(C.lapTime / 60) + ':' + String(C.lapTime % 60).padStart(2, '0'), 'Cat 4/5 race lap'] : null,
+    HAS_SPD ? [Math.floor(C.lapTime / 60) + ':' + String(C.lapTime % 60).padStart(2, '0'), C.lapLabel || 'race lap'] : null,
   ].filter(Boolean).map(f => `<li><b>${f[0]}</b><span>${f[1]}</span></li>`).join('');
 
   // ---- colour ramps ----
