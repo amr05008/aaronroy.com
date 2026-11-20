@@ -184,6 +184,10 @@ heading: the plugin's manifests link to `#support`.
 - Category listing: `/categories` (categories.astro)
 - Category archives: `/category/{slug}` (category/[slug].astro) - dynamic routes for each category
 - RSS feed: `/rss.xml` (rss.xml.ts) - Full-content RSS feed with HTML rendering
+- Course flyovers: `/cx/<name>.html` - static files in `public/cx/`, outside Astro. Built in
+  `agent-resources/projects/cx-flyover` (`python3 build.py`) and copied here verbatim; fix them
+  there and re-copy, never edit these copies. Shared by direct link only: `noindex`, out of the
+  sitemap (public files never enter it), not linked from nav or posts (Aaron, 2026-11-19).
 
 ### Content Collections
 Blog posts live in `src/content/blog/` as `.md` or `.mdx` files. Schema defined in `src/content/config.ts`:
