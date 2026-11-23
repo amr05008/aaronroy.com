@@ -93,6 +93,16 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
 .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 6px 28px; color: var(--muted); font-size: .88rem; }
 .notes p { margin: 0; max-width: 65ch; }
 .notes strong { color: var(--ink); font-weight: 600; }
+.cmp p { color: var(--muted); font-size: .88rem; max-width: 80ch; margin: 4px 0 10px; }
+.cmp .scroll { overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; }
+.cmp table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: .9rem; }
+.cmp th, .cmp td { text-align: right; padding: 7px 12px; border-top: 1px solid var(--line); white-space: nowrap; vertical-align: top; }
+.cmp tr:first-child th { border-top: 0; font-family: var(--display); font-weight: 600; font-size: 1rem; }
+.cmp th:first-child, .cmp td:first-child { text-align: left; white-space: normal; }
+.cmp td button { border: 0; background: none; padding: 0; text-align: left; font-weight: 600; color: var(--accent); border-radius: 2px; }
+.cmp .det { display: block; color: var(--muted); font-size: .78rem; }
+.cmp .gap { display: block; color: var(--muted); font-size: .8rem; }
+.cmp tfoot td { font-weight: 600; }
 </style>
 
 </head>
@@ -127,6 +137,9 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
         <button data-v="camber" aria-pressed="true">Off-camber</button><button data-v="grade" aria-pressed="false">Gradient</button><button data-v="speed" aria-pressed="false">Race speed</button>
       </div>
     </div>
+    <div class="group" id="gapGroup" hidden><span>Time gaps</span>
+      <div class="seg" id="gap"></div>
+    </div>
     <div class="group"><span>Height</span>
       <div class="seg" id="exag">
         <button data-v="1" aria-pressed="false">True</button><button data-v="2" aria-pressed="true">2×</button><button data-v="3" aria-pressed="false">3×</button>
@@ -146,6 +159,12 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
 
   <h2>Sections the terrain picks out</h2>
   <ul class="sections" id="sections"></ul>
+
+  <div class="cmp" id="cmp" hidden>
+    <h2>Where the time went</h2>
+    <p id="cmpNote"></p>
+    <div class="scroll"><table id="cmpTable"></table></div>
+  </div>
 
   <h2>How this was made, and what it can't see</h2>
   <div class="notes">
@@ -212,6 +231,13 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
     grade:  { title: 'Gradient along the line', lo: '−15% down', hi: '+15% up', stops: [[0, '#1c5fd0'], [0.5, '#f0f1ee'], [1, '#d42a1c']], val: i => (C.grade[i] + 15) / 30 },
     speed:  { title: 'Speed in the race', lo: '5 km/h', hi: '30 km/h', stops: [[0, '#5b2a86'], [0.5, '#1f9e8f'], [1, '#f4de45']], val: i => (C.spd[i] - 5) / 25 },
   };
+  // optional rider comparison from compare_riders.py: seconds per 100 m one rider loses to another
+  const CMP = C.compare;
+  if (CMP) CMP.modes.forEach(m => {
+    MODES[m.key] = m.both
+      ? { title: `${m.slow} v ${m.fast}, up to ${m.max} s per 100 m`, lo: m.slow + ' gains', hi: m.fast + ' gains', stops: [[0, '#1c5fd0'], [0.5, '#f0f1ee'], [1, '#d42a1c']], val: i => (m.rate[i] + m.max) / (2 * m.max) }
+      : { title: `Time ${m.slow} loses to ${m.fast}`, lo: 'level', hi: m.max + ' s per 100 m', stops: [[0, '#f3f5f1'], [0.35, '#ffd34d'], [0.7, '#f2701d'], [1, '#b3122b']], val: i => m.rate[i] / m.max };
+  });
   for (const k in MODES) MODES[k].fn = ramp(MODES[k].stops);
   let mode = 'camber', exag = 2, rate = 14, u = 0, playing = false, view = 'orbit';
   const col = i => MODES[mode].fn(MODES[mode].val(i));
@@ -439,11 +465,31 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
   // ---- controls ----
   function seg(id, fn) { $(id).addEventListener('click', e => { const b = e.target.closest('button'); if (b) fn(b.dataset.v); }); }
   function press(id, v) { $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === String(v)))); }
-  function setMode(v) { mode = v; press('mode', v); recolour(); }
+  function setMode(v) { mode = v; press('mode', v); press('gap', v); recolour(); }
   function setPlaying(v) { playing = v; $('play').textContent = v ? 'Pause' : (u > 1 ? 'Resume' : 'Fly the lap'); need = true; }
   function setView(v) { view = v; $('overview').setAttribute('aria-pressed', String(v === 'orbit')); $('hint').textContent = v === 'orbit' ? 'Drag to orbit · scroll or pinch to zoom' : 'Following the line · drag to look around'; need = true; }
   function follow() { const p = P(u); orbit.t.copy(p); }
   seg('mode', setMode);
+  if (CMP) {
+    $('gap').innerHTML = CMP.modes.map(m => `<button data-v="${m.key}" aria-pressed="false">${m.slow} v ${m.fast}</button>`).join('');
+    $('gapGroup').hidden = false; seg('gap', setMode);
+    const best = t => Math.min(...t), cell = (t, b) => t === b ? `<td><b>${t.toFixed(1)}</b></td>` : `<td>${t.toFixed(1)}<span class="gap">+${(t - b).toFixed(1)}</span></td>`;
+    const laps = l => l.length > 1 && l[l.length - 1] - l[0] === l.length - 1 ? `laps ${l[0]} to ${l[l.length - 1]}` : 'lap ' + l.join(', ');
+    const tot = CMP.riders.map((_, k) => CMP.sections.reduce((a, s) => a + s.t[k], 0));
+    $('cmpTable').innerHTML = '<thead><tr><th>Section, seconds</th>' + CMP.riders.map(r => `<th>${r}</th>`).join('') + '</tr></thead><tbody>' +
+      CMP.sections.map((s, n) => `<tr><td><button data-n="${n}">${s.name}</button><span class="det">${s.a} to ${s.b} m · ${laps(s.laps)}</span></td>` + s.t.map(t => cell(t, best(s.t))).join('') + '</tr>').join('') +
+      '</tbody><tfoot><tr><td>Whole lap</td>' + tot.map(t => cell(t, best(tot))).join('') + '</tr></tfoot>';
+    $('cmpNote').textContent = C.compareNote || '';
+    $('cmp').hidden = false;
+    $('cmpTable').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      u = CMP.sections[+b.dataset.n].a; setPlaying(false);
+      if (!mode.startsWith('gap')) setMode(CMP.modes[0].key);
+      setView('chase'); camInit = false; need = true;
+      $('stage').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
+      if (!ok) { hud(); drawProfile(); }
+    });
+  }
   seg('exag', v => { exag = +v; press('exag', v); if (view === 'orbit' && orbit.d < D0 * 0.7) follow(); need = true; });
   seg('rate', v => { rate = +v; press('rate', v); });
   $('play').addEventListener('click', () => { if (!playing) setView('chase'); setPlaying(!playing); });
