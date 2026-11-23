@@ -164,7 +164,7 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
 
   <div class="cmp" id="cmp" hidden>
     <h2>Where the time went</h2>
-    <p>Seconds lost per lap in each section, averaged over the race. Each column's three biggest losses are in bold. Pick a section to fly to it.</p>
+    <p>Seconds per lap in each section, averaged over the race. A plus is time the first rider named lost to the second, a minus is time gained. Each column's three biggest losses are in bold. Pick a section to fly to it.</p>
     <div class="scroll"><table id="cmpTable"></table></div>
     <h3>Before you trust these numbers</h3>
     <ul id="cmpNote"></ul>
@@ -239,7 +239,7 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
   const CMP = C.compare;
   if (CMP) CMP.modes.forEach(m => {
     MODES[m.key] = m.both
-      ? { title: `${m.slow} v ${m.fast}, up to ${m.max} s per 100 m`, lo: m.slow + ' gains', hi: m.fast + ' gains', stops: [[0, '#1c5fd0'], [0.5, '#f0f1ee'], [1, '#d42a1c']], val: i => (m.rate[i] + m.max) / (2 * m.max) }
+      ? { title: `${m.slow} vs ${m.fast}, up to ${m.max} s per 100 m`, lo: m.slow + ' gains', hi: m.fast + ' gains', stops: [[0, '#1c5fd0'], [0.5, '#f0f1ee'], [1, '#d42a1c']], val: i => (m.rate[i] + m.max) / (2 * m.max) }
       : { title: `Time ${m.slow} loses to ${m.fast}`, lo: 'level', hi: m.max + ' s per 100 m', stops: [[0, '#f3f5f1'], [0.35, '#ffd34d'], [0.7, '#f2701d'], [1, '#b3122b']], val: i => m.rate[i] / m.max };
   });
   for (const k in MODES) MODES[k].fn = ramp(MODES[k].stops);
@@ -475,13 +475,13 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
   function follow() { const p = P(u); orbit.t.copy(p); }
   seg('mode', setMode);
   if (CMP) {
-    $('gap').innerHTML = CMP.modes.map(m => `<button data-v="${m.key}" aria-pressed="false">${m.slow} v ${m.fast}</button>`).join('');
+    $('gap').innerHTML = CMP.modes.map(m => `<button data-v="${m.key}" aria-pressed="false">${m.slow} vs ${m.fast}</button>`).join('');
     $('gapGroup').hidden = false; seg('gap', setMode);
     const ix = n => CMP.riders.indexOf(n), gap = (s, m) => s.t[ix(m.slow)] - s.t[ix(m.fast)];
     const top = CMP.modes.map(m => CMP.sections.map(s => gap(s, m)).sort((x, y) => y - x)[2]);   // third-biggest loss: bold from here up
-    const cell = (g, bold) => { const t = Math.abs(g) < 0.05 ? 'level' : g > 0 ? g.toFixed(1) + ' s' : (-g).toFixed(1) + ' s ahead'; return `<td>${bold ? '<b>' + t + '</b>' : t}</td>`; };
+    const cell = (g, bold) => { const t = Math.abs(g) < 0.05 ? 'level' : (g > 0 ? '+' : '−') + Math.abs(g).toFixed(1) + ' s'; return `<td>${bold ? '<b>' + t + '</b>' : t}</td>`; };
     const tot = m => CMP.sections.reduce((a, s) => a + gap(s, m), 0);
-    $('cmpTable').innerHTML = '<thead><tr><th>Section</th>' + CMP.modes.map(m => `<th>${m.slow} loses to ${m.fast}</th>`).join('') + '</tr></thead><tbody>' +
+    $('cmpTable').innerHTML = '<thead><tr><th>Section</th>' + CMP.modes.map(m => `<th>${m.slow} vs ${m.fast}</th>`).join('') + '</tr></thead><tbody>' +
       CMP.sections.map((s, n) => `<tr><td><button data-n="${n}">${s.name}</button><span class="det">${s.a} to ${s.b} m</span></td>` + CMP.modes.map((m, k) => cell(gap(s, m), gap(s, m) >= top[k] && gap(s, m) > 0)).join('') + '</tr>').join('') +
       '</tbody><tfoot><tr><td>Whole lap</td>' + CMP.modes.map(m => cell(tot(m))).join('') + '</tr></tfoot>';
     $('cmpNote').innerHTML = (C.compareNotes || []).map(t => { const li = document.createElement('li'); li.textContent = t; return li.outerHTML; }).join('');
