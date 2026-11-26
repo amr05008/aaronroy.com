@@ -104,6 +104,8 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
 :root[data-theme="dark"] .prev { --pv-old: #74a9f5; --pv-new: #ff922b; --pv-rev: #d48cf0; }
 .prev .both { stroke: var(--ink); stroke-width: 2.5px; } .prev .old { stroke: var(--pv-old); stroke-width: 3px; }
 .prev .new { stroke: var(--pv-new); stroke-width: 3.5px; } .prev .rev { stroke: var(--pv-rev); stroke-width: 3.5px; }
+.prev polygon { stroke: var(--panel); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.prev polygon.both { fill: var(--ink); } .prev polygon.old { fill: var(--pv-old); } .prev polygon.new { fill: var(--pv-new); } .prev polygon.rev { fill: var(--pv-rev); }
 .prev .key { list-style: none; padding: 0; color: var(--ink); font-variant-numeric: tabular-nums; }
 .prev .key i { display: inline-block; width: 22px; height: 4px; border-radius: 2px; vertical-align: middle; margin-right: 8px; }
 .prev .key span { color: var(--muted); }
@@ -557,13 +559,23 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
     const x0 = Math.min(...xs) - M, x1 = Math.max(...xs) + M, y0 = Math.min(...ys) - M, y1 = Math.max(...ys) + M;
     const path = (X, Y, a, b, close) => { let d = ''; for (let i = a; i < b; i++) d += (i === a ? 'M' : 'L') + (X[i] - x0).toFixed(1) + ' ' + (y1 - Y[i]).toFixed(1); return d + (close ? 'Z' : ''); };
     const draw = (cls, X, Y, spans) => spans.map(([a, b]) => `<path class="${cls}" d="${path(X, Y, a, Math.min(b + 1, X.length))}"/>`).join('');
+    // arrowheads showing riding direction: one or more per coloured stretch, and every 140 m of the shared line
+    const head = (cls, X, Y, i) => {
+      const n = X.length, a = Math.max(0, i - 3), b = Math.min(n - 1, i + 3), dx = X[b] - X[a], dy = Y[a] - Y[b], l = Math.hypot(dx, dy) || 1;
+      const ux = dx / l, uy = dy / l, cx = X[i] - x0, cy = y1 - Y[i], pt = (f, s) => (cx + ux * f - uy * s).toFixed(1) + ',' + (cy + uy * f + ux * s).toFixed(1);
+      return `<polygon class="${cls}" points="${pt(6, 0)} ${pt(-4, 4.5)} ${pt(-4, -4.5)}"/>`;
+    };
+    const heads = (cls, X, Y, spans) => spans.map(([a, b]) => { const k = Math.max(1, Math.round((b - a) / 90)); return Array.from({ length: k }, (_, j) => head(cls, X, Y, Math.round(a + (j + 0.5) * (b - a) / k))).join(''); }).join('');
+    const changed = i => P.added.concat(P.rev).some(([a, b]) => i >= a - 12 && i < b + 12);
+    let shared = ''; for (let i = 70; i < C.x.length - 5; i += 140) if (!changed(i)) shared += head('both', C.x, C.y, i);
     const svg = $('prevMap');
     svg.setAttribute('viewBox', `0 0 ${(x1 - x0).toFixed(0)} ${(y1 - y0).toFixed(0)}`);
     svg.setAttribute('aria-label', `Map of this course laid over the ${P.label} course`);
     svg.innerHTML = draw('old', P.x, P.y, P.gone) + `<path class="both" d="${path(C.x, C.y, 0, C.x.length, true)}"/>` + draw('rev', C.x, C.y, P.rev) + draw('new', C.x, C.y, P.added) +
+      heads('old', P.x, P.y, P.gone) + shared + heads('rev', C.x, C.y, P.rev) + heads('new', C.x, C.y, P.added) +
       `<circle cx="${(C.x[0] - x0).toFixed(1)}" cy="${(y1 - C.y[0]).toFixed(1)}" r="5" fill="var(--accent)" stroke="var(--panel)" stroke-width="1.5"/>`;
     $('prevTitle').textContent = 'What changed from ' + P.label;
-    $('prevLead').textContent = `This lap is ${(C.lap / 1000).toFixed(2)} km. The ${P.label} lap was ${(P.lap / 1000).toFixed(2)} km with ${P.climb} m of climbing. North is up and the dot is where this lap starts.`;
+    $('prevLead').textContent = `This lap is ${(C.lap / 1000).toFixed(2)} km. The ${P.label} lap was ${(P.lap / 1000).toFixed(2)} km with ${P.climb} m of climbing. North is up, arrows show the riding direction and the dot is where this lap starts.`;
     $('prevKey').innerHTML = [['var(--ink)', 'On both courses', P.both - P.revM], ['var(--pv-new)', 'New this time', P.addedM], ['var(--pv-old)', P.label + ' only', P.goneM], ['var(--pv-rev)', 'Same ground, ridden the other way', P.revM]]
       .filter(r => r[2] > 0).map(([c, t, v]) => `<li><i style="background:${c}"></i>${t} <span>${v.toLocaleString('en-US')} m</span></li>`).join('');
     $('prevNote').innerHTML = (C.prevNotes || []).map(t => { const li = document.createElement('li'); li.textContent = t; return li.outerHTML; }).join('');
