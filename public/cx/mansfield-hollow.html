@@ -93,6 +93,20 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
 .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 6px 28px; color: var(--muted); font-size: .88rem; }
 .notes p { margin: 0; max-width: 65ch; }
 .notes strong { color: var(--ink); font-weight: 600; }
+.prev p, .prev ul { color: var(--muted); font-size: .88rem; max-width: 80ch; margin: 4px 0 10px; }
+.prev ul { padding-left: 1.2em; } .prev li { margin: 3px 0; }
+.prev .cols { display: grid; grid-template-columns: minmax(0, 3fr) minmax(240px, 2fr); gap: 10px 28px; align-items: start; }
+@media (max-width: 760px) { .prev .cols { grid-template-columns: 1fr; } }
+.prev svg { display: block; width: 100%; height: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; }
+.prev svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.prev { --pv-old: #1f6fd1; --pv-new: #e8590c; --pv-rev: #9c36b5; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .prev { --pv-old: #74a9f5; --pv-new: #ff922b; --pv-rev: #d48cf0; } }
+:root[data-theme="dark"] .prev { --pv-old: #74a9f5; --pv-new: #ff922b; --pv-rev: #d48cf0; }
+.prev .both { stroke: var(--ink); stroke-width: 2.5px; } .prev .old { stroke: var(--pv-old); stroke-width: 3px; }
+.prev .new { stroke: var(--pv-new); stroke-width: 3.5px; } .prev .rev { stroke: var(--pv-rev); stroke-width: 3.5px; }
+.prev .key { list-style: none; padding: 0; color: var(--ink); font-variant-numeric: tabular-nums; }
+.prev .key i { display: inline-block; width: 22px; height: 4px; border-radius: 2px; vertical-align: middle; margin-right: 8px; }
+.prev .key span { color: var(--muted); }
 .cmp p, .cmp ul { color: var(--muted); font-size: .88rem; max-width: 80ch; margin: 4px 0 10px; }
 .cmp ul { padding-left: 1.2em; } .cmp li { margin: 3px 0; }
 .cmp h3 { font-family: var(--display); font-weight: 600; font-size: 1rem; margin: 14px 0 0; }
@@ -161,6 +175,18 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
 
   <h2>Sections the terrain picks out</h2>
   <ul class="sections" id="sections"></ul>
+
+  <div class="prev" id="prev" hidden>
+    <h2 id="prevTitle"></h2>
+    <p id="prevLead"></p>
+    <div class="cols">
+      <svg id="prevMap" role="img"></svg>
+      <div>
+        <ul class="key" id="prevKey"></ul>
+        <ul id="prevNote"></ul>
+      </div>
+    </div>
+  </div>
 
   <div class="cmp" id="cmp" hidden>
     <h2>Where the time went</h2>
@@ -524,6 +550,25 @@ h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; margin: 
   glc.addEventListener('pointerup', up); glc.addEventListener('pointercancel', up);
   glc.addEventListener('wheel', e => { e.preventDefault(); toOrbit(); orbit.d = Math.min(Math.max(orbit.d * Math.exp(e.deltaY * 0.0012), 15), maxD()); need = true; }, { passive: false });
   glc.addEventListener('keydown', e => { if (e.key === ' ') { e.preventDefault(); $('play').click(); } });
+
+  // ---- optional map of what changed from an earlier course, from compare_courses.py ----
+  if (C.prev) {
+    const P = C.prev, M = 25, xs = C.x.concat(P.x), ys = C.y.concat(P.y);
+    const x0 = Math.min(...xs) - M, x1 = Math.max(...xs) + M, y0 = Math.min(...ys) - M, y1 = Math.max(...ys) + M;
+    const path = (X, Y, a, b, close) => { let d = ''; for (let i = a; i < b; i++) d += (i === a ? 'M' : 'L') + (X[i] - x0).toFixed(1) + ' ' + (y1 - Y[i]).toFixed(1); return d + (close ? 'Z' : ''); };
+    const draw = (cls, X, Y, spans) => spans.map(([a, b]) => `<path class="${cls}" d="${path(X, Y, a, Math.min(b + 1, X.length))}"/>`).join('');
+    const svg = $('prevMap');
+    svg.setAttribute('viewBox', `0 0 ${(x1 - x0).toFixed(0)} ${(y1 - y0).toFixed(0)}`);
+    svg.setAttribute('aria-label', `Map of this course laid over the ${P.label} course`);
+    svg.innerHTML = draw('old', P.x, P.y, P.gone) + `<path class="both" d="${path(C.x, C.y, 0, C.x.length, true)}"/>` + draw('rev', C.x, C.y, P.rev) + draw('new', C.x, C.y, P.added) +
+      `<circle cx="${(C.x[0] - x0).toFixed(1)}" cy="${(y1 - C.y[0]).toFixed(1)}" r="5" fill="var(--accent)" stroke="var(--panel)" stroke-width="1.5"/>`;
+    $('prevTitle').textContent = 'What changed from ' + P.label;
+    $('prevLead').textContent = `This lap is ${(C.lap / 1000).toFixed(2)} km. The ${P.label} lap was ${(P.lap / 1000).toFixed(2)} km with ${P.climb} m of climbing. North is up and the dot is where this lap starts.`;
+    $('prevKey').innerHTML = [['var(--ink)', 'On both courses', P.both - P.revM], ['var(--pv-new)', 'New this time', P.addedM], ['var(--pv-old)', P.label + ' only', P.goneM], ['var(--pv-rev)', 'Same ground, ridden the other way', P.revM]]
+      .filter(r => r[2] > 0).map(([c, t, v]) => `<li><i style="background:${c}"></i>${t} <span>${v.toLocaleString('en-US')} m</span></li>`).join('');
+    $('prevNote').innerHTML = (C.prevNotes || []).map(t => { const li = document.createElement('li'); li.textContent = t; return li.outerHTML; }).join('');
+    $('prev').hidden = false;
+  }
 
   // ---- sizing, theme, loop ----
   function resize() {
